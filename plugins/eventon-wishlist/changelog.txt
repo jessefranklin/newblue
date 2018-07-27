@@ -1,0 +1,13 @@
+Wishlist for EventON Plugin
+====================================
+v 0.3 (2017-12-15)
+ADDED: Likes count on backend all events
+ADDED: Lightbox login form when non-loggedin member trying to add to wishlist
+FIXED: shortcode arg error
+FIXED: wishlist manager page link error
+
+v 0.2 (2017-10-16)
+FIXED: upcoming events not showing in the wish list manager
+
+v 0.1 (2017-6-9)
+Initial Release

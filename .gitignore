@@ -1,0 +1,12 @@
+*.zip
+/themes/gallery-pro-jira-ticketing-tool/*log*.txt
+plugins/can_custom/*.json
+plugins/talent_source/profiles/*.json
+plugins/red_carpet_talent_json_cache/profiles/*.json
+plugins/talent_marketplace/profiles/*.json
+plugins/fln_authorizer/*.txt
+plugins/fln_authorizer/log.txt
+plugins/SecurityScanDetails/scan_data.txt
+plugins/SecurityScanDetails/scan_data_log.txt
+plugins/blue_hire/data.json
+.gitignore.swp

@@ -1,0 +1,407 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: evotx\n"
+"POT-Creation-Date: 2017-05-19 09:33-0800\n"
+"PO-Revision-Date: 2017-05-19 09:33-0800\n"
+"Last-Translator: Ashan Perera <ashanster@gmail.com>\n"
+"Language-Team: AJDE\n"
+"Language: English\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.7\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../eventon-rsvp.php:56
+#, php-format
+msgid "EventON %s is NOT active! - "
+msgstr ""
+
+#: ../eventon-rsvp.php:128
+msgid "Event RSVP"
+msgstr ""
+
+#: ../eventon-rsvp.php:128
+msgid "Event RSVPs"
+msgstr ""
+
+#: ../includes/class-emailing.php:62
+msgid "RSVP Confirmation"
+msgstr ""
+
+#: ../includes/class-intergration-actionuser.php:236
+#: ../includes/admin/class-admin-ajax.php:71
+msgid "Click for more information"
+msgstr ""
+
+#: ../includes/admin/admin-init.php:120
+msgid "RSVP Event Box"
+msgstr ""
+
+#: ../includes/admin/admin-init.php:130
+msgid "RSVP Info (Remaing Spaces & eventtop RSVP)"
+msgstr ""
+
+#: ../includes/admin/admin-init.php:135 ../includes/admin/evo-rsvp.php:35
+msgid "RSVP"
+msgstr ""
+
+#: ../includes/admin/admin-init.php:555
+msgid "Save Changes"
+msgstr ""
+
+#: ../includes/admin/class-admin-ajax.php:44
+#: ../includes/admin/class-admin-ajax.php:52
+msgid "No Attendees found."
+msgstr ""
+
+#: ../includes/admin/class-admin-ajax.php:96 ../includes/admin/evo-rsvp.php:36
+#: ../includes/admin/evo-rsvp_meta_boxes.php:92
+msgid "RSVP Status"
+msgstr ""
+
+#: ../includes/admin/class-admin-ajax.php:97
+#: ../includes/admin/evo-rsvp_meta_boxes.php:111
+msgid "Email Address"
+msgstr ""
+
+#: ../includes/admin/class-admin-ajax.php:98
+msgid "Phone Number"
+msgstr ""
+
+#: ../includes/admin/class-admin-ajax.php:99 ../includes/admin/evo-rsvp.php:38
+#: ../includes/admin/evo-rsvp_meta_boxes.php:123
+msgid "Event"
+msgstr ""
+
+#: ../includes/admin/class-admin-ajax.php:100
+#: ../includes/admin/evo-rsvp_meta_boxes.php:148
+msgid "Event Date"
+msgstr ""
+
+#: ../includes/admin/class-admin-ajax.php:101
+msgid "Spaces Reserved"
+msgstr ""
+
+#: ../includes/admin/class-admin-ajax.php:102
+msgid "Additional Attendees"
+msgstr ""
+
+#: ../includes/admin/class-admin-ajax.php:143
+msgid "Checkin Status"
+msgstr ""
+
+#: ../includes/admin/class-admin-ajax.php:146
+msgid "Edit Attendee Info"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp.php:34
+msgid "Status"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp.php:39
+#: ../includes/admin/evo-rsvp_meta_boxes.php:114
+msgid "Count"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp.php:40
+msgid "Email Updates"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:21
+#: ../includes/admin/evo-rsvp_meta_boxes.php:22
+msgid "RSVP Event"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:23
+msgid "RSVP Notifications"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:24
+msgid "RSVP Email"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:35
+msgid ""
+"You can re-send the RSVP confirmation email to submitter if they have not "
+"received it. Make sure to check spam folder."
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:36
+msgid "Re-send Confirmation Email"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:37
+msgid "Email resend action performed!"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:47
+msgid ""
+"Send RSVP confirmation email to other email addresses using below fields. "
+"<br/>NOTE: you can send to multiple email address separated by commas."
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:49
+msgid "Email field can not be empty!"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:49
+#: ../includes/admin/evo-rsvp_meta_boxes.php:599
+msgid "Send Email"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:50
+msgid "Email send action performed!"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:91
+msgid "RSVP #"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:102
+msgid "Checkin to Event Status"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:105
+msgid "First Name"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:108
+msgid "Last Name"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:116
+msgid "Phone"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:118
+msgid "Receive Email Updates"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:217
+msgid "Other Attendee Names"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:225
+msgid "Additional Notes"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:320
+msgid "Allow visitors to RSVP to this event"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:329
+msgid "YES"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:330
+msgid "Maybe"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:331
+msgid "No"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:347
+msgid ""
+"Activating this will allow you to add a limit to how many RSVPs you can "
+"receive. When the limit is reached RSVP will close."
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:355
+msgid "Total Event RSVP capacity"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:376
+msgid ""
+"NOTE: The capacity above should match the total number of capacity for each "
+"repeat occurance below for this event."
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:401
+msgid "Show Rest"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:420
+msgid ""
+"This will show how many guests are coming for each RSVP option as a number "
+"next to it on eventcard."
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:435
+msgid ""
+"This will allow only guests that have RSVP-ed to the event see the guest "
+"list."
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:448
+msgid ""
+"This will allow you to limit each RSVP reservation count to a set max "
+"number, then the guests can not book more spaces than this limit"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:452
+msgid "Maximum count number"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:473
+msgid ""
+"With this you can set a minimum capacity for this event, at which point the "
+"event will take place for certain."
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:477
+msgid "Minimum capacity for event to happen"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:489
+msgid ""
+"This will show RSVP form in the eventCard instead of showing the form as a "
+"lightbox. This value will be overridden by RSVP settings global value for "
+"inCard RSVP form."
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:497
+msgid "Close RSVP before event start (in minutes)"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:497
+msgid ""
+"Set how many minutes before the event start time to close RSVP form. Time "
+"must be in minutes. Leave blank to not close RSVP before event time."
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:503
+msgid ""
+"Additional Information only visible to loggedin RSVPed guests & in "
+"Confirmation Email"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:503
+msgid ""
+"Information entered in here will only be visible on front-end once user has "
+"RSVPed to the event."
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:513
+msgid "Additional email addresses to receive email notifications"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:513
+msgid ""
+"Set additional email addresses seperated by commas to receive email "
+"notifications upon new RSVP reciept"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:521
+msgid ""
+"Enabling this will send email notification upon new RSVPs to event author in "
+"addition to above email addresses and emails set up in RSVP settings"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:530
+msgid ""
+"This will send you daily email digest of RSVP information for this event. "
+"Email settings can be customized from RSVP settings. This is in BETA version"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:537
+msgid ""
+"NOTE: All text strings that appear for RSVP section on eventcard can be "
+"editted via myEventon > languages"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:558
+msgid "View Attendees"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:559
+msgid "Download (CSV)"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:560
+msgid "Sync Count"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:561
+msgid "Emailing"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:562
+msgid "Troubleshoot RSVP Addon"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:562
+msgid "Troubleshoot"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:569
+msgid "Select emailing option"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:571
+msgid "Email Attendees List to someone"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:572
+msgid "Email to only attending guests"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:573
+msgid "Email to guests not coming to event"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:574
+msgid "Email to all rsvped guests"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:581
+msgid "Select Event Repeat Instance"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:583
+msgid "All"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:595
+msgid "Email Addresses (separated by commas)"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:596
+msgid "Subject for email"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:597
+msgid "Message for the email"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:608
+msgid "Select Repeating Instance of Event"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:610
+msgid "All Repeating Instances"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:620
+msgid "Submit"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:638
+msgid "View Attendee List"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:644
+msgid "Email Attendee List"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:649
+msgid "Loading"
+msgstr ""
+
+#: ../includes/admin/evo-rsvp_meta_boxes.php:650
+msgid "Attendee Information"
+msgstr ""
