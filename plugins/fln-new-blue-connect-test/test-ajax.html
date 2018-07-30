@@ -1,0 +1,116 @@
+<style>
+	.my-test-form select {
+		width: auto;
+		padding: 0px;
+	}
+	.my-test-form label {
+		font-weight: bold;
+		display: block;
+	}
+	.empl {
+		width: 100%;
+		height: 100px;
+		border: 1px solid black;
+		overflow: auto;
+		background-color: white;
+		padding: 2.55px;
+	}
+</style>
+<section class='my-test-form'>
+	<div>
+		<label>Select Super Group</label>
+		<select id='bus'><option></option></select>
+		<div id='empl_1' class='empl'></div>
+	</div>
+	<div>
+		<input id="send_to_group" type='button' value='Send Emails to Group' />
+	</div>
+	<br />
+	<br />
+	<div>
+		<label>Select Site</label>
+		<select id='site'><option></option></select>
+		<div id='empl_2' class='empl'></div>
+	</div>
+	<div>
+		<!--input id="send_to_site" type='button' value='Send Emails to Site' /-->
+	</div>
+	<br />
+	<br />
+</section>
+<script>
+
+jQuery(document).ready( function( $ ) {
+	//Load the Super groups
+	var data = {
+		'action': 'fln_get_super_groups'
+	};
+	jQuery.post( ajax_url, data, function( response ) {
+		for( var i = 0; i < response.length; i++ ) {
+			jQuery( "#bus" ).append( "<option>" + response[ i ].bu + "</option>" );
+		}
+	} );
+
+	//Load the Sites
+	data = {
+		'action': 'fln_get_sites'
+	};
+	jQuery.post( ajax_url, data, function( response ) {
+		for( var i = 0; i < response.length; i++ ) {
+			jQuery( "#site" ).append( "<option>" + response[ i ].site + "</option>" );
+		}
+	} );
+
+	jQuery( "#bus" ).on( "change", function () {
+		var bu = $(this).val();
+		var data = {
+			'action': 'fln_get_employees_by_bu',
+			'bu': bu
+		};
+		jQuery.post( ajax_url, data, function( response ) {
+			//console.log( response );
+			jQuery( "#empl_1" ).html( "" );
+			for( var i = 0; i < response.length; i++ ) {
+				jQuery( "#empl_1" ).append( response[ i ].email + ", " );
+			}
+		} );
+	} );
+	jQuery( "#site" ).on( "change", function () {
+		var site = $(this).val();
+		var data = {
+			'action': 'fln_get_employees_by_site',
+			'site': site
+		};
+		jQuery.post( ajax_url, data, function( response ) {
+			jQuery( "#empl_2" ).html( "" );
+			for( var i = 0; i < response.length; i++ ) {
+				jQuery( "#empl_2" ).append( response[ i ].email + ", " );
+			}
+		} );
+	} );
+	jQuery( "#send_to_group" ).on( "click", function () { 
+		var bu = jQuery( "#bus" ).val();
+		var data = {
+			'action': 'fln_invite_guests',
+			'event_data': {
+				'event_id': 1,
+				'event_title': 'Test Title',
+				'evcal_subtitle': 'Test Sub Title',
+				'event_details': 'Test Event Details',
+				'ics_url': 'Test URL',
+				'event_location': 'Test Location',
+				'event_time': 'Test Time',
+				'evcal_organizer': 'Test Organizer',
+				'evcal_type': 'Test Type',
+				'group': [ bu ]
+			}
+		};
+		jQuery.post( ajax_url, data, function( response ) {
+			console.log( response );
+			jQuery( "#empl_1" ).html( response.data );
+		} );
+	} );
+} );
+
+</script>
+
