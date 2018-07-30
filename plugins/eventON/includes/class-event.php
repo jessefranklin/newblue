@@ -219,7 +219,9 @@ class EVO_Event{
 				$new_unix = $unix - $utc_offset;
 				$new_timeT = date("Ymd", $new_unix);
 				$new_timeZ = date("Hi", $new_unix);
-				$new_times[$key] = $new_timeT.'T'.$new_timeZ.'00Z';
+				// $new_times[$key] = $new_timeT.'T'.$new_timeZ.'00Z';  
+				$new_times[$key] = $new_timeT.'T'.$new_timeZ; 
+
 			}
 
 			return $new_times;

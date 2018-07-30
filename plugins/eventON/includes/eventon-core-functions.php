@@ -479,8 +479,8 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 			
 			$new_timeT = date("Ymd", $unix);
 			$new_timeZ = date("Hi", $unix);
-			return $new_timeT.'T'.$new_timeZ.'00Z';
-
+			// return $new_timeT.'T'.$new_timeZ.'00Z';
+			return $new_timeT.'T'.$new_timeZ;
 		}
 		
 	/* ADD TO CALENDAR */
