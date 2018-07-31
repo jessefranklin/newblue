@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name: EventON
+ * Plugin Name: EventON Intel
  * Plugin URI: http://www.myeventon.com/
- * Description: A beautifully crafted minimal calendar experience
- * Version: 2.6.11
+ * Description: A beautifully crafted minimal calendar experience (last version: 2.6.11)
+ * Version: 2018.07.31
  * Author: AshanJay
  * Author URI: http://www.ashanjay.com
  * Requires at least: 4.0
