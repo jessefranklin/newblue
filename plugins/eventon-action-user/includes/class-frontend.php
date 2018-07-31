@@ -287,7 +287,7 @@ class evoau_frontend{
 				'event_allday'=>array('All Day', 'event_allday', 'allday','',''),
 
 				'event_location_select'=>array('Event Location Fields', 'evcal_location_select', 'locationselect','','evoAU_pseld'),
-					'event_location_name'=>array('Room Details/Webcast Link - e.g. RS5-116 <br> <a href="https://employeecontent.intel.com/content/corp/meeting-center/home.html" target="_blank" class="form-link">Need to book a conference room or set up an online meeting?</a>', 'evcal_location_name', 'text','', 'evoAUL_lca'),
+					'event_location_name'=>array('Room or Other Location <br> <a href="https://employeecontent.intel.com/content/corp/meeting-center/home.html" target="_blank" class="form-link">If you have not booked a room or virtual meeting yet, use this link.</a>', 'evcal_location_name', 'text','', 'evoAUL_lca'),
 					'event_location'=>array('Event Location Address', 'location_address', 'text','','evoAUL_ln'),
 					'event_location_cord'=>array('Event Location Coordinates (lat,lon Seperated by comma)', 'event_location_cord', 'text','','evoAUL_lcor'),
 					'event_location_link'=>array('Event Location Link', 'evcal_location_link', 'text','','evoAUL_llink'),
@@ -308,7 +308,7 @@ class evoau_frontend{
 					$__tax_name = $_tax_names_array[$x];
 
 					$event_fields['event_type'.$ab] = array(
-						'Select the '.$__tax_name.' Category',
+						'Select the '.$__tax_name.' Category (for Filtering)',
 						'event_type'.$ab, 'tax','',
 						'evoAUL_stet'.$x
 					);
@@ -481,8 +481,16 @@ class evoau_frontend{
 							$this->create_custom_fields($created_event_id, 'evcal_allday', 'yes');
 						}
 
+						if(!empty($_POST['evcal_allday']) && $_POST['evcal_allday']=='no'){
+							$this->create_custom_fields($created_event_id, 'evcal_allday', 'no');
+						}
+
 						if(!empty($_POST['evo_hide_endtime']) && $_POST['evo_hide_endtime']=='yes'){
 							$this->create_custom_fields($created_event_id, 'evo_hide_endtime', 'yes');
+						}
+
+						if(!empty($_POST['evo_hide_endtime']) && $_POST['evo_hide_endtime']=='no'){
+							$this->create_custom_fields($created_event_id, 'evo_hide_endtime', 'no');
 						}
 
 						//$__evo_date_format = (!empty($_POST['_evo_date_format']))? $_POST['_evo_date_format']: 'd/m/Y';
@@ -983,7 +991,7 @@ class evoau_frontend{
 
 					$subject = (!empty( $this->evoau_opt['evoau_ntf_drf_subject'])) ? $this->evoau_opt['evoau_ntf_drf_subject'] : 'We have received your event!';
 
-					$_message = (!empty( $this->evoau_opt['evoau_ntf_drf_msg'])) ? stripslashes($this->evoau_opt['evoau_ntf_drf_msg']) : 'Thank you for submitting your event!';
+					$_message = (!empty( $this->evoau_opt['evoau_ntf_drf_msg'])) ? stripslashes($this->evoau_opt['evoau_ntf_drf_msg']) : 'Is this event open to all? Then you are all set! Otherwise, click below to select your group of attendees!';
 
 					$message = $this->_get_email_body($_message, $event_id);
 

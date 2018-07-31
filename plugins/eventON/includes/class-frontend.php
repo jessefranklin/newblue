@@ -18,11 +18,11 @@ class evo_frontend {
 	public function __construct(){
 		global $eventon;
 
-		
+
 		// eventon related wp options access on frontend
 		$this->evo_options = get_option('evcal_options_evcal_1');
 		$this->evo_lang_opt = get_option('evcal_options_evcal_2');
-	
+
 		// register styles and scripts
 		add_action( 'init', array( $this, 'register_scripts' ), 10 );
 
@@ -30,13 +30,13 @@ class evo_frontend {
 			add_action( 'wp_enqueue_scripts', array( $this, 'load_evo_scripts_styles' ), 10 );
 			add_action( 'wp_head', array( $this, 'load_dynamic_evo_styles' ), 50 );
 		}
-		if(evo_settings_val('evo_load_scripts_only_onevo', $this->evo_options) && 
+		if(evo_settings_val('evo_load_scripts_only_onevo', $this->evo_options) &&
 			evo_settings_val('evo_load_all_styles_onpages', $this->evo_options)
 		){
 			add_action( 'wp_enqueue_scripts', array( $this, 'load_default_evo_styles' ), 50 );
 			add_action( 'wp_head', array( $this, 'load_dynamic_evo_styles' ), 50 );
 		}
-		
+
 		add_filter('body_class', array($this, 'body_classes'), 10,1);
 
 		$this->evopt1 = $eventon->evo_generator->evopt1;
@@ -46,20 +46,20 @@ class evo_frontend {
 		}
 
 		// SINGLE Events related
-		add_action( 'wp_head', array( $this, 'fb_headers' ) );	
+		add_action( 'wp_head', array( $this, 'fb_headers' ) );
 		add_filter('eventon_eventCard_evosocial', array($this, 'add_social_media_to_eventcard'), 10, 2);
 		add_filter('eventon_eventcard_array', array($this, 'eventcard_array'), 10, 4);
 		add_filter('evo_eventcard_adds', array($this, 'eventcard_adds'), 10, 1);
 		$this->register_se_sidebar();
 
 		// schedule deleting past events
-			add_action('evo_trash_past_events', array($this, 'evo_perform_trash_past_events'));	
+			add_action('evo_trash_past_events', array($this, 'evo_perform_trash_past_events'));
 
 		add_action( 'wp_footer', array( $this, 'footer_code' ) ,15);
 
 		add_filter('query_vars',array($this, 'query_vars'));
 		add_rewrite_endpoint('var', EP_PERMALINK);
-		
+
 	}
 
 	// Pass custom end points to single event URL
@@ -68,19 +68,19 @@ class evo_frontend {
 			return $vars;
 		}
 
-	
+
 	// styles and scripts
 		public function register_scripts() {
 			global $eventon;
-			
-			$evo_opt= $this->evo_options;	
 
-			
-			// Google gmap API script -- loadded from class-calendar_generator.php	
+			$evo_opt= $this->evo_options;
+
+
+			// Google gmap API script -- loadded from class-calendar_generator.php
 			//$apikey = !empty($evo_opt['evo_gmap_api_key'])? '?key='.$evo_opt['evo_gmap_api_key'] :'';
 			//wp_enqueue_script('testgmap','https://maps.googleapis.com/maps/api/js'.$apikey);
 			//wp_enqueue_style( 'select2',AJDE_EVCAL_URL.'/assets/css/select2.css');
-			
+
 			wp_register_script('evo_handlebars',plugins_url(EVENTON_BASE) . '/assets/js/handlebars.js', array('jquery'), $eventon->version, true ); // 2.6.8
 			wp_register_script('evo_mobile',plugins_url(EVENTON_BASE) . '/assets/js/jquery.mobile.min.js', array('jquery'), $eventon->version, true ); // 2.2.17
 			wp_register_script('evo_mobile',$eventon->assets_path.'js/jquery.mobile.min.js', array('jquery'), $eventon->version, true ); // 2.2.17
@@ -88,32 +88,32 @@ class evo_frontend {
 			wp_register_script('evo_mouse', $eventon->assets_path. 'js/jquery.mousewheel.min.js', array('jquery'),$eventon->version,true );//2.2.24
 			wp_register_script('evcal_functions', $eventon->assets_path. 'js/eventon_functions.js', array('jquery'), $eventon->version ,true );// 2.2.22
 			wp_register_script('evcal_ajax_handle', $eventon->assets_path. 'js/eventon_script.js', array('jquery'), $eventon->version ,true );
-			wp_localize_script( 
-				'evcal_ajax_handle', 
-				'the_ajax_script', 
-				apply_filters('evo_ajax_script_data', array( 
-					'ajaxurl' => admin_url( 'admin-ajax.php' ) , 
+			wp_localize_script(
+				'evcal_ajax_handle',
+				'the_ajax_script',
+				apply_filters('evo_ajax_script_data', array(
+					'ajaxurl' => admin_url( 'admin-ajax.php' ) ,
 					'postnonce' => wp_create_nonce( 'eventon_nonce' )
 				))
 			);
 
-			// google maps	
-			wp_register_script('eventon_gmaps', $eventon->assets_path. 'js/maps/eventon_gen_maps.js', array('jquery'), $eventon->version ,true );	
-			wp_register_script('eventon_gmaps_blank', $eventon->assets_path. 'js/maps/eventon_gen_maps_none.js', array('jquery'), $eventon->version ,true );	
+			// google maps
+			wp_register_script('eventon_gmaps', $eventon->assets_path. 'js/maps/eventon_gen_maps.js', array('jquery'), $eventon->version ,true );
+			wp_register_script('eventon_gmaps_blank', $eventon->assets_path. 'js/maps/eventon_gen_maps_none.js', array('jquery'), $eventon->version ,true );
 			wp_register_script('eventon_init_gmaps', $eventon->assets_path. 'js/maps/eventon_init_gmap.js', array('jquery'),'1.0',true );
 			wp_register_script( 'eventon_init_gmaps_blank', $eventon->assets_path. 'js/maps/eventon_init_gmap_blank.js', array('jquery'), $eventon->version ,true ); // load a blank initiate gmap javascript
 
 			$apikey = !empty($evo_opt['evo_gmap_api_key'])? '?key='.$evo_opt['evo_gmap_api_key'] :'';
 			wp_register_script( 'evcal_gmaps', apply_filters('eventon_google_map_url', 'https://maps.googleapis.com/maps/api/js'.$apikey), array('jquery'),'1.0',true);
-			
+
 
 			// STYLES
-			wp_register_style('evo_font_icons',$eventon->assets_path.'fonts/font-awesome.css','',$eventon->version);		
-			
+			wp_register_style('evo_font_icons',$eventon->assets_path.'fonts/font-awesome.css','',$eventon->version);
+
 			// Defaults styles and dynamic styles
-			wp_register_style('evcal_cal_default',$eventon->assets_path.'css/eventon_styles.css', array(), $eventon->version);	
+			wp_register_style('evcal_cal_default',$eventon->assets_path.'css/eventon_styles.css', array(), $eventon->version);
 			// single event
-			wp_register_style('evo_single_event',$eventon->assets_path.'css/evo_event_styles.css',array(),$eventon->version);	
+			wp_register_style('evo_single_event',$eventon->assets_path.'css/evo_event_styles.css',array(),$eventon->version);
 
 			// addon styles
 			if(evo_settings_check_yn($this->evo_options,'evcal_concat_styles'  )){
@@ -128,24 +128,24 @@ class evo_frontend {
 				wp_enqueue_style( 'ieStyle' );
 			}
 
-			// LOAD custom google fonts for skins	
+			// LOAD custom google fonts for skins
 			if( evo_settings_val( 'evo_googlefonts', $this->evo_options, true)){
-				//$gfonts = (is_ssl())? 'https://fonts.googleapis.com/css?family=Oswald:400,300|Open+Sans:400,300': 'http://fonts.googleapis.com/css?family=Oswald:400,300|Open+Sans:400,300';	
+				//$gfonts = (is_ssl())? 'https://fonts.googleapis.com/css?family=Oswald:400,300|Open+Sans:400,300': 'http://fonts.googleapis.com/css?family=Oswald:400,300|Open+Sans:400,300';
 				$gfonts="//fonts.googleapis.com/css?family=Oswald:400,300|Open+Sans:700,400,400i|Roboto:700,400";
 				wp_register_style( 'evcal_google_fonts', $gfonts, '', '', 'screen' );
 			}
-			
-			
+
+
 			$this->register_evo_dynamic_styles();
 
 			// Custom PHP codes to run via eventon settings
 				if( evo_settings_check_yn($evo_opt, 'evo_php_coding') ){
 					$php_codes = get_option('evcal_php');
 					//delete_option('evcal_php');
-					if(!empty($php_codes)){	
+					if(!empty($php_codes)){
 
 						$value = eval($php_codes."; return false;");
-						if($value!== false) {eval($php_codes);}						
+						if($value!== false) {eval($php_codes);}
 					}
 				}
 
@@ -161,9 +161,9 @@ class evo_frontend {
 			if(  evo_settings_val('evcal_css_head',  $opt, true)){
 				if(is_multisite()) {
 					$uploads = wp_upload_dir();
-					$dynamic_style_url = $uploads['baseurl'] . '/eventon_dynamic_styles.css';					
+					$dynamic_style_url = $uploads['baseurl'] . '/eventon_dynamic_styles.css';
 				} else {
-					$dynamic_style_url = $eventon->assets_path. 'css/eventon_dynamic_styles.css';					
+					$dynamic_style_url = $eventon->assets_path. 'css/eventon_dynamic_styles.css';
 				}
 
 				$dynamic_style_url = str_replace(array('http:','https:'), '',$dynamic_style_url);
@@ -171,15 +171,15 @@ class evo_frontend {
 				wp_register_style('eventon_dynamic_styles', $dynamic_style_url, 'style');
 			}
 		}
-		
+
 		public function load_dynamic_evo_styles(){
 			$opt= $this->evo_options;
 			if(evo_settings_val('evcal_css_head', $opt)){
-				
+
 				$dynamic_css = get_option('evo_dyn_css');
 				if(!empty($dynamic_css)){
 					echo '<style type ="text/css" rel="eventon_dynamic_styles">'.$dynamic_css.'</style>';
-				}				
+				}
 			}else{
 				wp_enqueue_style( 'eventon_dynamic_styles');
 			}
@@ -188,7 +188,7 @@ class evo_frontend {
 		public function enqueue_evo_scripts(){
 			$this->enqueue_evo_gmaps();
 			$this->load_default_evo_scripts();
-		}		
+		}
 
 		public function enqueue_evo_gmaps(){
 			wp_enqueue_script('evcal_gmaps');
@@ -201,12 +201,12 @@ class evo_frontend {
 			wp_enqueue_script('evo_handlebars');
 			wp_enqueue_script('evo_mobile');
 			wp_enqueue_script('evo_mouse');
-			wp_enqueue_script('evcal_ajax_handle');			
-			
+			wp_enqueue_script('evcal_ajax_handle');
+
 			do_action('eventon_enqueue_scripts');
 
 			// map enqueueing is done in calendar shell files
-			
+
 		}
 		public function load_default_evo_styles(){
 			$opt= $this->evo_options;
@@ -214,9 +214,9 @@ class evo_frontend {
 				wp_enqueue_style( 'evcal_google_fonts' );
 			}
 
-			wp_enqueue_style( 'evcal_cal_default');	
-			wp_enqueue_style( 'evo_addon_styles');	
-			
+			wp_enqueue_style( 'evcal_cal_default');
+			wp_enqueue_style( 'evo_addon_styles');
+
 			if(empty($opt['evo_fontawesome']) || $opt['evo_fontawesome'] =='no')
 				wp_enqueue_style( 'evo_font_icons' );
 
@@ -235,7 +235,7 @@ class evo_frontend {
 
 	// check if members only
 		function is_member_only($shortcode_args){
-			 return ( 
+			 return (
 			 	($shortcode_args['members_only']=='yes' && is_user_logged_in()) ||
 			 	$shortcode_args['members_only']=='no' || empty($shortcode_args['members_only'])
 			 )? true: false;
@@ -245,15 +245,15 @@ class evo_frontend {
 		}
 
 	// language
-		function lang($evo_options = '', 
-			$field, 
-			$default_val, 
+		function lang($evo_options = '',
+			$field,
+			$default_val,
 			$lang = ''
 		){
 			global $eventon;
-				
+
 			$evo_options = (!empty($evo_options))? $evo_options: $this->evo_lang_opt;
-			
+
 			// check for language preference
 			if(!empty($lang)){
 				$_lang_variation = $lang;
@@ -261,10 +261,10 @@ class evo_frontend {
 				$shortcode_arg = $eventon->evo_generator->shortcode_args;
 				$_lang_variation = (!empty($shortcode_arg['lang']))? $shortcode_arg['lang']:'L1';
 			}
-			
+
 			$new_lang_val = (!empty($evo_options[$_lang_variation][$field]) )?
 				stripslashes($evo_options[$_lang_variation][$field]): $default_val;
-				
+
 			return $new_lang_val;
 		}
 
@@ -284,7 +284,7 @@ class evo_frontend {
 			$options2 = (!empty($options2))? $options2: get_option('evcal_options_evcal_2');
 			$_lang_variation = (!empty($lang))? $lang:'L1';
 
-			
+
 			// foreach event type upto activated event type categories
 			for( $x=1; $x< (evo_get_ett_count($options)+1); $x++){
 				$ab = ($x==1)? '':$x;
@@ -292,7 +292,7 @@ class evo_frontend {
 				$_tax_lang_field = 'evcal_lang_et'.$x;
 
 				// check on eventon language values for saved name
-				$lang_name = (!empty($options2[$_lang_variation][$_tax_lang_field]))? 
+				$lang_name = (!empty($options2[$_lang_variation][$_tax_lang_field]))?
 					stripslashes($options2[$_lang_variation][$_tax_lang_field]): null;
 
 				// conditions
@@ -300,7 +300,7 @@ class evo_frontend {
 					$output[$x] = $lang_name;
 				}else{
 					$output[$x] = (!empty($options['evcal_eventt'.$ab]))? $options['evcal_eventt'.$ab]:'Event Type '.$ab;
-				}			
+				}
 			}
 			return $output;
 		}
@@ -315,7 +315,7 @@ class evo_frontend {
 			$_tax_lang_field = 'evcal_lang_et'.$x;
 
 			// check on eventon language values for saved name
-			$lang_name = (!empty($options2[$_lang_variation][$_tax_lang_field]))? 
+			$lang_name = (!empty($options2[$_lang_variation][$_tax_lang_field]))?
 				stripslashes($options2[$_lang_variation][$_tax_lang_field]): null;
 
 			// conditions
@@ -323,7 +323,7 @@ class evo_frontend {
 				return $lang_name;
 			}else{
 				return (!empty($options['evcal_eventt'.$ab]))? $options['evcal_eventt'.$ab]:'Event Type '.$ab;
-			}	
+			}
 
 		}
 
@@ -336,28 +336,28 @@ class evo_frontend {
 
 				// if disable OG tags set via settings
 				if( evo_settings_check_yn($this->evo_options,'evosm_disable_ogs') ) return false;
-				
+
 
 				//$thumbnail = get_the_post_thumbnail($post->ID, 'medium');
 				$img_id =get_post_thumbnail_id($post->ID);
 				$pmv = get_post_meta($post->ID);
-				
+
 				ob_start();
 					$excerpt = eventon_get_normal_excerpt( $post->post_content, 20);
 					//$excerpt = $post->post_content;
 				?>
 				<meta name="robots" content="all"/>
 				<meta property="description" content="<?php echo $excerpt;?>" />
-				<meta property="og:type" content="event" /> 
+				<meta property="og:type" content="event" />
 				<meta property="og:title" content="<?php echo $post->post_title;?>" />
 				<meta property="og:url" content="<?php echo get_permalink($post->ID);?>" />
 				<meta property="og:description" content="<?php echo $excerpt;?>" />
-				<?php if($img_id!=''): 
+				<?php if($img_id!=''):
 					$img_src = wp_get_attachment_image_src($img_id,'full');
 				?>
-					<meta property="og:image" content="<?php echo $img_src[0];?>" /> 
-					<meta property="og:image:width" content="<?php echo $img_src[1];?>" /> 
-					<meta property="og:image:height" content="<?php echo $img_src[2];?>" /> 
+					<meta property="og:image" content="<?php echo $img_src[0];?>" />
+					<meta property="og:image:width" content="<?php echo $img_src[1];?>" />
+					<meta property="og:image:height" content="<?php echo $img_src[2];?>" />
 				<?php endif;?>
 				<?php
 				// organizer as author
@@ -397,17 +397,17 @@ class evo_frontend {
 					$unixes = $dateTime->get_correct_event_repeat_time($event_post_meta, $repeat_interval);
 					$datetime_string = $dateTime->get_formatted_smart_time($unixes['start'], $unixes['end'],$event_post_meta);
 
-				
+
 				// check if social media to show or not
-				if( (!empty($evo_opt['evosm_som']) && $evo_opt['evosm_som']=='yes' && $__calendar_type=='single') 
+				if( (!empty($evo_opt['evosm_som']) && $evo_opt['evosm_som']=='yes' && $__calendar_type=='single')
 					|| ( empty($evo_opt['evosm_som']) ) || ( !empty($evo_opt['evosm_som']) && $evo_opt['evosm_som']=='no' ) ){
-					
+
 					$post_title = get_the_title($event_id);
 					$event_permalink = get_permalink($event_id);
 
 					// Link to event
 						$permalink_connector = (strpos($event_permalink, '?')!== false)? '&':'?';
-						$permalink = (!empty($object->__repeatInterval) && $object->__repeatInterval>0)? 
+						$permalink = (!empty($object->__repeatInterval) && $object->__repeatInterval>0)?
 							$event_permalink.$permalink_connector.'ri='.$object->__repeatInterval: $event_permalink;
 						$encodeURL = urlencode($permalink);
 
@@ -422,7 +422,7 @@ class evo_frontend {
 					$titleCOUNT = $post_title;
 					$summary = (!empty($summary)? urlencode(eventon_get_normal_excerpt($summary, 16)): '--');
 					$imgurl = $img_src? urlencode($img_src[0]):'';
-					
+
 					// social media array
 
 					$fb_js = "javascript:window.open(this.href, '', 'left=50,top=50,width=600,height=350,toolbar=0');return false;";
@@ -431,7 +431,7 @@ class evo_frontend {
 
 					//http://www.facebook.com/sharer.php?s=100&p[url]=PERMALINK&p[title]=TITLE&display=popup" data-url="PERMALINK
 					$social_sites = apply_filters('evo_se_social_media', array(
-											
+
 						'FacebookShare'    => array(
 							'key'=>'eventonsm_fbs',
 							'counter' =>1,
@@ -453,7 +453,7 @@ class evo_frontend {
 						'Google' => Array (
 							'key'=>'eventonsm_gp',
 							'counter' =>1,'favicon' => 'google.png',
-							'url' => '<a class="gp evo_ss" href="https://plus.google.com/share?url=PERMALINK" 
+							'url' => '<a class="gp evo_ss" href="https://plus.google.com/share?url=PERMALINK"
 								onclick="'.$fb_js.'" target="_blank"><i class="fa fa-google-plus"></i></a>'
 						),
 						'Pinterest' => Array (
@@ -463,14 +463,14 @@ class evo_frontend {
 							'url' => '<a class="pn evo_ss" href="http://www.pinterest.com/pin/create/button/?url=PERMALINK&media=IMAGEURL&description=SUMMARY"
 						        data-pin-do="buttonPin" data-pin-config="above" target="_blank"><i class="fa fa-pinterest"></i></a>'
 						),'EmailShare' => Array (
-							'key'=>'eventonsm_email',						
-							'url' => '<a class="em evo_ss" href="HREF" target="_blank"><i class="fa fa-envelope"></i></a>'
-						)						
+							'key'=>'eventonsm_email',
+							'url' => '<a class="em evo_ss" href="HREF" target="_blank"><i class="fa fa-envelope"></i>Share this event</a>'
+						)
 					));
-					
+
 					$sm_count = 0;
 					$output_sm='';
-					
+
 					// foreach sharing option
 					foreach($social_sites as $sm_site=>$sm_site_val){
 						if(!empty($evo_opt[$sm_site_val['key']]) && $evo_opt[$sm_site_val['key']]=='yes'){
@@ -493,7 +493,7 @@ class evo_frontend {
 								)) as $key=>$data){
 									$mailtocontent .= $data['label'] .': '. str_replace('+','%20',$data['value']) . '%0A';
 								}
-															
+
 
 								$href_ = 'mailto:?subject='.$title.'&body='.$mailtocontent;
 								$url = str_replace('HREF', $href_, $url);
@@ -506,19 +506,19 @@ class evo_frontend {
 
 								$site = $sm_site;
 								$url = $sm_site_val['url'];
-								
+
 								$url = str_replace('TITLECOUNT', $titleCOUNT, $url);
-								$url = str_replace('TITLE', $title, $url);			
+								$url = str_replace('TITLE', $title, $url);
 								$url = str_replace('PERMALINK', $encodeURL, $url);
 								$url = str_replace('SUMMARY', $summary, $url);
 								$url = str_replace('IMAGEURL', $imgurl, $url);
-								
+
 								$linkitem = '';
-								
+
 								$style='';
 								$target='';
 								$href = $url;
-								
+
 								$link= "<div class='evo_sm ".$sm_site."'>".$href."</div>";
 							}
 
@@ -528,18 +528,18 @@ class evo_frontend {
 							$sm_count++;
 						}
 					}
-					
+
 					if($sm_count>0){
 						return "<div class='bordb evo_metarow_socialmedia evcal_evdata_row'>".$output_sm."<div class='clear'></div></div>";
 					}
 				}
-			
-				$eventon->evo_generator->__calendar_type ='default';		
+
+				$eventon->evo_generator->__calendar_type ='default';
 			}
 
 	// Side bars
 		// create a single event sidebar
-		function register_se_sidebar(){			
+		function register_se_sidebar(){
 			$opt = $this->evo_options;
 
 			if(!empty($opt['evosm_1']) && $opt['evosm_1'] =='yes'){
@@ -553,7 +553,7 @@ class evo_frontend {
 			}
 		}
 
-	// Schedule 
+	// Schedule
 	// initiated in install
 		function evo_perform_trash_past_events(){
 
@@ -561,14 +561,14 @@ class evo_frontend {
 			eventon_trash_past_events();
 		}
 
-	// EMAILING	
+	// EMAILING
 		// get email parts
 			public function get_email_part($part){
 				global $eventon;
 
 				$file_name = 'email_'.$part.'.php';
 
-				$childThemePath = get_stylesheet_directory();	
+				$childThemePath = get_stylesheet_directory();
 
 				$paths = array(
 					0=> TEMPLATEPATH.'/'.$eventon->template_url.'templates/email/',
@@ -576,9 +576,9 @@ class evo_frontend {
 					2=> AJDE_EVCAL_PATH.'/templates/email/',
 				);
 
-				foreach($paths as $path){				
-					if(file_exists($path.$file_name) ){	
-						$template = $path.$file_name;	
+				foreach($paths as $path){
+					if(file_exists($path.$file_name) ){
+						$template = $path.$file_name;
 						break;
 					}//echo($path.$file_name.'<br/>');
 				}
@@ -598,14 +598,14 @@ class evo_frontend {
 				ob_start();
 
 				$file_location = EVO()->template_locator(
-					$part.'.php', 
+					$part.'.php',
 					$def_location,
 					'templates/email/'
 				);
 				include($file_location);
 
 				return ob_get_clean();
-				
+
 				/*
 				$file_name = $part.'.php';
 				global $eventon;
@@ -617,10 +617,10 @@ class evo_frontend {
 					);
 				}
 
-				foreach($paths as $path){	
-					// /echo $path.$file_name.'<br/>';			
-					if(file_exists($path.$file_name) ){	
-						$template = $path.$file_name;	
+				foreach($paths as $path){
+					// /echo $path.$file_name.'<br/>';
+					if(file_exists($path.$file_name) ){
+						$template = $path.$file_name;
 						break;
 					}
 				}
@@ -656,11 +656,11 @@ class evo_frontend {
 				return $str;
 			}elseif($this->evo_options['evo_content_filter']=='def'){
 				return apply_filters('the_content', $str);
-				
+
 			}else{// no filter at all
 				return $str;
 			}
-			
+
 		}
 
 	// footer for page with lightbox
@@ -683,13 +683,13 @@ class evo_frontend {
 				foreach($lightboxWindows as $key=>$lb){
 					?>
 					<div class='evo_lightbox <?php echo $key;?> <?php echo !empty($lb['classes'])? $lb['classes']:'';?>' id='<?php echo !empty($lb['id'])? $lb['id']:'';?>' >
-						<div class="evo_content_in">													
+						<div class="evo_content_in">
 							<div class="evo_content_inin">
 								<div class="evo_lightbox_content">
 									<a class='evolbclose <?php echo !empty($lb['CLclosebtn'])? $lb['CLclosebtn']:'';?>'>X</a>
 									<div class='evo_lightbox_body <?php echo !empty($lb['CLin'])? $lb['CLin']:'';?>'><?php echo !empty($lb['content'])? $lb['content']:'';?> </div>
 								</div>
-							</div>							
+							</div>
 						</div>
 					</div>
 					<?php

@@ -929,7 +929,7 @@ class evoau_form{
     :eventon_get_custom_language($this->opt_2, 'evoAUL_nof1', 'Required Field(s) Missing', $lang) ),
     'nof1'=> eventon_get_custom_language($this->opt_2, 'evoAUL_nof1', 'Required Field(s) Missing', $lang),
     'nof2'=>eventon_get_custom_language($this->opt_2, 'evoAUL_nof2', 'Invalid validation code please try again', $lang),
-    'nof3'=>eventon_get_custom_language($this->opt_2, 'evoAUL_nof3', 'Thank you for submitting your event!', $lang),
+    'nof3'=>eventon_get_custom_language($this->opt_2, 'evoAUL_nof3', 'Is this event open to all? Then you are all set! Otherwise, click below to select your group of attendees!', $lang),
     'nof4'=>eventon_get_custom_language($this->opt_2, 'evoAUL_nof4', 'Could not create event post, try again later!', $lang),
     'nof5'=>eventon_get_custom_language($this->opt_2, 'evoAUL_nof5', 'Bad nonce form verification, try again!', $lang),
     'nof6'=>eventon_get_custom_language($this->opt_2, 'evoAUL_nof6', 'You can only submit one event!', $lang),

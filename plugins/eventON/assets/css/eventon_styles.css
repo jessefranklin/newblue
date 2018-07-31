@@ -488,7 +488,7 @@
 		border: 1px solid #444;
 		font-size: 12px;
 		line-height: 12px;
-		padding: 6px 8px 4px 8px;
+		padding: 6px 16px 4px 8px;
 		font-style: normal;
 	}
 	.evo_hideshow_pastfuture,
@@ -505,10 +505,18 @@
 	.eventon_filter_line .filtering_set_val::after{
 		content:'\25BC';
 		margin-left: 2px;
+		position: absolute;
+		right:6px;
+		top:50%;
+		transform: translateY(-50%);
 	}
 	.eventon_filter_line .filtering_set_val.menuArrow::after{
 		content:'\25B2';
 		margin-left: 2px;
+		position: absolute;
+		right:6px;
+		top:50%;
+		transform: translateY(-50%);
 	}
 	.eventon_filter_line .filtering_set_val i.fa{margin-right: 5px;}
 	.eventon_filter_line .filtering_set_val:hover{background-color: #a5a5a5;}
@@ -528,11 +536,11 @@
 		.entry-content .eventon_filter_selection{
 			width:100%;
 		}
-		.entry-content .eventon_filter_line .filtering_set_val::after,
+		/* .entry-content .eventon_filter_line .filtering_set_val::after,
 		.entry-content .eventon_filter_line .filtering_set_val.menuArrow::after{
 			position: absolute;
 			right: 6px;
-		}
+		} */
 	}
 	@media screen and (max-width: 1000px) and (min-width: 560px), (min-width: 1360px){
 		.evo_widget .eventon_filter_line{
@@ -545,11 +553,11 @@
 		.evo_widget .eventon_filter_selection{
 			width:100%;
 		}
-		.evo_widget .eventon_filter_line .filtering_set_val::after,
+		/* .evo_widget .eventon_filter_line .filtering_set_val::after,
 		.evo_widget .eventon_filter_line .filtering_set_val.menuArrow::after{
 			position: absolute;
 			right: 6px;
-		}
+		} */
 	}
 
 	.eventon_sort_line p, .eventon_filter_line p, .eventon_sf_field p{
@@ -1341,12 +1349,18 @@
 			text-align: center;
 		}
 		.evo_metarow_socialmedia a.evo_ss{
-			display: block;
+			/* display: block; */
 			height: 50px; width: 50px;
 			/*border:1px solid #d6d6d6;*/
 			background-color: #f5f5f5;
-			border-radius: 50%;
-			margin: 0 5px;
+			border-radius: 6px;
+			margin: 10px 0px;
+			padding: 10px;
+			color: #6b6b6b;
+			font-size: 18px;
+			text-transform: uppercase;
+			font-weight: 700;
+			font-family: 'intel_clear_wlatregular', roboto, 'arial narrow' !important;
 		}
 		/* widget */
 		#evcal_widget .evo_metarow_socialmedia a.evo_ss i{font-size: 15px;}
@@ -1354,10 +1368,12 @@
 
 		.evo_metarow_socialmedia a.evo_ss:hover{
 			background-color: #909090;
+			color: #fff;
 		}
 		.evo_metarow_socialmedia a.evo_ss:hover i{	color: #fff;}
 		.evo_metarow_socialmedia a.evo_ss i{
 			margin-top: 15px;
+			margin-right: 12px;
 			font-size: 20px;
 			color:#909090;
 			display: inline-block;
@@ -1685,7 +1701,7 @@
 		background: -moz-linear-gradient(top, rgba(0,0,0,0) 50%, rgba(0,0,0,1) 98%, rgba(0,0,0,1) 100%); /* FF3.6-15 */
 		background: -webkit-linear-gradient(top, rgba(0,0,0,0) 50%,rgba(0,0,0,1) 98%,rgba(0,0,0,1) 100%); /* Chrome10-25,Safari5.1-6 */
 		background: linear-gradient(to bottom, rgba(0,0,0,0) 50%,rgba(0,0,0,1) 98%,rgba(0,0,0,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#000000',GradientType=0 ); /* IE6-9 */;
 		height: 100%; width: 100%;
 		z-index: 2;
 		opacity: 0.6;
@@ -2471,7 +2487,7 @@
 		margin-bottom: 2em;
 	}
 	.custom-header .EVOSR_section {
-		width: 30%;
+		width: 28%;
 		display: inline-block;
 		border: 1px solid grey;
 		border-radius: 1px;
@@ -2754,7 +2770,7 @@
 		    margin-top: 2px;
 		}
 		.ajdeToolTip em, .ajdethistooltip em{
-			visibility: hidden; 
+				visibility: hidden;
 		    font: 12px 'open sans';
 		    position: absolute;
 		    left: -1px;

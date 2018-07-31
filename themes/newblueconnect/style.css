@@ -4887,6 +4887,10 @@ label span{
 }
 
 /*Styling for search results*/
+.EVOSR_section input:hover{
+	color: #666 !important;
+}
+
 #evo_search{
 	position: relative;
 	margin-left: 2em;
@@ -5037,8 +5041,13 @@ body .evo_search_results_count span{
 	visibility: hidden !important;
 }
 
-.evosr_search_box ::-ms-clear,
-.evosr_search_box ::-webkit-clear-button{
+::-ms-clear{
+	display: none;
+  width : 0;
+  height: 0;
+}
+
+::-webkit-clear-button{
 	display: none;
   width : 0;
   height: 0;
