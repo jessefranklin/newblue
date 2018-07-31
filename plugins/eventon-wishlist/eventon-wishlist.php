@@ -1,9 +1,9 @@
 <?php
 /*
- * Plugin Name: EventON - Wishlist
+ * Plugin Name: EventON - Wishlist - Intel
  * Plugin URI: http://www.myeventon.com/event-map
- * Description: Add events to wishlist
- * Version: 0.3
+ * Description: Add events to wishlist. Based on v 0.3.
+ * Version: 2018.07.31
  * Author: AshanJay
  * Author URI: http://www.ashanjay.com
  * Requires at least: 4.0
