@@ -1,10 +1,10 @@
 <?php
 /**
- * Plugin Name: EventON - RSVP Events
+ * Plugin Name: EventON - RSVP Events - Intel
  * Plugin URI: http://www.myeventon.com/
- * Description: Allow visitors to RSVP to your event.
+ * Description: Allow visitors to RSVP to your event. Based on v 2.5.15.
  *  Author: Ashan Jay
- * Version: 2.5.15
+ * Version: 2018.07.31
  * Author URI: http://www.ashanjay.com/
  * Requires at least: 4.0
  * Tested up to: 4.9.4
