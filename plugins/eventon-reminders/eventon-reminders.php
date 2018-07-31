@@ -1,10 +1,10 @@
 <?php
 /*
- * Plugin Name: EventON - Reminders
+ * Plugin Name: EventON - Reminders - Intel
  * Plugin URI: http://www.myeventon.com/addons/reminders
- * Description: Send automated event reminders to RSVP guests or Ticket customers
+ * Description: Send automated event reminders to RSVP guests or Ticket customers. Based on v 0.4.
  * Author: Ashan Jay
- * Version: 0.4
+ * Version: 2018.07.31
  * Author URI: http://www.ashanjay.com/
  * Requires at least: 4.0
  * Tested up to: 4.9.5
