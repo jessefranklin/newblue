@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name: Custom Sidebars
+ * Plugin Name: Custom Sidebars Intel
  * Plugin URI:  https://wordpress.org/plugins/custom-sidebars/
- * Description: Allows you to create widgetized areas and custom sidebars. Replace whole sidebars or single widgets for specific posts and pages.
- * Version:     3.1.6
+ * Description: Allows you to create widgetized areas and custom sidebars. Replace whole sidebars or single widgets for specific posts and pages.  Based on: 3.1.6
+ * Version:     2018.07.31
  * Author:      WPMU DEV
  * Author URI:  http://premium.wpmudev.org/
  * Textdomain:  custom-sidebars
