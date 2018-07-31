@@ -1,9 +1,9 @@
 <?php
 /*
- * Plugin Name: EventON - Event Map  
+ * Plugin Name: EventON - Event Map - Intel 
  * Plugin URI: http://www.myeventon.com/event-map
- * Description: Create a map of all events
- * Version: 1.4.2
+ * Description: Create a map of all events. Based on v 1.4.2
+ * Version: 2018.07.31
  * Author: AshanJay
  * Author URI: http://www.ashanjay.com
  * Requires at least: 4.0
