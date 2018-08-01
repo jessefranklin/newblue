@@ -7,7 +7,7 @@
  * @author 		AJDE
  * @category 	Core
  * @package 	EventON/Functions/AJAX
- * @version     2.5.3
+ * @version     2.5.4
  */
 
 class evo_ajax{
@@ -189,7 +189,10 @@ class evo_ajax{
 						
 			// start and end time
 				$start = $_GET['sunix'];
-				$end = (!empty($_GET['eunix']))? $_GET['eunix'] : $sunix;
+				$start = strtotime($start) - 60 * 60 * 4;
+				// $end = (!empty($_GET['eunix']))? $_GET['eunix'] : $sunix;
+				$end = $_GET['eunix'];			
+				$end = strtotime($end) - 60 * 60 * 4;
 			
 			$name = $summary = (get_the_title($event_id));
 
@@ -213,35 +216,54 @@ class evo_ajax{
 			
 			//$slug = strtolower(str_replace(array(' ', "'", '.'), array('_', '', ''), $name));
 			$slug = $event->post_name;
+			$offset_1 = (int)$offset*(-100) + 100;
+			$tzzone = $this->esc_ical_text($timezone);
+			$tzzones = explode("/", $tzzone); 
+			$tzzone = $tzzones[1];
+			$tzzones = str_split($tzzone);
 						
 			header("Content-Type: text/Calendar; charset=utf-8");
 			header("Content-Disposition: inline; filename={$slug}.ics");          
 			echo "BEGIN:VCALENDAR\r\n";
 			echo "VERSION:2.0\r\n";
 			echo "PRODID:-//eventon.com NONSGML v1.0//EN\n";
-			echo "METHOD:REQUEST\n"; // requied by Outlook
+			echo "X-WR-CALNAME:".html_entity_decode( $this->esc_ical_text($name))."\n";			
+			echo "CALSCALE:GREGORIAN\n";
+			// echo "METHOD:REQUEST\n"; // requied by Outlook
 			echo "BEGIN:VTIMEZONE\n";						
 			echo "TZID:".$this->esc_ical_text($timezone)."\n";
-			echo "BEGIN:STANDARD\n";
-			echo "DTSTART:".   ( strpos($start, 'T')===false? date_i18n('Ymd\THis',$start): $start)."\n";
-			echo "TZOFFSETFROM:". str_replace(":","",$offset)."\n";
+			echo "TZURL:http://tzurl.org/zoneinfo-outlook/".$this->esc_ical_text($timezone)."\n";
+			echo "X-LIC-LOCATION:".$this->esc_ical_text($timezone)."\n";
+
+			echo "BEGIN:DAYLIGHT\n";
+			echo "TZOFFSETFROM:-0". str_replace(":","",$offset_1)."\n";
 			echo "TZOFFSETTO:".  str_replace(":","",$offset)."\n";
-			echo "TZNAME:GMT\n";
+			echo "TZNAME:".$tzzone[0]."DT\n";
+			echo "DTSTART:19700822T134641\n";
+			echo "RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU"."\n";
+			echo "END:DAYLIGHT\n";
+			
+			echo "BEGIN:STANDARD\n";
+			echo "TZOFFSETFROM:". str_replace(":","",$offset)."\n";
+			echo "TZOFFSETTO:-0".  str_replace(":","",$offset_1)."\n";
+			echo "TZNAME:".$tzzone[0]."ST\n";
+			echo "DTSTART:19700822T134641\n";
+			echo "RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU"."\n";
 			echo "END:STANDARD\n";
+
 			echo "END:VTIMEZONE\n";	
 			//	echo "DTSTART;TZID:".$this->esc_ical_text($timezone).':'.$offset."\n";     
-			echo "BEGIN:VEVENT\n";
-			echo "UID:{$uid}\n"; // required by Outlok
-			echo "DTSTAMP:".date_i18n('Ymd').'T'.date_i18n('His')."\n"; // required by Outlook
+			echo "BEGIN:VEVENT\n";			
+			echo "UID:".date_i18n('Ymd').'T'.date_i18n('THis\Z')."-:{$uid}\n"; // required by Outlok
 			//echo "DTSTART:{$start}\n";   
 			//echo "DTEND:{$end}\n";			 
 			//echo "DTSTART:".   ( strpos($start, 'T')===false? date_i18n('Ymd\THis',$start): $start)."\n";
 			//echo "DTEND:".		( strpos($start, 'T')===false? date_i18n('Ymd\THis',$end): $end)."\n";
-			echo "DTSTART;TZID=". $this->esc_ical_text($timezone).':'.( strpos($start, 'T')===false? date_i18n('Ymd\THis',$start): $start)."\n";
-			echo "DTEND;TZID=".	$this->esc_ical_text($timezone).':'.( strpos($start, 'T')===false? date_i18n('Ymd\THis',$end): $end)."\n";	
-			echo "LOCATION:{$location}\n";
+			echo "DTSTART;TZID=". $this->esc_ical_text($timezone).':'.date_i18n('Ymd').'T'.date_i18n('His',$start)."\n";
+			echo "DTEND;TZID=".	$this->esc_ical_text($timezone).':'.date_i18n('Ymd').'T'.date_i18n('His',$end)."\n";	
+			// echo "LOCATION:{$location}\n";
 			echo "SUMMARY:".html_entity_decode( $this->esc_ical_text($name))."\n";
-			echo "DESCRIPTION: ".$this->esc_ical_text($summary)."\n";
+			// echo "DESCRIPTION: ".$this->esc_ical_text($summary)."\n";
 			echo "END:VEVENT\n";
 			echo "END:VCALENDAR";
 			exit;
