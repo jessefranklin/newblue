@@ -3,7 +3,7 @@
  * Plugin Name: EventON Intel
  * Plugin URI: http://www.myeventon.com/
  * Description: A beautifully crafted minimal calendar experience (last version: 2.6.11)
- * Version: 2018.07.31
+ * Version: 2018.08.01
  * Author: AshanJay
  * Author URI: http://www.ashanjay.com
  * Requires at least: 4.0
