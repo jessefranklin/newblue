@@ -1,7 +1,9 @@
 <?php
 /**
  * Event Class for one event
- * @version 2.6.7
+ * @version 2.6.8
+ *
+ * Intel version 1.5
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
@@ -220,7 +222,7 @@ class EVO_Event{
 				$new_timeT = date("Ymd", $new_unix);
 				$new_timeZ = date("Hi", $new_unix);
 				// $new_times[$key] = $new_timeT.'T'.$new_timeZ.'00Z';
-				$new_times[$key] = $new_timeT.'T'.$new_timeZ;
+				$new_times[$key] = $new_timeT.'T'.$new_timeZ.'00Z';
 
 			}
 

@@ -8,6 +8,8 @@
  * @category 	Core
  * @package 	EventON/Functions/AJAX
  * @version     2.5.4
+ *
+ * Intel version 1.5
  */
 
 class evo_ajax{
@@ -199,7 +201,12 @@ class evo_ajax{
 			// summary for ICS file
 			$event = get_post($event_id);
 			if(empty($event)) return false;
-			$timezone = get_post_meta( $event_id, 'evotimezone', true );						 $tz = new DateTimeZone($timezone);			$timezone_offsets= $tz->getOffset(new DateTime);						$offset_prefix = $timezone_offsets < 0 ? '-' : '+';			$offset_formatted = gmdate( 'H:i', abs($timezone_offsets) );						$offset=$offset_prefix . $offset_formatted;						 
+			$timezone = get_post_meta( $event_id, 'evotimezone', true );						 
+			$tz = new DateTimeZone($timezone);			
+			$timezone_offsets= $tz->getOffset(new DateTime);						
+			$offset_prefix = $timezone_offsets < 0 ? '-' : '+';			
+			$offset_formatted = gmdate( 'H:i', abs($timezone_offsets) );						
+			$offset=$offset_prefix . $offset_formatted;						 
 			$content = (!empty($event->post_content))? $event->post_content:'';
 			if(!empty($content)){
 				$content = strip_tags($content);
@@ -223,7 +230,8 @@ class evo_ajax{
 			$tzzones = str_split($tzzone);
 						
 			header("Content-Type: text/Calendar; charset=utf-8");
-			header("Content-Disposition: inline; filename={$slug}.ics");          
+			header("Content-Disposition: inline; filename={$slug}.ics");     
+			
 			echo "BEGIN:VCALENDAR\r\n";
 			echo "VERSION:2.0\r\n";
 			echo "PRODID:-//eventon.com NONSGML v1.0//EN\n";
@@ -252,19 +260,20 @@ class evo_ajax{
 			echo "END:STANDARD\n";
 
 			echo "END:VTIMEZONE\n";	
-			//	echo "DTSTART;TZID:".$this->esc_ical_text($timezone).':'.$offset."\n";     
+
+			//	echo "DTSTART;TZID:".$this->esc_ical_text($timezone).':'.$offset."\n";    
 			echo "BEGIN:VEVENT\n";			
 			echo "UID:".date_i18n('Ymd').'T'.date_i18n('THis\Z')."-:{$uid}\n"; // required by Outlok
 			//echo "DTSTART:{$start}\n";   
 			//echo "DTEND:{$end}\n";			 
 			//echo "DTSTART:".   ( strpos($start, 'T')===false? date_i18n('Ymd\THis',$start): $start)."\n";
 			//echo "DTEND:".		( strpos($start, 'T')===false? date_i18n('Ymd\THis',$end): $end)."\n";
-			echo "DTSTART;TZID=". $this->esc_ical_text($timezone).':'.date_i18n('Ymd').'T'.date_i18n('His',$start)."\n";
-			echo "DTEND;TZID=".	$this->esc_ical_text($timezone).':'.date_i18n('Ymd').'T'.date_i18n('His',$end)."\n";	
+			echo "DTSTART;TZID=". $this->esc_ical_text($timezone).':'.date_i18n('Ymd',$start).'T'.date_i18n('His',$start)."\n";
+			echo "DTEND;TZID=".	$this->esc_ical_text($timezone).':'.date_i18n('Ymd',$end).'T'.date_i18n('His',$end)."\n";	
 			// echo "LOCATION:{$location}\n";
 			echo "SUMMARY:".html_entity_decode( $this->esc_ical_text($name))."\n";
 			// echo "DESCRIPTION: ".$this->esc_ical_text($summary)."\n";
-			echo "END:VEVENT\n";
+			echo "END:VEVENT\n";		
 			echo "END:VCALENDAR";
 			exit;
 		}
@@ -296,8 +305,9 @@ class evo_ajax{
 				echo "BEGIN:VCALENDAR\n";
 				echo "VERSION:2.0\n";
 				echo "PRODID:-//eventon.com NONSGML v1.0//EN\n";
+				echo "X-WR-CALNAME:".html_entity_decode( $this->esc_ical_text($name))."\n";	
 				echo "CALSCALE:GREGORIAN\n";
-				echo "METHOD:PUBLISH\n";
+				// echo "METHOD:PUBLISH\n";
 
 				foreach($events as $event_id=>$event){
 					$location = $summary = '';
@@ -320,13 +330,13 @@ class evo_ajax{
 
 					$uid = uniqid();
 					echo "BEGIN:VEVENT\n";
-					echo "UID:{$uid}\n"; // required by Outlok
-					echo "DTSTAMP".date_i18n('Ymd').'T'.date_i18n('His')."\n"; // required by Outlook
-					echo "DTSTART;TZID=" . evo_get_adjusted_utc($event['start']) ."\n"; 
-					echo "DTEND;TZID=" . evo_get_adjusted_utc($event['end']) ."\n";
-					if(!empty($location)) echo "LOCATION:". $this->esc_ical_text($location) ."\n";
+					echo "UID:".date_i18n('Ymd').'T'.date_i18n('THis\Z')."-:{$uid}\n"; // required by Outlok
+					// echo "DTSTAMP".date_i18n('Ymd').'T'.date_i18n('His')."\n"; // required by Outlook
+					echo "DTSTART;TZID=" . $this->esc_ical_text($timezone).':'.date_i18n('Ymd',$start).'T'.date_i18n('His',$start)."\n"; 
+					echo "DTEND;TZID=" . $this->esc_ical_text($timezone).':'.date_i18n('Ymd',$end).'T'.date_i18n('His',$end)."\n";
+					// if(!empty($location)) echo "LOCATION:". $this->esc_ical_text($location) ."\n";
 					echo "SUMMARY:". $fnc->htmlspecialchars_decode($event['name'])."\n";
-					if(!empty($summary)) echo "DESCRIPTION: ".$this->esc_ical_text($summary)."\n";
+					// if(!empty($summary)) echo "DESCRIPTION: ".$this->esc_ical_text($summary)."\n";
 					echo "END:VEVENT\n";
 
 					// repeating instances
@@ -336,17 +346,16 @@ class evo_ajax{
 
 								$uid = uniqid();
 								echo "BEGIN:VEVENT\n";
-								echo "UID:{$uid}\n"; // required by Outlok
-								echo "DTSTAMP:".date_i18n('Ymd').'T'.date_i18n('His')."\n"; // required by Outlook
-								echo "DTSTART;TZID=" . evo_get_adjusted_utc($repeats[0]) ."\n"; 
-								echo "DTEND;TZID=" . evo_get_adjusted_utc($repeats[1]) ."\n";
-								if(!empty($location)) echo "LOCATION:". $this->esc_ical_text($location) ."\n";
+								echo "UID:".date_i18n('Ymd').'T'.date_i18n('THis\Z')."-:{$uid}\n"; // required by Outlok
+								// echo "DTSTAMP:".date_i18n('Ymd').'T'.date_i18n('His')."\n"; // required by Outlook
+								echo "DTSTART;TZID=" . $this->esc_ical_text($timezone).':'.date_i18n('Ymd',$repeats[0]).'T'.date_i18n('His',$repeats[0])."\n"; 
+								echo "DTEND;TZID=" . $this->esc_ical_text($timezone).':'.date_i18n('Ymd',$repeats[1]).'T'.date_i18n('His',$repeats[1])."\n";
+								// if(!empty($location)) echo "LOCATION:". $this->esc_ical_text($location) ."\n";
 								echo "SUMMARY:". $fnc->htmlspecialchars_decode($event['name'])."\n";
-								if(!empty($summary)) echo "DESCRIPTION: ".$this->esc_ical_text($summary)."\n";
+								// if(!empty($summary)) echo "DESCRIPTION: ".$this->esc_ical_text($summary)."\n";
 								echo "END:VEVENT\n";
 							}
 						}
-
 				}
 				echo "END:VCALENDAR";
 				exit;
