@@ -288,7 +288,7 @@ class evoau_frontend{
 
 				'event_location_select'=>array('Event Location Fields', 'evcal_location_select', 'locationselect','','evoAU_pseld'),
 					'event_location_name'=>array('Room or Other Location <br> <a href="https://employeecontent.intel.com/content/corp/meeting-center/home.html" target="_blank" class="form-link">If you have not booked a room or virtual meeting yet, use this link.</a>', 'evcal_location_name', 'text','', 'evoAUL_lca'),
-					'event_location'=>array('Event Location Address', 'location_address', 'text','','evoAUL_ln'),
+					'event_location'=>array('Event Location Address (e.g. City, State, Country)', 'location_address', 'text','','evoAUL_ln'),
 					'event_location_cord'=>array('Event Location Coordinates (lat,lon Seperated by comma)', 'event_location_cord', 'text','','evoAUL_lcor'),
 					'event_location_link'=>array('Event Location Link', 'evcal_location_link', 'text','','evoAUL_llink'),
 				'event_color'=>array('Event Color', 'evcal_event_color', 'color','','evoAUL_ec'),
