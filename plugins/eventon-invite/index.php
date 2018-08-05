@@ -14,7 +14,7 @@
 	function get_UTC_offset(){
 
 		$offset = (get_option('gmt_offset', 0) * 3600);
-		$opt = get_option('evcal_options_evcal_1');;
+		$opt = get_option('evcal_options_evcal_1');
 		$customoffset = !empty($opt['evo_time_offset'])? 
 			(intval($opt['evo_time_offset'])) * 60:
 			0;
@@ -157,8 +157,24 @@
 							<input type="hidden" name="event_type" id="event_type" value="<?php echo esc_html__($terms[0]->name); ?>">
 							
 							<div>
+								<span style="font-weight: bold; margin-top: 10px; color: black; display: block;" >Select Invite List Selection Method</span>
+								<select id="get_invite_type" class="ui fluid dropdown">
+									<option value='custom_list' selected>Upload Custom Invite List</option>
+									<option value='super_group'>Invite Super Group(s)</option>
+								</select>
+
 								<select name="group[]" multiple="" class="ui fluid dropdown" id="group">
 								</select>
+
+								<div id="group_container" style="display: none;">
+									<select name="group[]" multiple="" class="ui fluid dropdown" id="group">
+									</select>
+								</div>
+								<div id="custom_list">
+									<span style="font-weight: bold; margin-top: 10px; color: black; display: block;" >Enter/Paste Emails (one email per line):</span>
+									<textarea id="txt_custom_list" style="height: 150px"></textarea>
+								</div>
+
 							</div>
 							<div style="margin-top:20px;">
 								<input type="submit" name="submit" value="submit" id="submit">
@@ -304,7 +320,18 @@ body {font-family: Arial, Helvetica, sans-serif;}
 <script>
 var ajax_url = '<?php echo admin_url( 'admin-ajax.php' ); ?>';
 $('.ui.dropdown').dropdown({placeholder:'Select Group'});
-$(document).ready(function(){    
+$(document).ready(function(){
+	$( "#get_invite_type" ).on( "change", function () {
+		var invite_type = $( this ).val();
+		if( invite_type === "custom_list" ) {
+			$("#custom_list").show();
+			$("#group_container").hide();
+		} else if( invite_type === "super_group" ) {
+			$("#custom_list").hide();
+			$("#group_container").show();
+		}
+	} );
+  
     $("#myBtn").click(function(){
         $("#myModal").show();		
 			var dropdown = $('#group');
@@ -385,6 +412,12 @@ $(document).ready(function(){
 					'evcal_type': $('#event_type').val()
 				}
 			};
+			if( $( "#get_invite_type" ).val() === "custom_list" ) {
+				data.event_data.custom_list = $( '#txt_custom_list' ).val();
+			} else if( $( "#get_invite_type" ).val() === "super_group" ) {
+				data.event_data.group = $( '#group' ).val();
+			}
+
 			jQuery.post( ajax_url, data, function( response ) {
 				console.log('event_id : ' + $('#event_id').val() );
 				console.log('event_title : ' + $('#event_title').val() );
