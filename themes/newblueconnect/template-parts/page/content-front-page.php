@@ -28,10 +28,10 @@
 		<div class="wrap">
 			<header class="entry-header">
 				<?php the_title( '<h2 class="entry-title">', '</h2>' ); ?>
-				<!-- <span id="btn-map" class="map-toggle">
+				<span id="btn-map" class="map-toggle">
 					<p class="fa fa-map-marker"></p>
 					<p>Map</p>
-				</span> -->
+				</span>
 				<span id="btn-calendar" class="map-toggle">
 					<p class="fa fa-calendar"></p>
 					<p>Calendar</p>
