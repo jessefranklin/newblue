@@ -678,7 +678,7 @@ class evoau_form{
                   'event_location_cord',
                   'event_location_link',
                   );
-                  echo "<div class='enterownrow' style='display:none'>";
+                  echo "<div class='enterownrow' style='display:block'>";
                   foreach($data as $v){
                     $dataField = $fields[$v];
                     $savedValue = (!empty($termMeta) && !empty($termMeta[$dataField[1]]) )?$termMeta[$dataField[1]]: '';

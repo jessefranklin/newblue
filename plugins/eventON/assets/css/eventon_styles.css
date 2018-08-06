@@ -11,6 +11,7 @@ p.evors_max_active {display:none}
 p.event_org_contact {display:none}
 p.event_org_address {display:none}
 p.event_org_link {display:none}
+div.row.locationSelect > div.enterownrow {display:block;}
 /* End Overrides */
 
 /* Created for New Blue COnnect */
