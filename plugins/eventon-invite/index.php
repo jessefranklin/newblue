@@ -76,6 +76,8 @@
 
 	$post_id = $wpdb->get_results("SELECT * from $wpdb->posts WHERE post_type='ajde_events' and post_status='publish' and post_author =".$user_id." ORDER BY post_date DESC LIMIT 1");
 	
+	//$event_link = 'https://newblueconnect.intel.com/' . $post_id[0]->post_name;
+	$event_link = get_permalink( $post_id[0] );
 	//print_r($_POST);   
 	
 	// $post_id[0]->ID;
@@ -155,15 +157,12 @@
 							<input type="hidden" name="event_time" id="event_time" value="<?php echo esc_html__($new_estart).' - '.esc_html__($new_eend); ?>">
 							<input type="hidden" name="ics_url" id="ics_url" value="<?php echo esc_html__($ics_url); ?>">
 							<input type="hidden" name="event_type" id="event_type" value="<?php echo esc_html__($terms[0]->name); ?>">
-							
+							<input type="hidden" name="event_link" id="event_link" value="<?php echo esc_html__($event_link); ?>">
 							<div>
 								<span style="font-weight: bold; margin-top: 10px; color: black; display: block;" >Select Invite List Selection Method</span>
 								<select id="get_invite_type" class="ui fluid dropdown">
 									<option value='custom_list' selected>Upload Custom Invite List</option>
 									<option value='super_group'>Invite Super Group(s)</option>
-								</select>
-
-								<select name="group[]" multiple="" class="ui fluid dropdown" id="group">
 								</select>
 
 								<div id="group_container" style="display: none;">
@@ -409,7 +408,8 @@ $(document).ready(function(){
 					'event_location': $('#event_location').val(),
 					'event_time': $('#event_time').val(),
 					'evcal_organizer': $('#evcal_organizer').val(),
-					'evcal_type': $('#event_type').val()
+					'evcal_type': $('#event_type').val(),
+					'event_link': $('#event_link').val()
 				}
 			};
 			if( $( "#get_invite_type" ).val() === "custom_list" ) {
