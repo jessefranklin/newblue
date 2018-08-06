@@ -3,7 +3,7 @@
    Plugin Name: EventON - Invite
    Plugin URI: http://www.myeventon.com/
    description:Invite group
-   Intel Version: 1.5
+   Intel Version: 1.6
    Author: Hero Digital
    Author URI: http://herodigital.com  
    License: GPL2
@@ -177,7 +177,7 @@
 
 							</div>
 							<div style="margin-top:20px;">
-								<input type="submit" name="submit" value="submit" id="submit">
+								<input type="submit" name="submit" value="Submit" id="submit">
 							</div>
 						</form>
 					</div>
@@ -429,10 +429,14 @@ $(document).ready(function(){
 				console.log('event_time : ' + $('#event_time').val() );
 				console.log('evcal_organizer : ' + $('#evcal_organizer').val() );
 				console.log('evcal_type : ' + $('#event_type').val() );
+				$("#myModal .modal-body").removeClass( "evoloadbar" );
+				$("#myModal .modal-body").removeClass( "bottom" );
 				$("#myModal").hide();
 				$("#myBtn").after("<p>Invitations Sent</p>");
 				$("#myBtn").hide();
 			} );
+			$("#myModal .modal-body").addClass( "evoloadbar" );
+			$("#myModal .modal-body").addClass( "bottom" );
         });
 
       });
