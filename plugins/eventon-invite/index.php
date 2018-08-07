@@ -76,8 +76,8 @@
 
 	$post_id = $wpdb->get_results("SELECT * from $wpdb->posts WHERE post_type='ajde_events' and post_status='publish' and post_author =".$user_id." ORDER BY post_date DESC LIMIT 1");
 	
-	//$event_link = 'https://newblueconnect.intel.com/' . $post_id[0]->post_name;
-	$event_link = get_permalink( $post_id[0] );
+	$event_link = 'https://newblueconnect.intel.com/' . $post_id[0]->post_name;
+	//$event_link = get_permalink( $post_id[0] );
 	//print_r($_POST);   
 	
 	// $post_id[0]->ID;
