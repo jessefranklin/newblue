@@ -484,7 +484,7 @@ function evoautimezone_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 			<option value="America/Los_Angeles">(GMT-08:00) Pacific Time (US & Canada)</option>
 			<option value="America/Denver">(GMT-07:00) Mountain Time (US & Canada)</option>
 			<option value="America/Chihuahua">(GMT-07:00) Chihuahua, La Paz, Mazatlan</option>
-			<option value="America/Dawson_Creek">(GMT-07:00) Arizona</option>
+			<option value="America/Arizona">(GMT-07:00) Arizona</option>
 			<option value="America/Belize">(GMT-06:00) Saskatchewan, Central America</option>
 			<option value="America/Cancun">(GMT-06:00) Guadalajara, Mexico City, Monterrey</option>
 			<option value="Chile/EasterIsland">(GMT-06:00) Easter Island</option>
@@ -544,6 +544,7 @@ function evoautimezone_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 			<option value="Asia/Hong_Kong">(GMT+08:00) Beijing, Chongqing, Hong Kong, Urumqi</option>
 			<option value="Asia/Irkutsk">(GMT+08:00) Irkutsk, Ulaan Bataar</option>
 			<option value="Australia/Perth">(GMT+08:00) Perth</option>
+			<option value="Asia/Malaysia">(GMT+08:00) Malaysia</option>
 			<option value="Australia/Eucla">(GMT+08:45) Eucla</option>
 			<option value="Asia/Tokyo">(GMT+09:00) Osaka, Sapporo, Tokyo</option>
 			<option value="Asia/Seoul">(GMT+09:00) Seoul</option>
