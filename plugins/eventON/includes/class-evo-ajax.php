@@ -9,7 +9,7 @@
  * @package 	EventON/Functions/AJAX
  * @version     2.5.4
  *
- * Intel version 1.6
+ * Intel version 1.61
  */
 
 class evo_ajax{
@@ -266,7 +266,6 @@ class evo_ajax{
 			// echo "UID:".date_i18n('Ymd').'T'.date_i18n('THis\Z')."-:{$uid}\n"; // required by Outlook
 			echo "UID:".html_entity_decode( $this->esc_ical_text($name))."\n";; // required by Outlook
 			echo "SEQUENCE:1\n";
-			echo "ORGANIZER:NewBlueConnect\n";
 			//echo "DTSTART:{$start}\n";   
 			//echo "DTEND:{$end}\n";			 
 			//echo "DTSTART:".   ( strpos($start, 'T')===false? date_i18n('Ymd\THis',$start): $start)."\n";
