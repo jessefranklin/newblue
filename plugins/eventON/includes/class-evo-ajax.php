@@ -268,7 +268,7 @@ class evo_ajax{
 			//echo "DTEND:".		( strpos($start, 'T')===false? date_i18n('Ymd\THis',$end): $end)."\n";
 			echo "DTSTART;TZID=". $this->esc_ical_text($timezone).':'.date_i18n('Ymd',$start).'T'.date_i18n('His',$start)."\n";
 			echo "DTEND;TZID=".	$this->esc_ical_text($timezone).':'.date_i18n('Ymd',$end).'T'.date_i18n('His',$end)."\n";	
-			// echo "LOCATION:{$location}\n";
+			echo "LOCATION:{$location}\n";
 			echo "SUMMARY:".html_entity_decode( $this->esc_ical_text($name))."\n";
 			// echo "DESCRIPTION: ".$this->esc_ical_text($summary)."\n";
 			echo "BEGIN:VALARM\n";
