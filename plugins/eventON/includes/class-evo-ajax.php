@@ -234,10 +234,9 @@ class evo_ajax{
 			
 			echo "BEGIN:VCALENDAR\r\n";
 			echo "VERSION:2.0\r\n";
-			echo "PRODID:-//eventon.com NONSGML v1.0//EN\n";
-			echo "METHOD:REQUEST\n";
+			echo "PRODID:www.eventon.com";
+			echo "METHOD:PUBLISH\n";
 			//echo "X-WR-CALNAME:".html_entity_decode( $this->esc_ical_text($name))."\n";			
-			echo "CALSCALE:GREGORIAN\n";
 			echo "BEGIN:VTIMEZONE\n";						
 			echo "TZID:".$this->esc_ical_text($timezone)."\n";
 			echo "TZURL:http://tzurl.org/zoneinfo-outlook/".$this->esc_ical_text($timezone)."\n";
@@ -248,7 +247,6 @@ class evo_ajax{
 			echo "TZOFFSETTO:".  str_replace(":","",$offset)."\n";
 			echo "TZNAME:".$tzzone[0]."DT\n";
 			echo "DTSTART:19700822T134641\n";
-			echo "RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU"."\n";
 			echo "END:DAYLIGHT\n";
 			
 			echo "BEGIN:STANDARD\n";
@@ -256,7 +254,6 @@ class evo_ajax{
 			echo "TZOFFSETTO:-0".  str_replace(":","",$offset_1)."\n";
 			echo "TZNAME:".$tzzone[0]."ST\n";
 			echo "DTSTART:19700822T134641\n";
-			echo "RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU"."\n";
 			echo "END:STANDARD\n";
 
 			echo "END:VTIMEZONE\n";	
@@ -265,7 +262,6 @@ class evo_ajax{
 			echo "BEGIN:VEVENT\n";			
 			// echo "UID:".date_i18n('Ymd').'T'.date_i18n('THis\Z')."-:{$uid}\n"; // required by Outlook
 			echo "UID:".html_entity_decode( $this->esc_ical_text($name))."\n";; // required by Outlook
-			echo "SEQUENCE:1\n";
 			//echo "DTSTART:{$start}\n";   
 			//echo "DTEND:{$end}\n";			 
 			//echo "DTSTART:".   ( strpos($start, 'T')===false? date_i18n('Ymd\THis',$start): $start)."\n";
