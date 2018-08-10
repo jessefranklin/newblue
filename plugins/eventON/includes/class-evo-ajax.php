@@ -201,7 +201,7 @@ class evo_ajax{
 			// summary for ICS file
 			$event = get_post($event_id);
 			if(empty($event)) return false;
-			$timezone = get_post_meta( $event_id, 'evotimezone', true );						 
+			$timezone = get_post_meta( $event_id, 'evo_event_timezone', true );						 
 			$tz = new DateTimeZone($timezone);			
 			$timezone_offsets= $tz->getOffset(new DateTime);						
 			$offset_prefix = $timezone_offsets < 0 ? '-' : '+';			
