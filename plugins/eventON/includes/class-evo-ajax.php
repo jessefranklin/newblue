@@ -235,9 +235,9 @@ class evo_ajax{
 			echo "BEGIN:VCALENDAR\r\n";
 			echo "VERSION:2.0\r\n";
 			echo "PRODID:-//eventon.com NONSGML v1.0//EN\n";
-			echo "METHOD:REQUEST\n";
-			//echo "X-WR-CALNAME:".html_entity_decode( $this->esc_ical_text($name))."\n";			
+			echo "X-WR-CALNAME:".html_entity_decode( $this->esc_ical_text($name))."\n";			
 			echo "CALSCALE:GREGORIAN\n";
+			// echo "METHOD:REQUEST\n"; // requied by Outlook
 			echo "BEGIN:VTIMEZONE\n";						
 			echo "TZID:".$this->esc_ical_text($timezone)."\n";
 			echo "TZURL:http://tzurl.org/zoneinfo-outlook/".$this->esc_ical_text($timezone)."\n";
@@ -263,10 +263,7 @@ class evo_ajax{
 
 			//	echo "DTSTART;TZID:".$this->esc_ical_text($timezone).':'.$offset."\n";    
 			echo "BEGIN:VEVENT\n";			
-			// echo "UID:".date_i18n('Ymd').'T'.date_i18n('THis\Z')."-:{$uid}\n"; // required by Outlook
-			echo "UID:".html_entity_decode( $this->esc_ical_text($name))."\n";; // required by Outlook
-			echo "SEQUENCE:1\n";
-			echo "ORGANIZER:NewBlueConnect\n";
+			echo "UID:".date_i18n('Ymd').'T'.date_i18n('THis\Z')."-:{$uid}\n"; // required by Outlok
 			//echo "DTSTART:{$start}\n";   
 			//echo "DTEND:{$end}\n";			 
 			//echo "DTSTART:".   ( strpos($start, 'T')===false? date_i18n('Ymd\THis',$start): $start)."\n";
@@ -276,11 +273,6 @@ class evo_ajax{
 			// echo "LOCATION:{$location}\n";
 			echo "SUMMARY:".html_entity_decode( $this->esc_ical_text($name))."\n";
 			// echo "DESCRIPTION: ".$this->esc_ical_text($summary)."\n";
-			echo "BEGIN:VALARM\n";
-			echo "TRIGGER:-PT15M\n";
-			echo "ACTION:DISPLAY\n";
-			echo "DESCRIPTION:Reminder\n";
-			echo "END:VALARM\n";
 			echo "END:VEVENT\n";		
 			echo "END:VCALENDAR";
 			exit;
