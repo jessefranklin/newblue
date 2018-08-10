@@ -3,7 +3,7 @@
  * Plugin Name: EventON Intel
  * Plugin URI: http://www.myeventon.com/
  * Description: A beautifully crafted minimal calendar experience (last version: 2.6.11)
- * Version: 2018.08.10
+ * Version: 2018.08.10.1
  * Author: AshanJay
  * Author URI: http://www.ashanjay.com
  * Requires at least: 4.0
@@ -15,7 +15,7 @@
  * @package EventON
  * @category Core
  * @author AJDE
- * Intel version 1.5
+ * Intel version 1.6
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
