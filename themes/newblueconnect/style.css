@@ -4933,6 +4933,11 @@ body .evo_search_results_count span{
 	color: #444;
 }
 
+/* Bigger like button */
+.evowi{
+	width:110px;
+}
+
 /*--------------------------------------------------------------
 22.0 New Blue Connect Features
 --------------------------------------------------------------*/
