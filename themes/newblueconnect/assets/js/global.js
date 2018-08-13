@@ -217,40 +217,46 @@
     End of Eventon code
   ------------------------------------*/
 
-    /*---------------------------------------------
-    Code to hide reviews until event is done
-    ---------------------------------------------*/
-    if ($('body').find('.evo_metarow_review').length){
-        hideReviews();
-    }
+  /*---------------------------------------------
+  Code to hide reviews until after event is done
+  Hide share button after event
+  ---------------------------------------------*/
+  if ($('body').find('.evo_metarow_review').length){
+      hideReviews();
+  }
 
-    function hideReviews(){
-        var reviewSection = $('body').find('.evo_metarow_review');
-        var evDate = $('body').find('.evo_event_schema').find('meta[itemprop=endDate]').attr('content').split('-');
-        var evYear = evDate[0];
-        var evMonth = evDate[1];
-        var evDay = evDate[2].split('T')[0];
-        var curTime = new Date();
-        var curYear = curTime.getFullYear();
-        var curMonth = curTime.getMonth() + 1;
-        var curDay = curTime.getDate();
+  function hideReviews(){
+      var reviewSection = $('body').find('.evo_metarow_review');
+      var shareSection = $('body').find('.evo_metarow_socialmedia');
+      var evDate = $('body').find('.evo_event_schema').find('meta[itemprop=endDate]').attr('content').split('-');
+      var evYear = evDate[0];
+      var evMonth = evDate[1];
+      var evDay = evDate[2].split('T')[0];
+      var curTime = new Date();
+      var curYear = curTime.getFullYear();
+      var curMonth = curTime.getMonth() + 1;
+      var curDay = curTime.getDate();
 
-        reviewSection.hide();
+      reviewSection.hide();
 
-        if (evYear<curYear){
-            reviewSection.show();
-        } else if((evYear==curYear) && (evMonth<curMonth)){
-            reviewSection.show();
-        } else if((evYear==curYear) && (evMonth==curMonth) && (evDay<curDay)){
-            reviewSection.show();
-        };
+      if (evYear<curYear){
+          reviewSection.show();
+          shareSection.hide();
+      } else if((evYear==curYear) && (evMonth<curMonth)){
+          reviewSection.show();
+          shareSection.hide();
+      } else if((evYear==curYear) && (evMonth==curMonth) && (evDay<curDay)){
+          reviewSection.show();
+          shareSection.hide();
+      };
 
-        if(evDate[2].split('T').length > 1){
-            var evHour = evDate[2].split('T')[1].split(':')[0];
-            var curHour = curTime.getHours();
-            if((evYear==curYear) && (evMonth==curMonth) && (evDay==curDay) && (evHour<=curHour)){
-             reviewSection.show();
-            }
+      if(evDate[2].split('T').length > 1){
+          var evHour = evDate[2].split('T')[1].split(':')[0];
+          var curHour = curTime.getHours();
+          if((evYear==curYear) && (evMonth==curMonth) && (evDay==curDay) && (evHour<=curHour)){
+           reviewSection.show();
+           shareSection.hide();
+          }
       }
     }
 
