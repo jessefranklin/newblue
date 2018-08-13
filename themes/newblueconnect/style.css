@@ -5041,6 +5041,22 @@ body .evo_search_results_count span{
 	visibility: hidden !important;
 }
 
+/* ie fixes */
+
+@media screen\0{
+	#myModal{
+		position: relative;
+		background-color: rgba(0,0,0,0);
+		margin: 50px;
+		padding: 0px;
+		width:auto;
+	}
+
+	#myModal .modal-content{
+		width:100%;
+	}
+}
+
 ::-ms-clear{
 	display: none;
   width : 0;
