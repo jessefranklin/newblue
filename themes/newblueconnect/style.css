@@ -4933,6 +4933,11 @@ body .evo_search_results_count span{
 	color: #444;
 }
 
+/* Bigger like button */
+.evowi{
+	width:110px;
+}
+
 /*--------------------------------------------------------------
 22.0 New Blue Connect Features
 --------------------------------------------------------------*/
@@ -5039,6 +5044,22 @@ body .evo_search_results_count span{
 
 #bitnami-banner{
 	visibility: hidden !important;
+}
+
+/* ie fixes */
+
+@media screen\0{
+	#myModal{
+		position: relative;
+		background-color: rgba(0,0,0,0);
+		margin: 50px;
+		padding: 0px;
+		width:auto;
+	}
+
+	#myModal .modal-content{
+		width:100%;
+	}
 }
 
 ::-ms-clear{
