@@ -234,7 +234,7 @@ class evo_ajax{
 			
 			echo "BEGIN:VCALENDAR\r\n";
 			echo "VERSION:2.0\r\n";
-			echo "PRODID:www.eventon.com";
+			echo "PRODID:www.eventon.com\n";
 			echo "METHOD:PUBLISH\n";
 			//echo "X-WR-CALNAME:".html_entity_decode( $this->esc_ical_text($name))."\n";			
 			echo "BEGIN:VTIMEZONE\n";						
@@ -242,19 +242,19 @@ class evo_ajax{
 			echo "TZURL:http://tzurl.org/zoneinfo-outlook/".$this->esc_ical_text($timezone)."\n";
 			echo "X-LIC-LOCATION:".$this->esc_ical_text($timezone)."\n";
 
-			echo "BEGIN:DAYLIGHT\n";
-			echo "TZOFFSETFROM:-0". str_replace(":","",$offset_1)."\n";
-			echo "TZOFFSETTO:".  str_replace(":","",$offset)."\n";
-			echo "TZNAME:".$tzzone[0]."DT\n";
-			echo "DTSTART:19700822T134641\n";
-			echo "END:DAYLIGHT\n";
-			
 			echo "BEGIN:STANDARD\n";
+			echo "DTSTART:16011104T020000\n";
+			echo "RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=11\n";
 			echo "TZOFFSETFROM:". str_replace(":","",$offset)."\n";
 			echo "TZOFFSETTO:-0".  str_replace(":","",$offset_1)."\n";
-			echo "TZNAME:".$tzzone[0]."ST\n";
-			echo "DTSTART:19700822T134641\n";
 			echo "END:STANDARD\n";
+			
+			echo "BEGIN:DAYLIGHT\n";
+			echo "DTSTART:16010311T020000\n";
+			echo "RRULE:FREQ=YEARLY;BYDAY=2SU;BYMONTH=3\n";
+			echo "TZOFFSETFROM:-0". str_replace(":","",$offset_1)."\n";
+			echo "TZOFFSETTO:".  str_replace(":","",$offset)."\n";
+			echo "END:DAYLIGHT\n";
 
 			echo "END:VTIMEZONE\n";	
 
