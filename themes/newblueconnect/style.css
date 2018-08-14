@@ -4754,7 +4754,49 @@ body .sidebar-past .evo_sort_btn p{
 
 .ajde_evcal_calendar .calendar_header .evcal_arrows:hover{background-color: #0070c5 !important;}
 
+/* Calendar adjustments */
+.boxy .evo_end{
+	transform: translate(-25px,7px);
+	font-size: 16px !important;
+}
 
+.eventon_single_event .evo_info{
+	padding-left: 109px !important;
+}
+
+.eventon_single_event .evcal_cblock{
+	padding-left: 20px !important;
+}
+
+.eventon_single_event .evo_end{
+	transform: translate(-25px,33px);
+	font-size: 14px !important;
+	font-weight: 300;
+}
+
+.eventon_single_event .evo_end:before{
+	left: 3px !important;
+}
+
+.evo_widget .evo_info{
+	padding-left: 61px !important;
+}
+
+.evo_widget .evo_start .date{
+	font-size: 22px !important;
+}
+
+.evo_widget .evo_start .month{
+	top: 10px !important;
+}
+
+.evo_widget .evo_end{
+	transform: translate(-20px);
+}
+
+.evo_widget .evo_end:before{
+	left: 1px !important;
+}
 
 /*Hide button to go to current month. Causes style problems */
 .evo-gototoday-btn{
