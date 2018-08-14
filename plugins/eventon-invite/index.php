@@ -3,7 +3,7 @@
    Plugin Name: EventON - Invite
    Plugin URI: http://www.myeventon.com/
    description:Invite group
-   Intel Version: 1.6
+   Intel Version: 1.7
    Author: Hero Digital
    Author URI: http://herodigital.com  
    License: GPL2
@@ -128,72 +128,85 @@
 									 'post-url' => ''
                                  ], $atts, $tag);
 	?>
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.css">
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.js"></script>
     <div class="wporg-box">
-	
 		<div id="eventon_form" class="evoau_submission_form successForm" >   
-		<div class="evoau_success_msg" style=""><p><b></b>Is this event open to all? Then you are all set!<br> Otherwise, click below to select your group of attendees!</p>
-		<h3><strong>Event : </strong> <?php echo esc_html__($post_id[0]->post_title); ?></h3>
-			<button type="button" class="" id="myBtn"><?php echo esc_html__($wporg_atts['button-text'], 'wporg'); ?> </button>   
-		
-		</div>
-
-			<div id="myModal" class="modal">
-
-				  <!-- Modal content -->
-				<div class="modal-content">
-					<div class="modal-header">
-						  <span aria-hidden="true" class="close">×</span>
-						  <h4 class="modal-title" id="myModalLabel">Invite</h4>
-					</div>
-					
-					<div class="modal-body">
-						<form action="<?php echo esc_html__($wporg_atts['post-url'], 'wporg'); ?> " method="post">
-						
-							<input type="hidden" name="event_id" id="event_id" value="<?php echo esc_html__($post_id[0]->ID); ?>">							
-							<input type="hidden" name="event_title" id="event_title" value="<?php echo esc_html__($post_id[0]->post_title); ?>">
-							<input type="hidden" name="event_subtitle" id="event_subtitle" value="<?php echo esc_html__($evcal_subtitle); ?>">
-							<input type="hidden" name="event_details" id="event_details" value="<?php echo esc_html__($post_id[0]->post_content); ?>">
-							<input type="hidden" name="event_location" id="event_location" value="<?php echo esc_html__($evcal_location_name); ?>">
-							<input type="hidden" name="event_location_address" id="event_location_address" value="<?php echo esc_html__($location_address); ?>">
-							<input type="hidden" name="evcal_organizer" id="evcal_organizer" value="<?php echo esc_html__($evcal_organizer); ?>">
-							<input type="hidden" name="event_time" id="event_time" value="<?php echo esc_html__($new_estart).' - '.esc_html__($new_eend); ?>">
-							<input type="hidden" name="ics_url" id="ics_url" value="<?php echo esc_html__($ics_url); ?>">
-							<input type="hidden" name="event_type" id="event_type" value="<?php echo esc_html__($terms[0]->name); ?>">
-							<input type="hidden" name="event_link" id="event_link" value="<?php echo esc_html__($event_link); ?>">
-							<div>
-								<span style="font-weight: bold; margin-top: 10px; color: black; display: block;" >Select Invite List Selection Method</span>
-								<select id="get_invite_type" class="ui fluid dropdown">
-									<option value='custom_list' selected>Upload Custom Invite List</option>
-									<option value='super_group'>Invite Super Group(s)</option>
-								</select>
-
-								<div id="group_container" style="display: none;">
-									<select name="group[]" multiple="" class="ui fluid dropdown" id="group">
-									</select>
-								</div>
-								<div id="custom_list">
-									<span style="font-weight: bold; margin-top: 10px; color: black; display: block;" >Enter/Paste Emails (one email per line):</span>
-									<textarea id="txt_custom_list" style="height: 150px"></textarea>
-								</div>
-
-							</div>
-							<div style="margin-top:20px;">
-								<input type="submit" name="submit" value="Submit" id="submit">
-							</div>
-						</form>
-					</div>
-					
-				</div>
+			<div class="evoau_success_msg" style="">
+				<p>
+					Is this event open to all? Then you are all set!<br> 
+					Otherwise, click below to select your group of attendees!
+				</p>
+				<h3>
+					<strong>Event : </strong> <?php echo esc_html__($post_id[0]->post_title); ?>
+				</h3>
+				<button type="button" class="" id="myBtn"><?php echo esc_html__($wporg_atts['button-text'], 'wporg'); ?> </button>   
 			</div>
 		</div>
     </div>
-	
+	<div id="myModal" class="modal">
+	  <!-- Modal content -->
+		<div class="modal-content">
+			<div class="modal-header">
+				  <span aria-hidden="true" class="close">×</span>
+				  <h4 class="modal-title" id="myModalLabel">Invite</h4>
+			</div>
+			
+			<div class="modal-body">
+				<form action="<?php echo esc_html__($wporg_atts['post-url'], 'wporg'); ?> " method="post">
+				
+					<input type="hidden" name="event_id" id="event_id" value="<?php echo esc_html__($post_id[0]->ID); ?>">							
+					<input type="hidden" name="event_title" id="event_title" value="<?php echo esc_html__($post_id[0]->post_title); ?>">
+					<input type="hidden" name="event_subtitle" id="event_subtitle" value="<?php echo esc_html__($evcal_subtitle); ?>">
+					<input type="hidden" name="event_details" id="event_details" value="<?php echo esc_html__($post_id[0]->post_content); ?>">
+					<input type="hidden" name="event_location" id="event_location" value="<?php echo esc_html__($evcal_location_name); ?>">
+					<input type="hidden" name="event_location_address" id="event_location_address" value="<?php echo esc_html__($location_address); ?>">
+					<input type="hidden" name="evcal_organizer" id="evcal_organizer" value="<?php echo esc_html__($evcal_organizer); ?>">
+					<input type="hidden" name="event_time" id="event_time" value="<?php echo esc_html__($new_estart).' - '.esc_html__($new_eend); ?>">
+					<input type="hidden" name="ics_url" id="ics_url" value="<?php echo esc_html__($ics_url); ?>">
+					<input type="hidden" name="event_type" id="event_type" value="<?php echo esc_html__($terms[0]->name); ?>">
+					<input type="hidden" name="event_link" id="event_link" value="<?php echo esc_html__($event_link); ?>">
+					<div>
+						<span style="font-weight: bold; margin-top: 10px; color: black; display: block;" >Select Invite List Selection Method</span>
+						<select id="get_invite_type" class="ui fluid dropdown">
+							<option value='custom_list' selected>Upload Custom Invite List</option>
+							<option value='super_group'>Invite Super Group(s)</option>
+						</select>
+
+						<div id="group_container" style="display: none;">
+							<select name="group[]" multiple="" class="ui fluid dropdown" id="group">
+							</select>
+						</div>
+						<div id="custom_list">
+							<span style="font-weight: bold; margin-top: 10px; color: black; display: block;" >Enter/Paste Emails (one email per line):</span>
+							<textarea id="txt_custom_list" style="height: 150px"></textarea>
+						</div>
+
+					</div>
+					<div style="margin-top:20px;">
+						<input type="submit" name="submit" value="Submit" id="submit">
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 <style>
 select {
     width: 30%;
     height: 4em !important;
 }
-body {font-family: Arial, Helvetica, sans-serif;}
+body {
+	font-size: 16px;
+    line-height: 1.5;
+    background-color: #005395;
+	font-family: "intel_clear_wlatlight", "Libre Franklin", "Helvetica Neue", helvetica, arial, sans-serif;
+	font-weight: 400;
+}
+.header-links a {
+	color: white;
+}
+
 /* The Modal (background) */
 .modal {
     display: none; /* Hidden by default */
@@ -315,9 +328,6 @@ body {font-family: Arial, Helvetica, sans-serif;}
 	color: #ffffff !important;
 }
 </style>
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.css">
-<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.js"></script>
 <script>
 var ajax_url = '<?php echo admin_url( 'admin-ajax.php' ); ?>';
 $('.ui.dropdown').dropdown({placeholder:'Select Group'});
