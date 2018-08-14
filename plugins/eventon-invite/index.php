@@ -179,7 +179,7 @@
 							</select>
 						</div>
 						<div id="custom_list">
-							<span style="font-weight: bold; margin-top: 10px; color: black; display: block;" >Enter/Paste Emails (one email per line):</span>
+							<span style="font-weight: bold; margin-top: 10px; color: black; display: block;" >Enter/Paste Emails (Email addresses can be separated by commas, semi-colons, or new-lines.):</span>
 							<textarea id="txt_custom_list" style="height: 150px"></textarea>
 						</div>
 
