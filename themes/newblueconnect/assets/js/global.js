@@ -481,12 +481,13 @@
     // Fire on document ready.
     $( document ).ready( function() {
 
-        //Hide events map after waiting for it to load. Doesn't render properly if hidden right away
-        // $('.eventmap').css('opacity', 0);
-        // setTimeout(function(){
-        //     $('.eventmap').hide();
-        //     $('.eventmap').css('opacity', 1);
-        // }, 1000);
+      // $('.eventmap').css('opacity', 0);
+      // setTimeout(function(){
+      //     if($('#btn-calendar').hasClass('currentView')){
+      //       $('.eventmap').hide();
+      //     };
+      //     $('.eventmap').css('opacity', 1);
+      // }, 1000);
 
         //Set map current target
         $('#btn-calendar').addClass('currentView');
