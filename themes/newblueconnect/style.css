@@ -4936,6 +4936,7 @@ body .evo_search_results_count span{
 /* Bigger like button */
 .evowi{
 	width:110px;
+	cursor:pointer;
 }
 
 /*--------------------------------------------------------------
