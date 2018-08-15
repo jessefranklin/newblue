@@ -51,11 +51,40 @@ class FlnNewBlueConnectTest {
 
 	public function __construct() {
 		add_shortcode( 'fln-test-new-blue-connect-ajax', array( $this, 'test_new_blue_connect_ajax' ) );
+		add_shortcode( 'fln-test-is-user-invited', array( $this, 'test_is_user_invited' ) );
 		add_action( 'wp_ajax_fln_get_super_groups', array( $this, 'fln_ajax_get_super_groups' ) );
 		add_action( 'wp_ajax_fln_get_sites', array( $this, 'fln_ajax_get_sites' ) );
 		add_action( 'wp_ajax_fln_get_employees_by_site', array( $this, 'fln_ajax_get_employees_by_site' ) );
 		add_action( 'wp_ajax_fln_get_employees_by_bu', array( $this, 'fln_ajax_get_employees_by_bu' ) );
 		add_action( 'wp_ajax_fln_invite_guests', array( $this, 'fln_ajax_invite_guests' ) );
+	}
+
+	public function is_user_invited( $email, $event_id ) {
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'fln_nbc_invites';
+		$safe_email = sanitize_email( $email );
+		$safe_event_id = ( int )$event_id;
+		$sql = "SELECT COUNT(*) FROM $table_name WHERE event_id = '$safe_event_id' AND email = '$safe_email'";
+		$this->log( $sql );
+		$count = $wpdb->get_var( $sql );
+		return $count > 0;
+	}
+
+	public function test_is_user_invited( $atts ) {
+		$msg = 'Is user ' . $atts[ 'email' ] . ' invited to ' . $atts[ 'event_id' ] . 
+			'. Expected result is ' . $atts[ 'expected' ] . '. Result: ';
+		if( $this->is_user_invited( $atts[ 'email' ], $atts[ 'event_id' ] ) ) {
+			$msg .= '1. ';
+			if( $atts[ 'expected' ] == 1 ) {
+				$msg .= '<b>Success!</b>';
+			}
+		} else {
+			$msg .= '0. ';
+			if( $atts[ 'expected' ] == 0 ) {
+				$msg .= '<b>Success!</b>';
+			}
+		}
+		return $msg;
 	}
 
 	public function test_new_blue_connect_ajax() {
@@ -280,4 +309,4 @@ class FlnNewBlueConnectTest {
 	}
 }
 
-$flnNewBlueConnectTest = new FlnNewBlueConnectTest();
+$flnNewBlueConnect = new FlnNewBlueConnectTest();
