@@ -596,3 +596,160 @@ require get_parent_theme_file_path( '/inc/customizer.php' );
  * SVG icons functions and filters.
  */
 require get_parent_theme_file_path( '/inc/icon-functions.php' );
+
+
+   
+// add_action( 'edit_terms', 'save_event_location', 10, 2 ); 
+
+// function save_event_location( $term_id, $taxonomy ){
+  
+   // if($taxonomy == 'event_location'){	   
+	   // if(isset($_POST['fields'])){
+		 // //  print_r($_POST['fields']);
+		   // update_term_meta($term_id, 'event_region', $_POST['fields']['field_5b7137500c2dd']);
+	   // }
+   // }    
+
+// }
+
+function event_location_add_custom_field($term) { 
+	$t_id = $term->term_id;
+	echo $term_region = get_term_meta( $t_id, 'region', true );    
+            ?>
+			<script>
+			jQuery(document).ready(function(){
+				var region = '<?php echo $term_region; ?>';
+				//alert('<?php echo $term_region; ?>');
+				//$("#evoregion option[value:<?php echo $term_region; ?>]").prop("selected", true);
+				if(region){   
+					$("#evoregion option").each(function(){
+						if($(this).val().indexOf("<?php echo $term_region; ?>") != -1){
+							$(this).prop("selected", true)
+						}
+					});
+				}
+				
+			//	jQuery('evoregion').attr('id', 'yourid');
+			});
+			</script>
+           <tr class="form-field">  
+				<th scope="row" valign="top">  
+					<label for="evoregion">Event Region</label>  
+				</th>  
+				<td>  
+					<select class="form-control" id="evoregion" name="evoregion" style="width: 95%;">				   
+						<option value="" selected="selected">Select Region</option>
+						<optgroup label="AMR">
+							<option value="Argentina, Cordoba">Argentina, Cordoba</option>
+							<option value="Arizona, Chandler">Arizona, Chandler</option>
+							<option value="Arizona, Ocotillo">Arizona, Ocotillo</option>
+							<option value="California, Bowers">California, Bowers</option>
+							<option value="California, Folsom">California, Folsom</option>
+							<option value="California, San Diego">California, San Diego</option>
+							<option value="California, San Francisco">California, San Francisco</option>
+							<option value="California, San Jose">California, San Jose</option>
+							<option value="Colorado, Ft. Collins">Colorado, Ft. Collins</option>
+							<option value="Costa Rica">Costa Rica</option>
+							<option value="Massachuessets, Hudson">Massachuessets, Hudson</option>
+							<option value="Mexico, Guadalajara">Mexico, Guadalajara</option>
+							<option value="New Mexico, Rio Rancho">New Mexico, Rio Rancho</option>
+							<option value="Oregon, Aloha">Oregon, Aloha</option>
+							<option value="Oregon, Hawthorn Farm">Oregon, Hawthorn Farm</option>
+							<option value="Oregon, Jones Farm">Oregon, Jones Farm</option>
+							<option value="Oregon, Ronler Acres">Oregon, Ronler Acres</option>
+							<option value="South Carolina, Columbia">South Carolina, Columbia</option>
+							<option value="Texas, Austin">Texas, Austin</option>
+						</optgroup>
+						<optgroup label="GAR">
+							<option value="China, Beijing GTC">China, Beijing GTC</option>
+							<option value="China, Beijing RYC2">China, Beijing RYC2</option>
+							<option value="China, Chengdu">China, Chengdu</option>
+							<option value="China, Dallan">China, Dallan</option>
+							<option value="China, Hong Kong">China, Hong Kong</option>
+							<option value="China, Shanghai Mart">China, Shanghai Mart</option>
+							<option value="China, Shanghai Zizhu">China, Shanghai Zizhu</option>
+							<option value="China, Shenzhen VBP">China, Shenzhen VBP</option>
+							<option value="India, Bangalore BGA">India, Bangalore BGA</option>
+							<option value="India, Bangalore EMB">India, Bangalore EMB</option>
+							<option value="India, Bangalore SRR">India, Bangalore SRR</option>
+							<option value="India, Mumbai & New Delhi">India, Mumbai & New Delhi</option>
+							<option value="Japan, Tokyo">Japan, Tokyo</option>
+							<option value="Malaysia, Kulim & Penang">Malaysia, Kulim & Penang</option>
+							<option value="Singapore">Singapore</option>
+							<option value="South Korea">South Korea</option>
+							<option value="Australia - Sydney">Australia - Sydney</option>
+							<option value="Taiwan, Taipei">Taiwan, Taipei</option>
+							<option value="Vietnam">Vietnam</option>
+						</optgroup>
+						<optgroup label="GER">
+							<option value="Belgium, Kontich">Belgium, Kontich</option>
+							<option value="Denmark, Aalborg">Denmark, Aalborg</option>
+							<option value="Finland, Espoo & Tampere">Finland, Espoo & Tampere</option>
+							<option value="Germany, Campeon">Germany, Campeon</option>
+							<option value="Germany, Duisburg">Germany, Duisburg</option>
+							<option value="Germany, Karlsruhe TPK">Germany, Karlsruhe TPK</option>
+							<option value="Germany, MU-Feldkirchhen IMU">Germany, MU-Feldkirchhen IMU</option>
+							<option value="Ireland, Leixlip">Ireland, Leixlip</option>
+							<option value="Ireland, Shannon">Ireland, Shannon</option>
+							<option value="Israel, FAB28">Israel, FAB28</option>
+							<option value="Israel, IDC">Israel, IDC</option>
+							<option value="Israel, IDCJ and IDPJ">Israel, IDCJ and IDPJ</option>
+							<option value="Israel, PTK">Israel, PTK</option>
+							<option value="Israel, Yakum">Israel, Yakum</option>
+							<option value="Italy, Milan">Italy, Milan</option>
+							<option value="Poland, Gdansk">Poland, Gdansk</option>
+							<option value="Russia, Moscow">Russia, Moscow</option>
+							<option value="Russia, Nizhiniy">Russia, Nizhiniy</option>
+							<option value="Spain, Barcelona">Spain, Barcelona</option>
+							<option value="Sweden, DRT">Sweden, DRT</option>
+							<option value="Sweden, Kista">Sweden, Kista</option>
+							<option value="UK, Swindon">UK, Swindon</option>
+						</optgroup>  
+						<optgroup label="Other">	
+							<option value="Virtual">Virtual</option>
+							<option value="Off-Site">Off-Site</option>
+						</optgroup>
+					</select>			
+				</td>  
+			</tr>    
+        <?php
+        }
+add_action( 'event_location_add_form_fields', 'event_location_add_custom_field', 10, 2 );
+add_action( 'event_location_edit_form_fields', 'event_location_add_custom_field', 10, 8 ); 
+
+function save_event_region( $term_id ) {
+	
+	if ( isset( $_POST['evoregion'] ) ) {
+		$term_region = $_POST['evoregion'];
+		if( $term_region ) {
+			 update_term_meta( $term_id, 'region', $term_region );
+		}
+	} 
+		
+}  
+add_action( 'edited_event_location', 'save_event_region' );  
+add_action( 'create_event_location', 'save_event_region' );
+
+
+add_action('wp_ajax_get_event_location', 'get_event_location');
+
+function get_event_location(){
+	
+	global $wpdb;
+	echo '<option value="">Select Location</option>';
+	if(!empty($_POST['region'])){
+		//echo "select t.* from $wpdb->terms t left join $wpdb->termmeta t1 on t.term_id= t1.term_id where t1.meta_key LIKE '%region%' and meta_value LIKE '%".$_POST['region']."%'";
+		$sql = $wpdb->get_results("select t.* from $wpdb->terms t left join $wpdb->termmeta t1 on t.term_id= t1.term_id where t1.meta_key LIKE '%region%' and meta_value LIKE '%".$_POST['region']."%'");
+		$loc= array();
+		
+		foreach($sql as $val){
+			// $loc['name'] = $val->name;
+			// $loc['slug'] = $val->slug;
+			// $array['data'] = $loc;
+			echo '<option value="'.$val->term_id.'">'.$val->name .'</option>';
+		}
+	}
+	
+	//echo json_encode($array);
+	die();
+}

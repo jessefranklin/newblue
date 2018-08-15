@@ -3,7 +3,7 @@
    Plugin Name: EventON - Invite
    Plugin URI: http://www.myeventon.com/
    description:Invite group
-   Intel Version: 1.8
+   Intel Version: 1.81
    Author: Hero Digital
    Author URI: http://herodigital.com  
    License: GPL2
@@ -468,7 +468,7 @@ $(document).ready(function(){
 }
  add_shortcode('invite', 'invite_shortcode');
 
- /** Additional Timezone Field **/
+  /** Additional Timezone Field **/
 
 add_filter('evoau_form_fields', 'evoautimezone_fields_to_form', 10, 1);
 function evoautimezone_fields_to_form($array){
@@ -476,10 +476,17 @@ function evoautimezone_fields_to_form($array){
 	return $array;
 }
 
+add_filter('evoau_form_fields', 'evoaulocation_fields_to_form', 10, 1);
+function evoaulocation_fields_to_form($array){
+	$array['evolocation']=array('Location', 'evolocation', 'evolocation','custom','');
+	return $array;
+}
+
 // only for frontend
 if(!is_admin()){
 	// actionUser intergration
-	add_action('evoau_frontform_evotimezone',  'evoautimezone_fields', 10, 6);	
+	add_action('evoau_frontform_evotimezone',  'evoautimezone_fields', 10, 6);
+    add_action('evoau_frontform_evolocation',  'evoaulocation_fields', 10, 6);  		   
 }
 // Frontend showing fields and saving values  
 function evoautimezone_fields($field, $event_id, $default_val, $EPMV, $opt2, $lang){
@@ -590,10 +597,34 @@ function evoautimezone_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 
 add_action('evoau_save_formfields',  'evoautest_save_values', 10, 3);
 function evoautest_save_values($field, $fn, $created_event_id){
+// print_r($_POST);
+// die();
 
 	if ( isset( $_POST['evotimezone'] )){
-    update_post_meta($created_event_id, 'evo_event_timezone', $_POST['evotimezone']); 
-}
+		update_post_meta($created_event_id, 'evo_event_timezone', $_POST['evotimezone']); 
+	}
+	
+	if ( isset( $_POST['evolocationsite'] )){
+		update_post_meta($created_event_id, 'evo_event_locationsite', $_POST['evolocationsite']); 
+	}
+	
+	if ( isset( $_POST['evoregion'] )){
+		update_post_meta($created_event_id, 'evo_event_region', $_POST['evoregion']); 
+	}
+	
+	if ( isset( $_POST['address'] )){
+		update_post_meta($created_event_id, 'off_site_address', $_POST['address']); 
+	}
+	
+	if ( isset( $_POST['room'] )){
+		update_post_meta($created_event_id, 'room', $_POST['room']); 
+	}  
+	
+	$tag = intval($_POST['evolocation']);
+	if ( isset( $_POST['evolocation'] )){
+		update_post_meta($created_event_id, 'evo_event_location', $_POST['evolocation']); 
+		wp_set_post_terms( $created_event_id, array(  intval($_POST['evolocation']) ), 'event_location' );
+	}
 
 	if( $field =='evotimezone'){
 		
@@ -606,4 +637,176 @@ function evoautest_save_values($field, $fn, $created_event_id){
 			
 		}
 	}
+}
+
+// Frontend showing fields and saving values  
+function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $lang){
+	
+	//$fields = get_option('wpcf-termmeta');
+	//$options = $fields['region']['data']['options'];
+	//print_r($options);	
+?>
+		<div class='row evotest'>   
+		    
+			<p><label for="">Event Location</label></p>	
+
+			<p><label for="site">Select Location Type : </label>		
+			<select class="form-control" id="locationtype" name="evolocationtype">				   
+				<option value="" selected="selected">Select Location Type</option>
+				<option value="site">Site</option>
+				<option value="off-site">Off-Site</option>
+				<option value="virtual">Virtual</option>
+			</select>			
+			</p> 
+			
+			<p id="pregion" style="display:none;"><label for="region">Select Event's Region : </label>		
+			<select class="form-control" id="region" name="evoregion">				   
+				<option value="" selected="selected">Select Region</option>
+				<?php 
+				
+					// foreach($options as $v){
+						// if (array_key_exists("title",$v)){
+							// echo '<option value="'.$v['value'].'">'.$v['title'].'</option>';
+						// }		
+					// }
+				?>
+					<optgroup label="AMR">
+					<option value="Argentina, Cordoba">Argentina, Cordoba</option>
+					<option value="Arizona, Chandler">Arizona, Chandler</option>
+					<option value="Arizona, Ocotillo">Arizona, Ocotillo</option>
+					<option value="California, Bowers">California, Bowers</option>
+					<option value="California, Folsom">California, Folsom</option>
+					<option value="California, San Diego">California, San Diego</option>
+					<option value="California, San Francisco">California, San Francisco</option>
+					<option value="California, San Jose">California, San Jose</option>
+					<option value="Colorado, Ft. Collins">Colorado, Ft. Collins</option>
+					<option value="Costa Rica">Costa Rica</option>
+					<option value="Massachuessets, Hudson">Massachuessets, Hudson</option>
+					<option value="Mexico, Guadalajara">Mexico, Guadalajara</option>
+					<option value="New Mexico, Rio Rancho">New Mexico, Rio Rancho</option>
+					<option value="Oregon, Aloha">Oregon, Aloha</option>
+					<option value="Oregon, Hawthorn Farm">Oregon, Hawthorn Farm</option>
+					<option value="Oregon, Jones Farm">Oregon, Jones Farm</option>
+					<option value="Oregon, Ronler Acres">Oregon, Ronler Acres</option>
+					<option value="South Carolina, Columbia">South Carolina, Columbia</option>
+					<option value="Texas, Austin">Texas, Austin</option>
+				</optgroup>
+				<optgroup label="GAR">
+					<option value="China, Beijing GTC">China, Beijing GTC</option>
+					<option value="China, Beijing RYC2">China, Beijing RYC2</option>
+					<option value="China, Chengdu">China, Chengdu</option>
+					<option value="China, Dallan">China, Dallan</option>
+					<option value="China, Hong Kong">China, Hong Kong</option>
+					<option value="China, Shanghai Mart">China, Shanghai Mart</option>
+					<option value="China, Shanghai Zizhu">China, Shanghai Zizhu</option>
+					<option value="China, Shenzhen VBP">China, Shenzhen VBP</option>
+					<option value="India, Bangalore BGA">India, Bangalore BGA</option>
+					<option value="India, Bangalore EMB">India, Bangalore EMB</option>
+					<option value="India, Bangalore SRR">India, Bangalore SRR</option>
+					<option value="India, Mumbai & New Delhi">India, Mumbai & New Delhi</option>
+					<option value="Japan, Tokyo">Japan, Tokyo</option>
+					<option value="Malaysia, Kulim & Penang">Malaysia, Kulim & Penang</option>
+					<option value="Singapore">Singapore</option>
+					<option value="South Korea">South Korea</option>
+					<option value="Australia - Sydney">Australia - Sydney</option>
+					<option value="Taiwan, Taipei">Taiwan, Taipei</option>
+					<option value="Vietnam">Vietnam</option>
+				</optgroup>
+				<optgroup label="GER">
+					<option value="Belgium, Kontich">Belgium, Kontich</option>
+					<option value="Denmark, Aalborg">Denmark, Aalborg</option>
+					<option value="Finland, Espoo & Tampere">Finland, Espoo & Tampere</option>
+					<option value="Germany, Campeon">Germany, Campeon</option>
+					<option value="Germany, Duisburg">Germany, Duisburg</option>
+					<option value="Germany, Karlsruhe TPK">Germany, Karlsruhe TPK</option>
+					<option value="Germany, MU-Feldkirchhen IMU">Germany, MU-Feldkirchhen IMU</option>
+					<option value="Ireland, Leixlip">Ireland, Leixlip</option>
+					<option value="Ireland, Shannon">Ireland, Shannon</option>
+					<option value="Israel, FAB28">Israel, FAB28</option>
+					<option value="Israel, IDC">Israel, IDC</option>
+					<option value="Israel, IDCJ and IDPJ">Israel, IDCJ and IDPJ</option>
+					<option value="Israel, PTK">Israel, PTK</option>
+					<option value="Israel, Yakum">Israel, Yakum</option>
+					<option value="Italy, Milan">Italy, Milan</option>
+					<option value="Poland, Gdansk">Poland, Gdansk</option>
+					<option value="Russia, Moscow">Russia, Moscow</option>
+					<option value="Russia, Nizhiniy">Russia, Nizhiniy</option>
+					<option value="Spain, Barcelona">Spain, Barcelona</option>
+					<option value="Sweden, DRT">Sweden, DRT</option>
+					<option value="Sweden, Kista">Sweden, Kista</option>
+					<option value="UK, Swindon">UK, Swindon</option>
+				</optgroup>
+				<optgroup label="Other">	
+					<option value="Virtual">Virtual</option>
+					<option value="Off-Site">Off-Site</option>
+				</optgroup>				
+			</select>			
+			</p>
+
+			<p id="ploc" style="display:none;"><label for="evolocation">Select Event's Location : </label>	  	
+			<select class="form-control" id="evolocation" name="evolocation">				   
+				<option value="" selected="selected">Select Location</option>        
+			</select>			
+			</p>
+			
+		<!--	<p><label for="site">Select Event's Site : </label>		
+			<select class="form-control" id="site" name="evolocationsite">				   
+				<option value="" selected="selected">Select Site</option>
+				<option value="CH7">CH7</option>
+				<option value="CH8">CH8</option>
+				<option value="CH9">CH9</option>
+			</select>			
+			</p>  -->
+
+			<p id="padd" style="display:none;"><label for="address">Enter The Address  : </label>
+				<input type="text" name="address" id="address" value="">	
+			</p>
+			
+			<p><label for="room">Enter Virtual Link  : </label>
+			<a href="https://employeecontent.intel.com/content/corp/meeting-center/home.html" style="color:black;">If you have not booked a room or virtual meeting yet, use this link.</a>
+				<input type="text" name="room" id="" value="">	
+			</p>
+
+		</div>
+		
+		<script>
+		 jQuery("#region").change(function () {
+			var ajax_url = '<?php echo admin_url( 'admin-ajax.php' ); ?>';
+			var region = this.value;
+			var data = {
+				'action': 'get_event_location',
+				'region': region
+			};
+
+			jQuery.post( ajax_url, data, function( response ) {
+				jQuery( "#evolocation" ).html( response );
+			} );
+			
+		});
+		
+		jQuery( "#locationtype" ).on( "change", function () {
+		var location_type = $( this ).val();
+	//	alert(location_type);
+		if( location_type === "site" ) {
+			jQuery("#pregion").show();
+			jQuery("#ploc").show();
+			jQuery("#padd").hide();
+		} else if( location_type === "off-site" ) {
+			jQuery("#pregion").hide();
+			jQuery("#ploc").hide();
+			jQuery("#padd").show();
+		}else if( location_type === "virtual" ) {
+			jQuery("#pregion").hide();
+			jQuery("#ploc").hide();
+			jQuery("#padd").hide();
+		}else {
+			jQuery("#pregion").hide();
+			jQuery("#ploc").hide();
+			jQuery("#padd").hide();
+		}
+	} );
+	
+		</script>
+		
+	<?php		 
 }
