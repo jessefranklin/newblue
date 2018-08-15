@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: FLN New Blue Connect Test
-Version:     1.1
+Version:     1.2
 Description: This plugin is to test the New Blue Connect Site.
 Author:      Andy Stubbs
 */
@@ -205,29 +205,29 @@ class FlnNewBlueConnectTest {
 		
 		$entry = new stdClass();
 		$entry->id = 89704;
-		$entry->idsid = 'mffallas';
-		$entry->name = 'Fallas navarrete, Moises F';
+		$entry->idsid = 'bruth';
+		$entry->name = 'Ruth, Babe';
 		$entry->bu = $bu;
 		$entry->site = 'CR';
-		$entry->email = 'moises.f.fallas.navarrete@intel.com';
+		$entry->email = 'ruth.babe@intel.com';
 		$entries[] = $entry;
 		
 		$entry = new stdClass();
 		$entry->id = 56865;
-		$entry->idsid = 'laykeene';
-		$entry->name = 'New, Lay Kee';
+		$entry->idsid = 'haaron';
+		$entry->name = 'Aaron, Hank';
 		$entry->bu = $bu;
 		$entry->site = 'PG';
-		$entry->email = 'lay.kee.new@intel.com';
+		$entry->email = 'hank.aaron@intel.com';
 		$entries[] = $entry;
 		
 		$entry = new stdClass();
 		$entry->id = 54710;
-		$entry->idsid = 'mlsorbel';
-		$entry->name = 'Sorbel, Marie L';
+		$entry->idsid = 'smusial';
+		$entry->name = 'Musial, Stan';
 		$entry->bu = $bu;
 		$entry->site = 'RA';
-		$entry->email = 'marie.l.sorbel@intel.com';
+		$entry->email = 'stan.musial@intel.com';
 		$entries[] = $entry;
 
 		return $entries;
@@ -256,29 +256,29 @@ class FlnNewBlueConnectTest {
 		
 		$entry = new stdClass();
 		$entry->id = 89704;
-		$entry->idsid = 'mffallas';
-		$entry->name = 'Fallas navarrete, Moises F';
+		$entry->idsid = 'bruth';
+		$entry->name = 'Ruth, Babe';
 		$entry->bu = 'INFORMATION TECHNOLOGY SGRP';
 		$entry->site = $site_code;
-		$entry->email = 'moises.f.fallas.navarrete@intel.com';
+		$entry->email = 'ruth.babe@intel.com';
 		$entries[] = $entry;
 		
 		$entry = new stdClass();
 		$entry->id = 56865;
-		$entry->idsid = 'laykeene';
-		$entry->name = 'New, Lay Kee';
+		$entry->idsid = 'haaron';
+		$entry->name = 'Aaron, Hank';
 		$entry->bu = 'ALTERA SUPER GROUP';
 		$entry->site = $site_code;
-		$entry->email = 'lay.kee.new@intel.com';
+		$entry->email = 'hank.aaron@intel.com';
 		$entries[] = $entry;
 		
 		$entry = new stdClass();
 		$entry->id = 54710;
-		$entry->idsid = 'mlsorbel';
-		$entry->name = 'Sorbel, Marie L';
+		$entry->idsid = 'smusial';
+		$entry->name = 'Musial, Stan';
 		$entry->bu = 'CORE & VIS COMPUTE SUPER GROUP';
 		$entry->site = $site_code;
-		$entry->email = 'marie.l.sorbel@intel.com';
+		$entry->email = 'stan.musial@intel.com';
 		$entries[] = $entry;
 		
 		wp_send_json( $entries );
