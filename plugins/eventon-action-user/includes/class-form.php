@@ -529,7 +529,7 @@ class evoau_form{
 
                     echo "<span class='evoau_cat_select_field {$field[1]}' data-enhance='false'>";
                     foreach($terms as $term){
-                      echo "<span class='{$field[1]}_{$term->term_id}'><input type='checkbox' name='".$__field_id."[]' value='".$term->term_id."' ".( (count($slectedterms) && in_array($term->term_id, $slectedterms))? 'checked="checked"':null )." data-role='none'/> ".$term->name."</span>";
+                      echo "<span class='{$field[1]}_{$term->term_id}'><input type='radio' name='".$__field_id."[]' value='".$term->term_id."' ".( (count($slectedterms) && in_array($term->term_id, $slectedterms))? 'checked="checked"':null )." data-role='none'/> ".$term->name."</span>";
                     }
                     echo "</span>";
 

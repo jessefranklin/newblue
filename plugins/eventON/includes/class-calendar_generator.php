@@ -1754,12 +1754,16 @@ class EVO_generator {
 							if( $hide_location_info){
 								$location_name = $location_address = '';
 							}
-
+  
 
 						$_eventcard['timelocation'] = array(
 							'timetext'=>$_event_date_HTML['html_prettytime'],
 							'timezone'=>(!empty($ev_vals['evo_event_timezone'])? $ev_vals['evo_event_timezone'][0]:null),
 							'address'=> ($hide_location_info ? $fnc->get_field_login_message() : $location_address),
+							'location_type'=>(!empty($ev_vals['evo_event_locationtype'])? $ev_vals['evo_event_locationtype'][0]:null),
+							'location_region'=>(!empty($ev_vals['evo_event_region'])? $ev_vals['evo_event_region'][0]:null),
+							'location_offsite_address'=>(!empty($ev_vals['off_site_address'])? $ev_vals['off_site_address'][0]:null),
+							'location_virtual_link'=>(!empty($ev_vals['virtual_link'])? $ev_vals['virtual_link'][0]:null),
 							'location_name'=> ((!empty($ev_vals['evcal_hide_locname']) && $ev_vals['evcal_hide_locname'][0] == 'yes')?'':$location_name),
 							'location_link'=> (!empty($LocTermMeta['evcal_location_link'])? $LocTermMeta['evcal_location_link']: null ),
 							'locTaxID'=> (!empty($evo_location_tax_id)? $evo_location_tax_id:''),

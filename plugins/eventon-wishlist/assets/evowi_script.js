@@ -3,8 +3,8 @@
  * @version  0.1
  */
 jQuery(document).ready(function($){
-	
-	$('body').on('click', 'span.evowi_wi_area i', function(event){
+
+	$('body').on('click', 'span.evowi', function(event){
 
 		event.preventDefault();
 		event.stopPropagation();
@@ -15,12 +15,12 @@ jQuery(document).ready(function($){
 
 		newStatus = (OBJ.hasClass('notlisted'))? 'add':'remove';
 
-		ajaxdataa['action']= 'evowi_change_wishlist';				
-		ajaxdataa['ei']= OBJ.data('ei');				
-		ajaxdataa['ri']= OBJ.data('ri');				
-		ajaxdataa['pl']= OBJ.data('pl');				
-		ajaxdataa['newstatus']= newStatus; 
-		
+		ajaxdataa['action']= 'evowi_change_wishlist';
+		ajaxdataa['ei']= OBJ.data('ei');
+		ajaxdataa['ri']= OBJ.data('ri');
+		ajaxdataa['pl']= OBJ.data('pl');
+		ajaxdataa['newstatus']= newStatus;
+
 		$.ajax({
 			beforeSend: function(){	OBJ.addClass('loading');	},
 			type: 'POST',
@@ -46,14 +46,14 @@ jQuery(document).ready(function($){
 					}else{
 						OBJ.html(data.message);
 					}
-					
+
 				}
 			},complete:function(){
 				OBJ.removeClass('loading');
 			}
-		});	
+		});
 
-		
+
 	});
 
 });

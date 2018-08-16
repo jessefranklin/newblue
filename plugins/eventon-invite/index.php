@@ -191,22 +191,13 @@
 			</div>
 		</div>
 	</div>
+	
 <style>
 select {
     width: 30%;
     height: 4em !important;
 }
-body {
-	font-size: 16px;
-    line-height: 1.5;
-    background-color: #005395;
-	font-family: "intel_clear_wlatlight", "Libre Franklin", "Helvetica Neue", helvetica, arial, sans-serif;
-	font-weight: 400;
-}
-.header-links a {
-	color: white;
-}
-
+body {font-family: Arial, Helvetica, sans-serif;}
 /* The Modal (background) */
 .modal {
     display: none; /* Hidden by default */
@@ -475,7 +466,7 @@ $(document).ready(function(){
 }
  add_shortcode('invite', 'invite_shortcode');
 
-  /** Additional Timezone Field **/
+ /** Additional Timezone Field **/
 
 add_filter('evoau_form_fields', 'evoautimezone_fields_to_form', 10, 1);
 function evoautimezone_fields_to_form($array){
@@ -623,8 +614,13 @@ function evoautest_save_values($field, $fn, $created_event_id){
 		update_post_meta($created_event_id, 'off_site_address', $_POST['address']); 
 	}
 	
-	if ( isset( $_POST['room'] )){
-		update_post_meta($created_event_id, 'room', $_POST['room']); 
+	if ( isset( $_POST['evolocationtype'] )){
+		update_post_meta($created_event_id, 'evo_event_locationtype', $_POST['evolocationtype']); 
+	}
+			
+	
+	if ( isset( $_POST['virtual_link'] )){
+		update_post_meta($created_event_id, 'virtual_link', $_POST['virtual_link']); 
 	}  
 	
 	$tag = intval($_POST['evolocation']);
@@ -671,6 +667,8 @@ function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 				<option value="" selected="selected">Select Region</option>
 				<?php 
 				
+
+						
 					// foreach($options as $v){
 						// if (array_key_exists("title",$v)){
 							// echo '<option value="'.$v['value'].'">'.$v['title'].'</option>';
@@ -769,9 +767,9 @@ function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 				<input type="text" name="address" id="address" value="">	
 			</p>
 			
-			<p><label for="room">Enter Virtual Link  : </label>
+			<p><label for="virtual_link">Enter Virtual Link  : </label>
 			<a href="https://employeecontent.intel.com/content/corp/meeting-center/home.html" style="color:black;">If you have not booked a room or virtual meeting yet, use this link.</a>
-				<input type="text" name="room" id="" value="">	
+				<input type="text" name="virtual_link" id="" value="">	
 			</p>
 
 		</div>
@@ -787,7 +785,7 @@ function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 
 			jQuery.post( ajax_url, data, function( response ) {
 				jQuery( "#evolocation" ).html( response );
-			} );
+			} );  
 			
 		});
 		
@@ -797,7 +795,7 @@ function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 		if( location_type === "site" ) {
 			jQuery("#pregion").show();
 			jQuery("#ploc").show();
-			jQuery("#padd").hide();
+			jQuery("#padd").show();
 		} else if( location_type === "off-site" ) {
 			jQuery("#pregion").hide();
 			jQuery("#ploc").hide();

@@ -93,11 +93,29 @@ function eventon_eventcard_print($array, $EVENT, $evOPT, $evoOPT2){
 					$iconTime = "<span class='evcal_evdata_icons'><i class='fa ".get_eventON_icon('evcal__fai_002', 'fa-clock-o',$evOPT )."'></i></span>";
 					$iconLoc = "<span class='evcal_evdata_icons'><i class='fa ".get_eventON_icon('evcal__fai_003', 'fa-map-marker',$evOPT )."'></i></span>";
 
-					if($object->address || $object->location_name){
+					if($object->address || $object->location_name || $object->location_type || $object->location_virtual_link){
+						
+						$location = '';
+						
+						if($object->location_type == 'site'){
+							$location .= (!empty($object->location_region)? ' <p class="evo_location_region">Region : '. $object->location_region.'</p>':null);
+							$location .= (!empty($object->location_name)? ' <p class="evo_location_name">Site : '. $object->location_name.'</p>':null);
+							$location .= (!empty($object->location_offsite_address)? ' <p class="evo_location_offsite_Address">Room : '. $object->location_offsite_address.'</p>':null);
+						}
+						
+						if($object->location_type == 'off-site'){
+							$location .= (!empty($object->location_offsite_address)? ' <p class="evo_location_offsite_Address">Address : '. $object->location_offsite_address.'</p>':null);
+						}
+						
+						if(!empty($object->location_virtual_link)){
+							$location .= (!empty($object->location_virtual_link) )?'<p class="evo_location_virtual_link">Virtual Link : <a target="_blank" href="'. evo_format_link($object->location_virtual_link).'">'.$object->location_virtual_link.'</a></p>':false;
+						}
+						
+						
 
 						$timezone = (!empty($object->timezone)? ' <em class="evo_eventcard_tiemzone">'. $object->timezone.'</em>':null);
 						$locationLink = (!empty($object->location_link))? '<a target="_blank" href="'. evo_format_link($object->location_link).'">':false;
-
+  
 						$OT.=
 						"<div class='evo_metarow_time_location evorow bordb".$end_row_class." '>
 						<div class='tb' >
@@ -114,7 +132,9 @@ function eventon_eventcard_print($array, $EVENT, $evOPT, $evoOPT2){
 								<div class='evcal_evdata_row evo_location'>
 									{$iconLoc}
 									<div class='evcal_evdata_cell' data-loc_tax_id='{$object->locTaxID}'>
-										<h3 class='evo_h3'>".$iconLoc.($locationLink? $locationLink:'').eventon_get_custom_language($evoOPT2, 'evcal_lang_location','Location').($locationLink?'</a>':'')."</h3>". ( (!empty($object->location_name))? "<p class='evo_location_name'>".stripslashes($object->location_name)."</p>":null ) ."<p class='evo_location_address'>". ( !empty($object->address)? stripslashes($object->address): null)."</p>
+										<h3 class='evo_h3'>".$iconLoc.($locationLink? $locationLink:'').eventon_get_custom_language($evoOPT2, 'evcal_lang_location','Location').($locationLink?'</a>':'')."</h3>" //.( (!empty($object->location_name))? "<p class='evo_location_name'>".stripslashes($object->location_name)."</p>":null ) 
+										."<p class='evo_location_address'>". ( !empty($object->address)? stripslashes($object->address): null)."</p>"
+										.$location."
 									</div>
 								</div>
 							</div><div class='clear'></div>
