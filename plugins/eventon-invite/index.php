@@ -128,85 +128,72 @@
 									 'post-url' => ''
                                  ], $atts, $tag);
 	?>
-	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.css">
-	<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.js"></script>
     <div class="wporg-box">
+	
 		<div id="eventon_form" class="evoau_submission_form successForm" >   
-			<div class="evoau_success_msg" style="">
-				<p>
-					Is this event open to all? Then you are all set!<br> 
-					Otherwise, click below to select your group of attendees!
-				</p>
-				<h3>
-					<strong>Event : </strong> <?php echo esc_html__($post_id[0]->post_title); ?>
-				</h3>
-				<button type="button" class="" id="myBtn"><?php echo esc_html__($wporg_atts['button-text'], 'wporg'); ?> </button>   
+		<div class="evoau_success_msg" style=""><p><b></b>Is this event open to all? Then you are all set!<br> Otherwise, click below to select your group of attendees!</p>
+		<h3><strong>Event : </strong> <?php echo esc_html__($post_id[0]->post_title); ?></h3>
+			<button type="button" class="" id="myBtn"><?php echo esc_html__($wporg_atts['button-text'], 'wporg'); ?> </button>   
+		
+		</div>
+
+			<div id="myModal" class="modal">
+
+				  <!-- Modal content -->
+				<div class="modal-content">
+					<div class="modal-header">
+						  <span aria-hidden="true" class="close">×</span>
+						  <h4 class="modal-title" id="myModalLabel">Invite</h4>
+					</div>
+					
+					<div class="modal-body">
+						<form action="<?php echo esc_html__($wporg_atts['post-url'], 'wporg'); ?> " method="post">
+						
+							<input type="hidden" name="event_id" id="event_id" value="<?php echo esc_html__($post_id[0]->ID); ?>">							
+							<input type="hidden" name="event_title" id="event_title" value="<?php echo esc_html__($post_id[0]->post_title); ?>">
+							<input type="hidden" name="event_subtitle" id="event_subtitle" value="<?php echo esc_html__($evcal_subtitle); ?>">
+							<input type="hidden" name="event_details" id="event_details" value="<?php echo esc_html__($post_id[0]->post_content); ?>">
+							<input type="hidden" name="event_location" id="event_location" value="<?php echo esc_html__($evcal_location_name); ?>">
+							<input type="hidden" name="event_location_address" id="event_location_address" value="<?php echo esc_html__($location_address); ?>">
+							<input type="hidden" name="evcal_organizer" id="evcal_organizer" value="<?php echo esc_html__($evcal_organizer); ?>">
+							<input type="hidden" name="event_time" id="event_time" value="<?php echo esc_html__($new_estart).' - '.esc_html__($new_eend); ?>">
+							<input type="hidden" name="ics_url" id="ics_url" value="<?php echo esc_html__($ics_url); ?>">
+							<input type="hidden" name="event_type" id="event_type" value="<?php echo esc_html__($terms[0]->name); ?>">
+							<input type="hidden" name="event_link" id="event_link" value="<?php echo esc_html__($event_link); ?>">
+							<div>
+								<span style="font-weight: bold; margin-top: 10px; color: black; display: block;" >Select Invite List Selection Method</span>
+								<select id="get_invite_type" class="ui fluid dropdown">
+									<option value='custom_list' selected>Upload Custom Invite List</option>
+									<option value='super_group'>Invite Super Group(s)</option>
+								</select>
+
+								<div id="group_container" style="display: none;">
+									<select name="group[]" multiple="" class="ui fluid dropdown" id="group">
+									</select>
+								</div>
+								<div id="custom_list">
+									<span style="font-weight: bold; margin-top: 10px; color: black; display: block;" >Enter/Paste Emails (one email per line):</span>
+									<textarea id="txt_custom_list" style="height: 150px"></textarea>
+								</div>
+
+							</div>
+							<div style="margin-top:20px;">
+								<input type="submit" name="submit" value="Submit" id="submit">
+							</div>
+						</form>
+					</div>
+					
+				</div>
 			</div>
 		</div>
     </div>
-	<div id="myModal" class="modal">
-	  <!-- Modal content -->
-		<div class="modal-content">
-			<div class="modal-header">
-				  <span aria-hidden="true" class="close">×</span>
-				  <h4 class="modal-title" id="myModalLabel">Invite</h4>
-			</div>
-			
-			<div class="modal-body">
-				<form action="<?php echo esc_html__($wporg_atts['post-url'], 'wporg'); ?> " method="post">
-				
-					<input type="hidden" name="event_id" id="event_id" value="<?php echo esc_html__($post_id[0]->ID); ?>">							
-					<input type="hidden" name="event_title" id="event_title" value="<?php echo esc_html__($post_id[0]->post_title); ?>">
-					<input type="hidden" name="event_subtitle" id="event_subtitle" value="<?php echo esc_html__($evcal_subtitle); ?>">
-					<input type="hidden" name="event_details" id="event_details" value="<?php echo esc_html__($post_id[0]->post_content); ?>">
-					<input type="hidden" name="event_location" id="event_location" value="<?php echo esc_html__($evcal_location_name); ?>">
-					<input type="hidden" name="event_location_address" id="event_location_address" value="<?php echo esc_html__($location_address); ?>">
-					<input type="hidden" name="evcal_organizer" id="evcal_organizer" value="<?php echo esc_html__($evcal_organizer); ?>">
-					<input type="hidden" name="event_time" id="event_time" value="<?php echo esc_html__($new_estart).' - '.esc_html__($new_eend); ?>">
-					<input type="hidden" name="ics_url" id="ics_url" value="<?php echo esc_html__($ics_url); ?>">
-					<input type="hidden" name="event_type" id="event_type" value="<?php echo esc_html__($terms[0]->name); ?>">
-					<input type="hidden" name="event_link" id="event_link" value="<?php echo esc_html__($event_link); ?>">
-					<div>
-						<span style="font-weight: bold; margin-top: 10px; color: black; display: block;" >Select Invite List Selection Method</span>
-						<select id="get_invite_type" class="ui fluid dropdown">
-							<option value='custom_list' selected>Upload Custom Invite List</option>
-							<option value='super_group'>Invite Super Group(s)</option>
-						</select>
-
-						<div id="group_container" style="display: none;">
-							<select name="group[]" multiple="" class="ui fluid dropdown" id="group">
-							</select>
-						</div>
-						<div id="custom_list">
-							<span style="font-weight: bold; margin-top: 10px; color: black; display: block;" >Enter/Paste Emails (Email addresses can be separated by commas, semi-colons, or new-lines.):</span>
-							<textarea id="txt_custom_list" style="height: 150px"></textarea>
-						</div>
-
-					</div>
-					<div style="margin-top:20px;">
-						<input type="submit" name="submit" value="Submit" id="submit">
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
+	
 <style>
 select {
     width: 30%;
     height: 4em !important;
 }
-body {
-	font-size: 16px;
-    line-height: 1.5;
-    background-color: #005395;
-	font-family: "intel_clear_wlatlight", "Libre Franklin", "Helvetica Neue", helvetica, arial, sans-serif;
-	font-weight: 400;
-}
-.header-links a {
-	color: white;
-}
-
+body {font-family: Arial, Helvetica, sans-serif;}
 /* The Modal (background) */
 .modal {
     display: none; /* Hidden by default */
@@ -328,6 +315,9 @@ body {
 	color: #ffffff !important;
 }
 </style>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.css">
+<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.js"></script>
 <script>
 var ajax_url = '<?php echo admin_url( 'admin-ajax.php' ); ?>';
 $('.ui.dropdown').dropdown({placeholder:'Select Group'});
@@ -425,14 +415,7 @@ $(document).ready(function(){
 				}
 			};
 			if( $( "#get_invite_type" ).val() === "custom_list" ) {
-				var custom_list = $( '#txt_custom_list' ).val();
-				custom_list = custom_list.replace( /; /g, ';' );
-				custom_list = custom_list.replace( /, /g, ',' );
-				custom_list = custom_list.replace( / /g, '\n');
-				custom_list = custom_list.replace( /;/g, '\n' );
-				custom_list = custom_list.replace( /,/g, '\n' );
-				data.event_data.custom_list = custom_list;
-				$( '#txt_custom_list' ).val( custom_list );
+				data.event_data.custom_list = $( '#txt_custom_list' ).val();
 			} else if( $( "#get_invite_type" ).val() === "super_group" ) {
 				data.event_data.group = $( '#group' ).val();
 			}
@@ -468,7 +451,7 @@ $(document).ready(function(){
 }
  add_shortcode('invite', 'invite_shortcode');
 
-  /** Additional Timezone Field **/
+ /** Additional Timezone Field **/
 
 add_filter('evoau_form_fields', 'evoautimezone_fields_to_form', 10, 1);
 function evoautimezone_fields_to_form($array){
@@ -616,8 +599,13 @@ function evoautest_save_values($field, $fn, $created_event_id){
 		update_post_meta($created_event_id, 'off_site_address', $_POST['address']); 
 	}
 	
-	if ( isset( $_POST['room'] )){
-		update_post_meta($created_event_id, 'room', $_POST['room']); 
+	if ( isset( $_POST['evolocationtype'] )){
+		update_post_meta($created_event_id, 'evo_event_locationtype', $_POST['evolocationtype']); 
+	}
+			
+	
+	if ( isset( $_POST['virtual_link'] )){
+		update_post_meta($created_event_id, 'virtual_link', $_POST['virtual_link']); 
 	}  
 	
 	$tag = intval($_POST['evolocation']);
@@ -664,6 +652,8 @@ function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 				<option value="" selected="selected">Select Region</option>
 				<?php 
 				
+
+						
 					// foreach($options as $v){
 						// if (array_key_exists("title",$v)){
 							// echo '<option value="'.$v['value'].'">'.$v['title'].'</option>';
@@ -762,9 +752,9 @@ function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 				<input type="text" name="address" id="address" value="">	
 			</p>
 			
-			<p><label for="room">Enter Virtual Link  : </label>
+			<p><label for="virtual_link">Enter Virtual Link  : </label>
 			<a href="https://employeecontent.intel.com/content/corp/meeting-center/home.html" style="color:black;">If you have not booked a room or virtual meeting yet, use this link.</a>
-				<input type="text" name="room" id="" value="">	
+				<input type="text" name="virtual_link" id="" value="">	
 			</p>
 
 		</div>
@@ -780,7 +770,7 @@ function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 
 			jQuery.post( ajax_url, data, function( response ) {
 				jQuery( "#evolocation" ).html( response );
-			} );
+			} );  
 			
 		});
 		
@@ -790,7 +780,7 @@ function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 		if( location_type === "site" ) {
 			jQuery("#pregion").show();
 			jQuery("#ploc").show();
-			jQuery("#padd").hide();
+			jQuery("#padd").show();
 		} else if( location_type === "off-site" ) {
 			jQuery("#pregion").hide();
 			jQuery("#ploc").hide();

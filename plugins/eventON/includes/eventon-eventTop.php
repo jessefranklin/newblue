@@ -125,7 +125,7 @@ function eventon_get_eventtop_print($array, $EVENT, $evOPT, $evOPT2){
 
 			case 'belowtitle':
 				$OT.="<span class='hr_sub' ></span>";
-				$OT.= "<span class='evcal_desc_info' >";
+				$OT.= "<span class='evcal_desc_info hii' >";
 
 				// time
 				if($object->fields_ && in_array('time',$object->fields) && isset($object->html)){
@@ -141,12 +141,62 @@ function eventon_get_eventtop_print($array, $EVENT, $evOPT, $evOPT2){
 
 					// location address
 					$LOCadd = (in_array('location',$object->fields) && !empty($object->locationaddress))? stripslashes($object->locationaddress): false;
-
-					if($LOCname || $LOCadd){
-						$OT.= '<em class="evcal_location" '.( ($object->lonlat)? $object->lonlat:null ).' data-add_str="'.$LOCadd.'">'.($LOCname? '<em class="event_location_name">'.$LOCname.'</em>':'').
-							( ($LOCname && $LOCadd)?', ':'').
+					
+					//$OT.= print_r($object->evvals['evo_event_locationtype']);
+					
+						$location = '';
+						
+						if($object->evvals['evo_event_locationtype'][0] == 'site'){
+							$location .= (!empty($object->evvals['evo_event_region'])? 'Region : '.$object->evvals['evo_event_region'][0] :null);
+							$location .= (!empty($LOCname)? ', Location : '. $LOCname :null);
+							$location .= (!empty($object->evvals['off_site_address'])? ', Room : '. $object->evvals['off_site_address'][0]:null);
+							$location .= (!empty($object->evvals['virtual_link'][0])? ', Virtual Link : '. $object->evvals['virtual_link'][0]:null);
+						}
+						   
+						if($object->evvals['evo_event_locationtype'][0] == 'off-site'){
+							$location .= (!empty($object->evvals['off_site_address'])? 'Address : '. $object->evvals['off_site_address'][0]:null);
+							$location .= (!empty($object->evvals['virtual_link'][0])? ', Virtual Link : '. $object->evvals['virtual_link'][0]:null);
+						}
+						
+						if($object->evvals['evo_event_locationtype'][0] == 'virtual'){
+							//$location .= (!empty($object->evvals['off_site_address'])? 'Address : '. $object->evvals['off_site_address'][0]:null);
+							$location .= (!empty($object->evvals['virtual_link'][0])? ', Virtual Link : '. $object->evvals['virtual_link'][0]:null);
+						}
+						
+						//print_r($object->evvals['virtual_link'][0]);
+						
+						
+						//$location .= (!empty($object->evvals['virtual_link'])? '<a target="_blank" href="'. evo_format_link($object->evvals['virtual_link'][0]).'">':false );
+					
+						//$location .= (!empty($object->evvals['virtual_link'][0])? ', Virtual Link : '. $object->evvals['virtual_link'][0]:null);
+						
+					
+					//$object->evvals['evo_event_locationtype'][0];
+					 $location = ltrim($location, ',');
+					
+					
+					//if($LOCname || $LOCadd){
+						// $OT.= '<em class="evcal_location" '.( ($object->lonlat)? $object->lonlat:null ).' data-add_str="'.$LOCadd.'">'.($LOCname? '<em class="event_location_name">'.$LOCname.'</em>':'').
+							// ( ($LOCname && $LOCadd)?', ':'').
+							// $LOCadd.'</em>';
+									
+				//	}
+					
+					$OT.= '<em class="evcal_location" '.( ($object->lonlat)? $object->lonlat:null ).' data-add_str="'.$LOCadd.'"><em class="event_location_name">'. $location .'</em>'.
+							( ($location && $LOCadd)?', ':'').
 							$LOCadd.'</em>';
-					}
+					
+					
+
+					// $off_site_address = (in_array('off_site_address',$object->fields) && isset($object->off_site_address) )? $object->off_site_address: false;					
+					
+					// $room = (in_array('room',$object->fields) && !empty($object->room))? stripslashes($object->room): false;
+
+					// if($off_site_address || $room){
+					// 	$OT.= '<em class="evcal_location" '.( ($object->lonlat)? $object->lonlat:null ).' data-add_str="'.$room.'">'.($off_site_address? '<em class="event_location_name">'.$off_site_address.'</em>':'').
+					// 		( ($off_site_address && $room)?', ':'').
+					// 		$room.'</em>';
+					// }
 				}
 
 				$OT.="</span>";
