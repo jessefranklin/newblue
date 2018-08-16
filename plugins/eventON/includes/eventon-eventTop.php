@@ -148,8 +148,8 @@ function eventon_get_eventtop_print($array, $EVENT, $evOPT, $evOPT2){
 						
 						if($object->evvals['evo_event_locationtype'][0] == 'site'){
 							$location .= (!empty($object->evvals['evo_event_region'])? 'Region : '.$object->evvals['evo_event_region'][0] :null);
-							$location .= (!empty($LOCname)? ', Location : '. $LOCname :null);
-							$location .= (!empty($object->evvals['off_site_address'])? ', Room : '. $object->evvals['off_site_address'][0]:null);
+							$location .= (!empty($LOCname)? ', Location : '. $LOCname .' - '. $LOCadd :null);
+							$location .= (!empty($object->evvals['off_site_address'][0])? ', Room : '. $object->evvals['off_site_address'][0]:null);
 							$location .= (!empty($object->evvals['virtual_link'][0])? ', Virtual Link : '. $object->evvals['virtual_link'][0]:null);
 						}
 						   
@@ -182,9 +182,7 @@ function eventon_get_eventtop_print($array, $EVENT, $evOPT, $evOPT2){
 									
 				//	}
 					
-					$OT.= '<em class="evcal_location" '.( ($object->lonlat)? $object->lonlat:null ).' data-add_str="'.$LOCadd.'"><em class="event_location_name">'. $location .'</em>'.
-							( ($location && $LOCadd)?', ':'').
-							$LOCadd.'</em>';
+					$OT.= '<em class="evcal_location" '.( ($object->lonlat)? $object->lonlat:null ).' data-add_str="'.$LOCadd.'"><em class="event_location_name">'. $location .'</em></em>';
 					
 					
 
