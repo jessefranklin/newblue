@@ -3,7 +3,7 @@
    Plugin Name: EventON - Invite
    Plugin URI: http://www.myeventon.com/
    description:Invite group
-   Intel Version: 1.81
+   Intel Version: 1.83
    Author: Hero Digital
    Author URI: http://herodigital.com  
    License: GPL2
@@ -132,6 +132,8 @@
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.js"></script>
     <div class="wporg-box">
+	
+		<div id="eventon_form" class="evoau_submission_form successForm" >   
 		<div id="eventon_form" class="evoau_submission_form successForm" >   
 			<div class="evoau_success_msg" style="">
 				<p>
@@ -191,13 +193,22 @@
 			</div>
 		</div>
 	</div>
-	
 <style>
 select {
     width: 30%;
     height: 4em !important;
 }
-body {font-family: Arial, Helvetica, sans-serif;}
+body {
+	font-size: 16px;
+    line-height: 1.5;
+    background-color: #005395;
+	font-family: "intel_clear_wlatlight", "Libre Franklin", "Helvetica Neue", helvetica, arial, sans-serif;
+	font-weight: 400;
+}
+.header-links a {
+	color: white;
+}
+
 /* The Modal (background) */
 .modal {
     display: none; /* Hidden by default */
@@ -417,20 +428,13 @@ $(document).ready(function(){
 			};
 			if( $( "#get_invite_type" ).val() === "custom_list" ) {
 				var custom_list = $( '#txt_custom_list' ).val();
-				if (custom_list.search(/<|>/g) != -1) {
-				    custom_list = custom_list.match(/\S+@\S+\.\S+/g);
-				    custom_list = custom_list.join('\n');
-				    custom_list = custom_list.replace( /<|>|;/g, '');
-				    data.event_data.custom_list = custom_list;
-				    $( '#txt_custom_list' ).val( custom_list );
-				} else {
-				    custom_list = custom_list.replace( /; /g, ';' );
-				    custom_list = custom_list.replace( /, /g, ',' );
-				    custom_list = custom_list.replace( / /g, '\n');
-				    custom_list = custom_list.replace( /;/g, '\n' );
-				    custom_list = custom_list.replace( /,/g, '\n' );
-				    data.event_data.custom_list = custom_list;
-				    $( '#txt_custom_list' ).val( custom_list );}
+				custom_list = custom_list.replace( /; /g, ';' );
+				custom_list = custom_list.replace( /, /g, ',' );
+				custom_list = custom_list.replace( / /g, '\n');
+				custom_list = custom_list.replace( /;/g, '\n' );
+				custom_list = custom_list.replace( /,/g, '\n' );
+				data.event_data.custom_list = custom_list;
+				$( '#txt_custom_list' ).val( custom_list );
 			} else if( $( "#get_invite_type" ).val() === "super_group" ) {
 				data.event_data.group = $( '#group' ).val();
 			}
@@ -763,7 +767,7 @@ function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 			</select>			
 			</p>  -->
 
-			<p id="padd" style="display:none;"><label for="address">Enter The Address  : </label>
+			<p id="padd" style="display:none;"><label for="address">Enter The <span id="addtxt">Address</span>  : </label>
 				<input type="text" name="address" id="address" value="">	
 			</p>
 			
@@ -785,21 +789,24 @@ function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 
 			jQuery.post( ajax_url, data, function( response ) {
 				jQuery( "#evolocation" ).html( response );
+				
 			} );  
 			
 		});
 		
 		jQuery( "#locationtype" ).on( "change", function () {
-		var location_type = $( this ).val();
+		var location_type = jQuery( this ).val();
 	//	alert(location_type);
 		if( location_type === "site" ) {
 			jQuery("#pregion").show();
 			jQuery("#ploc").show();
 			jQuery("#padd").show();
+			jQuery( "#addtxt" ).html( 'Room' ); 
 		} else if( location_type === "off-site" ) {
 			jQuery("#pregion").hide();
 			jQuery("#ploc").hide();
 			jQuery("#padd").show();
+			jQuery( "#addtxt" ).html('Address');
 		}else if( location_type === "virtual" ) {
 			jQuery("#pregion").hide();
 			jQuery("#ploc").hide();
@@ -807,11 +814,17 @@ function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 		}else {
 			jQuery("#pregion").hide();
 			jQuery("#ploc").hide();
-			jQuery("#padd").hide();
+			jQuery("#padd").hide();   
 		}
 	} );
 	
 		</script>
+		
+		<style>
+label span {
+    color: #404040;
+}
+		</style>
 		
 	<?php		 
 }

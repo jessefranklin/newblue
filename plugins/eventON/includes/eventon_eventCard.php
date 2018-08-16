@@ -97,9 +97,11 @@ function eventon_eventcard_print($array, $EVENT, $evOPT, $evoOPT2){
 						
 						$location = '';
 						
+					
+						
 						if($object->location_type == 'site'){
 							$location .= (!empty($object->location_region)? ' <p class="evo_location_region">Region : '. $object->location_region.'</p>':null);
-							$location .= (!empty($object->location_name)? ' <p class="evo_location_name">Site : '. $object->location_name.'</p>':null);
+							$location .= (!empty($object->location_name)? ' <p class="evo_location_name">Site : '. $object->location_name . ( !empty($object->address)? ' - '. stripslashes($object->address): null).'</p>':null);
 							$location .= (!empty($object->location_offsite_address)? ' <p class="evo_location_offsite_Address">Room : '. $object->location_offsite_address.'</p>':null);
 						}
 						
@@ -133,7 +135,7 @@ function eventon_eventcard_print($array, $EVENT, $evOPT, $evoOPT2){
 									{$iconLoc}
 									<div class='evcal_evdata_cell' data-loc_tax_id='{$object->locTaxID}'>
 										<h3 class='evo_h3'>".$iconLoc.($locationLink? $locationLink:'').eventon_get_custom_language($evoOPT2, 'evcal_lang_location','Location').($locationLink?'</a>':'')."</h3>" //.( (!empty($object->location_name))? "<p class='evo_location_name'>".stripslashes($object->location_name)."</p>":null ) 
-										."<p class='evo_location_address'>". ( !empty($object->address)? stripslashes($object->address): null)."</p>"
+										//."<p class='evo_location_address'>". ( !empty($object->address)? stripslashes($object->address): null)."</p>"
 										.$location."
 									</div>
 								</div>
