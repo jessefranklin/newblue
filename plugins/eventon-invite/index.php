@@ -566,7 +566,7 @@ function evoautimezone_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 			<option value="Asia/Hong_Kong">(GMT+08:00) Beijing, Chongqing, Hong Kong, Urumqi</option>
 			<option value="Asia/Irkutsk">(GMT+08:00) Irkutsk, Ulaan Bataar</option>
 			<option value="Australia/Perth">(GMT+08:00) Perth</option>
-			<option value="Asia/Malaysia">(GMT+08:00) Malaysia</option>
+			<option value="Asia/Kuala_Lumpur">(GMT+08:00) Malaysia</option>
 			<option value="Australia/Eucla">(GMT+08:45) Eucla</option>
 			<option value="Asia/Tokyo">(GMT+09:00) Osaka, Sapporo, Tokyo</option>
 			<option value="Asia/Seoul">(GMT+09:00) Seoul</option>
