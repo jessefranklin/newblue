@@ -10,3 +10,4 @@ plugins/SecurityScanDetails/scan_data.txt
 plugins/SecurityScanDetails/scan_data_log.txt
 plugins/blue_hire/data.json
 .gitignore.swp
+.ds_store

@@ -417,13 +417,20 @@ $(document).ready(function(){
 			};
 			if( $( "#get_invite_type" ).val() === "custom_list" ) {
 				var custom_list = $( '#txt_custom_list' ).val();
-				custom_list = custom_list.replace( /; /g, ';' );
-				custom_list = custom_list.replace( /, /g, ',' );
-				custom_list = custom_list.replace( / /g, '\n');
-				custom_list = custom_list.replace( /;/g, '\n' );
-				custom_list = custom_list.replace( /,/g, '\n' );
-				data.event_data.custom_list = custom_list;
-				$( '#txt_custom_list' ).val( custom_list );
+				if (custom_list.search(/<|>/g) != -1) {
+				    custom_list = custom_list.match(/\S+@\S+\.\S+/g);
+				    custom_list = custom_list.join('\n');
+				    custom_list = custom_list.replace( /<|>|;/g, '');
+				    data.event_data.custom_list = custom_list;
+				    $( '#txt_custom_list' ).val( custom_list );
+				} else {
+				    custom_list = custom_list.replace( /; /g, ';' );
+				    custom_list = custom_list.replace( /, /g, ',' );
+				    custom_list = custom_list.replace( / /g, '\n');
+				    custom_list = custom_list.replace( /;/g, '\n' );
+				    custom_list = custom_list.replace( /,/g, '\n' );
+				    data.event_data.custom_list = custom_list;
+				    $( '#txt_custom_list' ).val( custom_list );}
 			} else if( $( "#get_invite_type" ).val() === "super_group" ) {
 				data.event_data.group = $( '#group' ).val();
 			}
