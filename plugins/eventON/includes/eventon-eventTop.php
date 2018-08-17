@@ -147,20 +147,26 @@ function eventon_get_eventtop_print($array, $EVENT, $evOPT, $evOPT2){
 						$location = '';
 						
 						if($object->evvals['evo_event_locationtype'][0] == 'site'){
-							$location .= (!empty($object->evvals['evo_event_region'])? 'Region : '.$object->evvals['evo_event_region'][0] :null);
-							$location .= (!empty($LOCname)? ', Location : '. $LOCname .' - '. $LOCadd :null);
+							$location .= (!empty($object->evvals['evo_event_region'][0])? 'Region : '.$object->evvals['evo_event_region'][0] :null);
+							$location .= (!empty($LOCname)? ', Location : '. $LOCname .
+							 ( ($LOCname && $LOCadd)?' - ':''). $LOCadd :null);  
 							$location .= (!empty($object->evvals['off_site_address'][0])? ', Room : '. $object->evvals['off_site_address'][0]:null);
 							$location .= (!empty($object->evvals['virtual_link'][0])? ', Virtual Link : '. $object->evvals['virtual_link'][0]:null);
 						}
 						   
 						if($object->evvals['evo_event_locationtype'][0] == 'off-site'){
-							$location .= (!empty($object->evvals['off_site_address'])? 'Address : '. $object->evvals['off_site_address'][0]:null);
+							$location .= (!empty($object->evvals['off_site_address'][0])? 'Address : '. $object->evvals['off_site_address'][0]:null);
 							$location .= (!empty($object->evvals['virtual_link'][0])? ', Virtual Link : '. $object->evvals['virtual_link'][0]:null);
 						}
 						
 						if($object->evvals['evo_event_locationtype'][0] == 'virtual'){
 							//$location .= (!empty($object->evvals['off_site_address'])? 'Address : '. $object->evvals['off_site_address'][0]:null);
 							$location .= (!empty($object->evvals['virtual_link'][0])? ', Virtual Link : '. $object->evvals['virtual_link'][0]:null);
+						}
+						
+						if(empty($object->evvals['evo_event_locationtype'][0])){
+							$location .= (!empty($LOCname)? ', Location : '. $LOCname .
+							 ( ($LOCname && $LOCadd)?' - ':'').$LOCadd :null);
 						}
 						
 						//print_r($object->evvals['virtual_link'][0]);
