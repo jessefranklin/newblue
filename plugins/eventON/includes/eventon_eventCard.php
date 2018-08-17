@@ -113,6 +113,11 @@ function eventon_eventcard_print($array, $EVENT, $evOPT, $evoOPT2){
 							$location .= (!empty($object->location_virtual_link) )?'<p class="evo_location_virtual_link">Virtual Link : <a target="_blank" href="'. evo_format_link($object->location_virtual_link).'">'.$object->location_virtual_link.'</a></p>':false;
 						}
 						
+						if(empty($object->location_type)){
+							$location .= (!empty($object->location_name)? ' <p class="evo_location_name"> Location : '. $object->location_name .
+							 ( ($object->location_name && $object->address)?' - ':'').$object->address .'</p>' :null);
+						}
+						
 						
 
 						$timezone = (!empty($object->timezone)? ' <em class="evo_eventcard_tiemzone">'. $object->timezone.'</em>':null);
