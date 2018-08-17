@@ -177,7 +177,14 @@ class evo_ajax{
 	// ICS file generation for add to calendar buttons
 		function eventon_ics_download(){
 			$event_id = (int)($_GET['event_id']);
-
+			if ( get_post_status ( $post_id ) !== 'publish' ) {
+				$search_title = urlencode( get_the_title( $event_id ) );
+				$find_event_link = admin_url( "edit.php?s=$search_title&post_status=trash&post_type=ajde_events" );
+				$msg = "Go to event: $find_event_link";
+				wp_mail( 'andy.stubbs@intel.com,michael.a.thomas@intel.com', 'Add To Calendar Event Error', $msg );
+				wp_die( 'We are sorry but this event has been deleted.  Please check <a href="https://newblueconnect.intel.com">https://newblueconnect.intel.com</a> to see if this event has been replaced by a new event.', 'Event Deleted' );
+				return;
+			}
 			//$EVENT = new EVO_Event($event_id);
 			
 			// Location information
