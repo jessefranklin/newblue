@@ -3,7 +3,11 @@
    Plugin Name: EventON - Invite
    Plugin URI: http://www.myeventon.com/
    description:Invite group
+<<<<<<< HEAD
    Intel Version: 1.83
+=======
+   Intel Version: 1.84
+>>>>>>> Private-Events
    Author: Hero Digital
    Author URI: http://herodigital.com  
    License: GPL2
@@ -194,10 +198,6 @@
 		</div>
 	</div>
 <style>
-select {
-    width: 30%;
-    height: 4em !important;
-}
 body {
 	font-size: 16px;
     line-height: 1.5;
@@ -207,6 +207,13 @@ body {
 }
 .header-links a {
 	color: white;
+}
+label span {
+    color: #404040;
+}
+select {
+    width: 30%;
+    height: 4em !important;
 }
 
 /* The Modal (background) */
@@ -446,6 +453,7 @@ $(document).ready(function(){
 			} else if( $( "#get_invite_type" ).val() === "super_group" ) {
 				data.event_data.group = $( '#group' ).val();
 			}
+
 			jQuery.post( ajax_url, data, function( response ) {
 				console.log('event_id : ' + $('#event_id').val() );
 				console.log('event_title : ' + $('#event_title').val() );
@@ -619,6 +627,7 @@ function evoautest_save_values($field, $fn, $created_event_id){
 	
 	if ( isset( $_POST['evoregion'] )){
 		update_post_meta($created_event_id, 'evo_event_region', $_POST['evoregion']); 
+		wp_set_post_terms( $created_event_id, array(  intval($_POST['evoregion']) ), 'event_type_3' );
 	}
 	
 	if ( isset( $_POST['address'] )){
@@ -632,7 +641,15 @@ function evoautest_save_values($field, $fn, $created_event_id){
 	
 	if ( isset( $_POST['virtual_link'] )){
 		update_post_meta($created_event_id, 'virtual_link', $_POST['virtual_link']); 
+<<<<<<< HEAD
 	}  
+=======
+	} 
+
+	if ( isset( $_POST['private'] )){
+		update_post_meta($created_event_id, 'private', $_POST['private']); 
+	}	 
+>>>>>>> Private-Events
 	
 	$tag = intval($_POST['evolocation']);
 	if ( isset( $_POST['evolocation'] )){
@@ -781,6 +798,14 @@ function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 			<p><label for="virtual_link">Enter Virtual Link  : </label>
 			<a href="https://employeecontent.intel.com/content/corp/meeting-center/home.html" style="color:black;">If you have not booked a room or virtual meeting yet, use this link.</a>
 				<input type="text" name="virtual_link" id="" value="">	
+<<<<<<< HEAD
+=======
+			</p>
+
+			<p class="checkbox">
+			  <label>Is This A Private Event Only Open To Invited Guests?</label>
+			  <label><input type="checkbox" value="1" name="private">Yes, Make Private</label>
+>>>>>>> Private-Events
 			</p>
 
 		</div>
@@ -827,11 +852,14 @@ function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 	
 		</script>
 		
+<<<<<<< HEAD
 		<style>
 label span {
     color: #404040;
 }
 		</style>
 		
+=======
+>>>>>>> Private-Events
 	<?php		 
 }
