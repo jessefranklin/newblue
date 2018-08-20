@@ -446,7 +446,6 @@ $(document).ready(function(){
 			} else if( $( "#get_invite_type" ).val() === "super_group" ) {
 				data.event_data.group = $( '#group' ).val();
 			}
-
 			jQuery.post( ajax_url, data, function( response ) {
 				console.log('event_id : ' + $('#event_id').val() );
 				console.log('event_title : ' + $('#event_title').val() );
