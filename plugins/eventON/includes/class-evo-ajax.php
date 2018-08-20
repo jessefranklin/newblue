@@ -177,7 +177,8 @@ class evo_ajax{
 	// ICS file generation for add to calendar buttons
 		function eventon_ics_download(){
 			$event_id = (int)($_GET['event_id']);
-			if ( get_post_status ( $post_id ) !== 'publish' ) {
+			
+			if ( get_post_status ( $event_id ) !== 'publish' ) {
 				$search_title = urlencode( get_the_title( $event_id ) );
 				$find_event_link = admin_url( "edit.php?s=$search_title&post_status=trash&post_type=ajde_events" );
 				$msg = "Go to event: $find_event_link";
