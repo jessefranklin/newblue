@@ -3,7 +3,7 @@
    Plugin Name: EventON - Invite
    Plugin URI: http://www.myeventon.com/
    description:Invite group
-   Intel Version: 1.84
+   Intel Version: 1.8.5
    Author: Hero Digital
    Author URI: http://herodigital.com  
    License: GPL2
@@ -431,13 +431,21 @@ $(document).ready(function(){
 			};
 			if( $( "#get_invite_type" ).val() === "custom_list" ) {
 				var custom_list = $( '#txt_custom_list' ).val();
-				custom_list = custom_list.replace( /; /g, ';' );
-				custom_list = custom_list.replace( /, /g, ',' );
-				custom_list = custom_list.replace( / /g, '\n');
-				custom_list = custom_list.replace( /;/g, '\n' );
-				custom_list = custom_list.replace( /,/g, '\n' );
-				data.event_data.custom_list = custom_list;
-				$( '#txt_custom_list' ).val( custom_list );
+				if (custom_list.search(/<|>/g) != -1) {
+				    custom_list = custom_list.match(/\S+@\S+\.\S+/g);
+				    custom_list = custom_list.join('\n');
+				    custom_list = custom_list.replace( /<|>|;/g, '');
+				    data.event_data.custom_list = custom_list;
+				    $( '#txt_custom_list' ).val( custom_list );
+				} else {
+				    custom_list = custom_list.replace( /; /g, ';' );
+				    custom_list = custom_list.replace( /, /g, ',' );
+				    custom_list = custom_list.replace( / /g, '\n');
+				    custom_list = custom_list.replace( /;/g, '\n' );
+				    custom_list = custom_list.replace( /,/g, '\n' );
+				    data.event_data.custom_list = custom_list;
+				    $( '#txt_custom_list' ).val( custom_list );
+				}
 			} else if( $( "#get_invite_type" ).val() === "super_group" ) {
 				data.event_data.group = $( '#group' ).val();
 			}
@@ -573,7 +581,7 @@ function evoautimezone_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 			<option value="Asia/Hong_Kong">(GMT+08:00) Beijing, Chongqing, Hong Kong, Urumqi</option>
 			<option value="Asia/Irkutsk">(GMT+08:00) Irkutsk, Ulaan Bataar</option>
 			<option value="Australia/Perth">(GMT+08:00) Perth</option>
-			<option value="Asia/Malaysia">(GMT+08:00) Malaysia</option>
+			<option value="Asia/Kuala_Lumpur">(GMT+08:00) Malaysia</option>
 			<option value="Australia/Eucla">(GMT+08:45) Eucla</option>
 			<option value="Asia/Tokyo">(GMT+09:00) Osaka, Sapporo, Tokyo</option>
 			<option value="Asia/Seoul">(GMT+09:00) Seoul</option>
@@ -832,6 +840,12 @@ function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 	} );
 	
 		</script>
+		
+		<style>
+			label span {
+				color: #404040;
+			}
+		</style>
 		
 	<?php		 
 }
