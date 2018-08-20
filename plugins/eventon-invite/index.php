@@ -3,7 +3,7 @@
    Plugin Name: EventON - Invite
    Plugin URI: http://www.myeventon.com/
    description:Invite group
-   Intel Version: 1.81
+   Intel Version: 1.83
    Author: Hero Digital
    Author URI: http://herodigital.com  
    License: GPL2
@@ -132,6 +132,8 @@
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.js"></script>
     <div class="wporg-box">
+	
+		<div id="eventon_form" class="evoau_submission_form successForm" >   
 		<div id="eventon_form" class="evoau_submission_form successForm" >   
 			<div class="evoau_success_msg" style="">
 				<p>
@@ -439,7 +441,8 @@ $(document).ready(function(){
 				    custom_list = custom_list.replace( /;/g, '\n' );
 				    custom_list = custom_list.replace( /,/g, '\n' );
 				    data.event_data.custom_list = custom_list;
-				    $( '#txt_custom_list' ).val( custom_list );}
+				    $( '#txt_custom_list' ).val( custom_list );
+				}
 			} else if( $( "#get_invite_type" ).val() === "super_group" ) {
 				data.event_data.group = $( '#group' ).val();
 			}
@@ -475,7 +478,7 @@ $(document).ready(function(){
 }
  add_shortcode('invite', 'invite_shortcode');
 
-  /** Additional Timezone Field **/
+ /** Additional Timezone Field **/
 
 add_filter('evoau_form_fields', 'evoautimezone_fields_to_form', 10, 1);
 function evoautimezone_fields_to_form($array){
@@ -575,7 +578,7 @@ function evoautimezone_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 			<option value="Asia/Hong_Kong">(GMT+08:00) Beijing, Chongqing, Hong Kong, Urumqi</option>
 			<option value="Asia/Irkutsk">(GMT+08:00) Irkutsk, Ulaan Bataar</option>
 			<option value="Australia/Perth">(GMT+08:00) Perth</option>
-			<option value="Asia/Malaysia">(GMT+08:00) Malaysia</option>
+			<option value="Asia/Kuala_Lumpur">(GMT+08:00) Malaysia</option>
 			<option value="Australia/Eucla">(GMT+08:45) Eucla</option>
 			<option value="Asia/Tokyo">(GMT+09:00) Osaka, Sapporo, Tokyo</option>
 			<option value="Asia/Seoul">(GMT+09:00) Seoul</option>
@@ -623,8 +626,13 @@ function evoautest_save_values($field, $fn, $created_event_id){
 		update_post_meta($created_event_id, 'off_site_address', $_POST['address']); 
 	}
 	
-	if ( isset( $_POST['room'] )){
-		update_post_meta($created_event_id, 'room', $_POST['room']); 
+	if ( isset( $_POST['evolocationtype'] )){
+		update_post_meta($created_event_id, 'evo_event_locationtype', $_POST['evolocationtype']); 
+	}
+			
+	
+	if ( isset( $_POST['virtual_link'] )){
+		update_post_meta($created_event_id, 'virtual_link', $_POST['virtual_link']); 
 	}  
 	
 	$tag = intval($_POST['evolocation']);
@@ -671,6 +679,8 @@ function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 				<option value="" selected="selected">Select Region</option>
 				<?php 
 				
+
+						
 					// foreach($options as $v){
 						// if (array_key_exists("title",$v)){
 							// echo '<option value="'.$v['value'].'">'.$v['title'].'</option>';
@@ -765,13 +775,13 @@ function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 			</select>			
 			</p>  -->
 
-			<p id="padd" style="display:none;"><label for="address">Enter The Address  : </label>
+			<p id="padd" style="display:none;"><label for="address">Enter The <span id="addtxt">Address</span>  : </label>
 				<input type="text" name="address" id="address" value="">	
 			</p>
 			
-			<p><label for="room">Enter Virtual Link  : </label>
+			<p><label for="virtual_link">Enter Virtual Link  : </label>
 			<a href="https://employeecontent.intel.com/content/corp/meeting-center/home.html" style="color:black;">If you have not booked a room or virtual meeting yet, use this link.</a>
-				<input type="text" name="room" id="" value="">	
+				<input type="text" name="virtual_link" id="" value="">	
 			</p>
 
 		</div>
@@ -787,21 +797,24 @@ function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 
 			jQuery.post( ajax_url, data, function( response ) {
 				jQuery( "#evolocation" ).html( response );
-			} );
+				
+			} );  
 			
 		});
 		
 		jQuery( "#locationtype" ).on( "change", function () {
-		var location_type = $( this ).val();
+		var location_type = jQuery( this ).val();
 	//	alert(location_type);
 		if( location_type === "site" ) {
 			jQuery("#pregion").show();
 			jQuery("#ploc").show();
-			jQuery("#padd").hide();
+			jQuery("#padd").show();
+			jQuery( "#addtxt" ).html( 'Room' ); 
 		} else if( location_type === "off-site" ) {
 			jQuery("#pregion").hide();
 			jQuery("#ploc").hide();
 			jQuery("#padd").show();
+			jQuery( "#addtxt" ).html('Address');
 		}else if( location_type === "virtual" ) {
 			jQuery("#pregion").hide();
 			jQuery("#ploc").hide();
@@ -809,11 +822,17 @@ function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 		}else {
 			jQuery("#pregion").hide();
 			jQuery("#ploc").hide();
-			jQuery("#padd").hide();
+			jQuery("#padd").hide();   
 		}
 	} );
 	
 		</script>
+		
+		<style>
+label span {
+    color: #404040;
+}
+		</style>
 		
 	<?php		 
 }

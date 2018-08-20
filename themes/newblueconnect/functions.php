@@ -734,7 +734,7 @@ add_action( 'create_event_location', 'save_event_region' );
 add_action('wp_ajax_get_event_location', 'get_event_location');
 
 function get_event_location(){
-	
+	  
 	global $wpdb;
 	echo '<option value="">Select Location</option>';
 	if(!empty($_POST['region'])){
@@ -746,7 +746,11 @@ function get_event_location(){
 			// $loc['name'] = $val->name;
 			// $loc['slug'] = $val->slug;
 			// $array['data'] = $loc;
-			echo '<option value="'.$val->term_id.'">'.$val->name .'</option>';
+			$sel = '';
+			if($val->name == "Virtual" || $val->name == "Off-site"){
+				$sel = "selected";
+			}
+			echo '<option value="'.$val->term_id.'"  '. $sel .'>'.$val->name .'</option>';
 		}
 	}
 	
