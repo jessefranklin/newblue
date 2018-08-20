@@ -7,6 +7,7 @@
  * @package		EventON/Classes
  * @category	Class
  * @author 		AJDE
+ * Intel Version 1.1
  */
 
 class EVO_generator {
@@ -1691,8 +1692,11 @@ class EVO_generator {
 								);
 							}
 
+							
 					// EVENT DESCRIPTION
 						$event = get_post($event_id);
+						
+						
 						$evcal_event_content =(isset($event->post_content) ? $event->post_content:'');
 
 						if(!empty($evcal_event_content) ){
@@ -1711,7 +1715,7 @@ class EVO_generator {
 								'excerpt'=>$event_excerpt,
 							);
 						}
-
+				
 					// EVENT LOCATION
 						$location_terms = wp_get_post_terms($event_id, 'event_location');
 						$location_address = $location_name = $lonlat = false;
@@ -1758,6 +1762,7 @@ class EVO_generator {
   
 
 						$_eventcard['timelocation'] = array(
+							'event_id' => $event_id,
 							'timetext'=>$_event_date_HTML['html_prettytime'],
 							'timezone'=>(!empty($ev_vals['evo_event_timezone'])? $ev_vals['evo_event_timezone'][0]:null),
 							'address'=> ($hide_location_info ? $fnc->get_field_login_message() : $location_address),
@@ -2095,11 +2100,12 @@ class EVO_generator {
 							'fields_'=>$eventop_fields_,
 							'fields'=>$eventop_fields,
 							'evvals'=>$ev_vals,
+							'event_id' => $event_id,
 							'html'=> $_event_date_HTML,
 							'locationaddress'=>  $location_address,
 							'location'=>  $ev_location,
 							'locationname'=> $location_name,
-							'lonlat'=>$lonlat,
+							'lonlat'=>$lonlat,  
 							'organizer_name'=>$organizer_name,
 							'tax'=>$_html_tax_content,
 							'tags'=>$_event_tags,
