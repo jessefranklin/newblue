@@ -11,6 +11,8 @@ if ( !function_exists( 'add_action' ) ) {
 	exit();
 }
 
+
+
 function fln_new_blue_connect_test_log( $message ) {
 	date_default_timezone_set( 'America/Los_Angeles' );
 	$stamp = date('Y-m-d h:i:sa');
@@ -310,3 +312,18 @@ class FlnNewBlueConnectTest {
 }
 
 $flnNewBlueConnect = new FlnNewBlueConnectTest();
+
+
+/* Email for Testing 
+* The inviteemail is acting as the user's S.S.O email address
+* When the inviteemail is invited to a private event, that event will be viewble when testing.
+*/
+
+add_action('init', 'start_session', 1);
+
+function start_session() {
+if(!session_id()) {
+session_start();
+$_SESSION['inviteemail'] = 'ty.cobb@intel.com';
+}
+}

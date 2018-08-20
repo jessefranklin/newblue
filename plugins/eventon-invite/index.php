@@ -3,7 +3,7 @@
    Plugin Name: EventON - Invite
    Plugin URI: http://www.myeventon.com/
    description:Invite group
-   Intel Version: 1.83
+   Intel Version: 1.84
    Author: Hero Digital
    Author URI: http://herodigital.com  
    License: GPL2
@@ -194,10 +194,6 @@
 		</div>
 	</div>
 <style>
-select {
-    width: 30%;
-    height: 4em !important;
-}
 body {
 	font-size: 16px;
     line-height: 1.5;
@@ -207,6 +203,13 @@ body {
 }
 .header-links a {
 	color: white;
+}
+label span {
+    color: #404040;
+}
+select {
+    width: 30%;
+    height: 4em !important;
 }
 
 /* The Modal (background) */
@@ -620,6 +623,7 @@ function evoautest_save_values($field, $fn, $created_event_id){
 	
 	if ( isset( $_POST['evoregion'] )){
 		update_post_meta($created_event_id, 'evo_event_region', $_POST['evoregion']); 
+		wp_set_post_terms( $created_event_id, array(  intval($_POST['evoregion']) ), 'event_type_3' );
 	}
 	
 	if ( isset( $_POST['address'] )){
@@ -633,7 +637,11 @@ function evoautest_save_values($field, $fn, $created_event_id){
 	
 	if ( isset( $_POST['virtual_link'] )){
 		update_post_meta($created_event_id, 'virtual_link', $_POST['virtual_link']); 
-	}  
+	} 
+
+	if ( isset( $_POST['private'] )){
+		update_post_meta($created_event_id, 'private', $_POST['private']); 
+	}	 
 	
 	$tag = intval($_POST['evolocation']);
 	if ( isset( $_POST['evolocation'] )){
@@ -784,6 +792,11 @@ function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 				<input type="text" name="virtual_link" id="" value="">	
 			</p>
 
+			<p class="checkbox">
+			  <label>Is This A Private Event Only Open To Invited Guests?</label>
+			  <label><input type="checkbox" value="1" name="private">Yes, Make Private</label>
+			</p>
+
 		</div>
 		
 		<script>
@@ -827,12 +840,6 @@ function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 	} );
 	
 		</script>
-		
-		<style>
-label span {
-    color: #404040;
-}
-		</style>
 		
 	<?php		 
 }
