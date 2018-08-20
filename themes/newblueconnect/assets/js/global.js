@@ -221,7 +221,7 @@
   Code to hide reviews until after event is done
   Hide share button after event
   ---------------------------------------------*/
-  if ($('body').find('.evo_metarow_review').length){
+  if ($('body').find('.evo_metarow_review').length || $('body').find('.evo_metarow_socialmedia').length){
       hideReviews();
   }
 
@@ -481,13 +481,13 @@
     // Fire on document ready.
     $( document ).ready( function() {
 
-      // $('.eventmap').css('opacity', 0);
-      // setTimeout(function(){
-      //     if($('#btn-calendar').hasClass('currentView')){
-      //       $('.eventmap').hide();
-      //     };
-      //     $('.eventmap').css('opacity', 1);
-      // }, 1000);
+      $('.eventmap').css('opacity', 0);
+      setTimeout(function(){
+          if($('#btn-calendar').hasClass('currentView')){
+            $('.eventmap').hide();
+          };
+          $('.eventmap').css('opacity', 1);
+      }, 1000);
 
         //Set map current target
         $('#btn-calendar').addClass('currentView');
