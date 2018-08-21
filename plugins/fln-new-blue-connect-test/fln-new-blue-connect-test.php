@@ -324,6 +324,6 @@ add_action('init', 'start_session', 1);
 function start_session() {
 if(!session_id()) {
 session_start();
-$_SESSION['inviteemail'] = 'ty.cobb@intel.com';
+$_SESSION['inviteemail'] = 'test@intel.com';
 }
 }

@@ -92,20 +92,30 @@ function eventon_eventcard_print($array, $EVENT, $evOPT, $evoOPT2){
 				case 'timelocation':
 					$iconTime = "<span class='evcal_evdata_icons'><i class='fa ".get_eventON_icon('evcal__fai_002', 'fa-clock-o',$evOPT )."'></i></span>";
 					$iconLoc = "<span class='evcal_evdata_icons'><i class='fa ".get_eventON_icon('evcal__fai_003', 'fa-map-marker',$evOPT )."'></i></span>";
+					
+					$region_terms = wp_get_post_terms( $object->event_id , 'event_type_3' );
+					$region_name = '';
+					if ( $region_terms ){
+						$region_term_id = $region_terms[0]->term_id;
+						$region_name =  $region_terms[0]->name ;
+					}else{
+						$region_name =  (!empty($object->location_region)? $object->location_region :null);
+					}
+					$location_type_terms = wp_get_post_terms( $object->event_id , 'event_type_4' );
 
-					if($object->address || $object->location_name || $object->location_type || $object->location_virtual_link){
+					if($object->address || $object->location_name || $object->location_type || $object->location_virtual_link || $location_type_terms){
 						
 						$location = '';
 						
 					
 						
-						if($object->location_type == 'site'){
-							$location .= (!empty($object->location_region)? ' <p class="evo_location_region">Region : '. $object->location_region.'</p>':null);
+						if($object->location_type == 'site' || $location_type_terms[0]->term_id == 128){
+							$location .= (!empty($region_name)? ' <p class="evo_location_region">Region : '. $region_name.'</p>':null);
 							$location .= (!empty($object->location_name)? ' <p class="evo_location_name">Site : '. $object->location_name . ( !empty($object->address)? ' - '. stripslashes($object->address): null).'</p>':null);
 							$location .= (!empty($object->location_offsite_address)? ' <p class="evo_location_offsite_Address">Room : '. $object->location_offsite_address.'</p>':null);
 						}
 						
-						if($object->location_type == 'off-site'){
+						if($object->location_type == 'off-site' || $location_type_terms[0]->term_id == 132){
 							$location .= (!empty($object->location_offsite_address)? ' <p class="evo_location_offsite_Address">Address : '. $object->location_offsite_address.'</p>':null);
 						}
 						
@@ -113,7 +123,7 @@ function eventon_eventcard_print($array, $EVENT, $evOPT, $evoOPT2){
 							$location .= (!empty($object->location_virtual_link) )?'<p class="evo_location_virtual_link">Virtual Link : <a target="_blank" href="'. evo_format_link($object->location_virtual_link).'">'.$object->location_virtual_link.'</a></p>':false;
 						}
 						
-						if(empty($object->location_type)){
+						if(empty($object->location_type) && empty( $location_type_terms)){
 							$location .= (!empty($object->location_name)? ' <p class="evo_location_name"> Location : '. $object->location_name .
 							 ( ($object->location_name && $object->address)?' - ':'').$object->address .'</p>' :null);
 						}

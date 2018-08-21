@@ -639,7 +639,29 @@ function event_location_add_custom_field($term) {
 				<td>  
 					<select class="form-control" id="evoregion" name="evoregion" style="width: 95%;">				   
 						<option value="" selected="selected">Select Region</option>
-						<optgroup label="AMR">
+						<?php 
+						$taxonomy = 'event_type_3';
+						$args = array(
+							'parent' => 0,
+							'hide_empty' => false				// to get only parent terms
+						);
+						$terms = get_terms( $taxonomy, $args );
+						
+							foreach ( $terms as $term) {
+								$args1 = array(
+									'parent' => $term->term_id,
+									'hide_empty' => false	
+								);
+								$terms1 = get_terms( 'event_type_3', $args1);
+								echo '<optgroup label="'.$term->name .'">';   
+								foreach ( $terms1 as $term1) {
+									echo '<option value="'.$term1->term_id .'">'.$term1->name .'</option>';
+								}
+							
+							}
+							
+						?>
+						<!--<optgroup label="AMR">
 							<option value="Argentina, Cordoba">Argentina, Cordoba</option>
 							<option value="Arizona, Chandler">Arizona, Chandler</option>
 							<option value="Arizona, Ocotillo">Arizona, Ocotillo</option>
@@ -708,7 +730,7 @@ function event_location_add_custom_field($term) {
 						<optgroup label="Other">	
 							<option value="Virtual">Virtual</option>
 							<option value="Off-Site">Off-Site</option>
-						</optgroup>
+						</optgroup>  -->   
 					</select>			
 				</td>  
 			</tr>    
@@ -723,6 +745,7 @@ function save_event_region( $term_id ) {
 		$term_region = $_POST['evoregion'];
 		if( $term_region ) {
 			 update_term_meta( $term_id, 'region', $term_region );
+			// wp_set_post_terms( $term_id, array(  intval($_POST['evoregion']) ), 'event_type_3' );
 		}
 	} 
 		
@@ -739,21 +762,65 @@ function get_event_location(){
 	echo '<option value="">Select Location</option>';
 	if(!empty($_POST['region'])){
 		//echo "select t.* from $wpdb->terms t left join $wpdb->termmeta t1 on t.term_id= t1.term_id where t1.meta_key LIKE '%region%' and meta_value LIKE '%".$_POST['region']."%'";
-		$sql = $wpdb->get_results("select t.* from $wpdb->terms t left join $wpdb->termmeta t1 on t.term_id= t1.term_id where t1.meta_key LIKE '%region%' and meta_value LIKE '%".$_POST['region']."%'");
+		$sql = $wpdb->get_results("select t.* from $wpdb->terms t left join $wpdb->termmeta t1 on t.term_id= t1.term_id where t1.meta_key LIKE '%region%' and meta_value = '".$_POST['region']."'");
 		$loc= array();
+
 		
 		foreach($sql as $val){
 			// $loc['name'] = $val->name;
 			// $loc['slug'] = $val->slug;
 			// $array['data'] = $loc;
 			$sel = '';
-			if($val->name == "Virtual" || $val->name == "Off-site"){
+			if($val->term_id == 57 || $val->term_id == 58 ){
 				$sel = "selected";
 			}
-			echo '<option value="'.$val->term_id.'"  '. $sel .'>'.$val->name .'</option>';
+		
+				
+			echo '<option value="'.$val->term_id.'" '. $sel .'>'.$val->name .'</option>';
 		}
 	}
 	
 	//echo json_encode($array);
 	die();
+}
+
+/* Register Private Field */
+
+if(function_exists("register_field_group"))
+{
+	register_field_group(array (
+		'id' => 'acf_private',
+		'title' => 'private',
+		'fields' => array (
+			array (
+				'key' => 'field_5b7a67663e1b3',
+				'label' => 'Private',
+				'name' => 'private',
+				'type' => 'checkbox',
+				'choices' => array (
+					1 => 'Private',
+				),
+				'default_value' => '',
+				'layout' => 'vertical',
+			),
+		),
+		'location' => array (
+			array (
+				array (
+					'param' => 'post_type',
+					'operator' => '==',
+					'value' => 'ajde_events',
+					'order_no' => 0,
+					'group_no' => 0,
+				),
+			),
+		),
+		'options' => array (
+			'position' => 'normal',
+			'layout' => 'no_box',
+			'hide_on_screen' => array (
+			),
+		),
+		'menu_order' => 0,
+	));
 }
