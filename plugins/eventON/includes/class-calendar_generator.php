@@ -2326,12 +2326,12 @@ class EVO_generator {
 					$event_html_code="<div {$atts}>{$eventbefore}{$__scheme_data}
 					<{$html_tag_start} {$attsIn} >{$html_info_line}</{$html_tag_end}>".$html_event_detail_card."<div class='clear end'></div></div>";
 
-					
-					$flnNewBlueConnect = new FlnNewBlueConnectTest();
+					global $flnNewBlueConnect;
+					//$flnNewBlueConnect = new FlnNewBlueConnect();
 					$user = wp_get_current_user();
 					$user_email = $user->user_email;
+					$email = $user_email;
 					//print_r($user);   
-					
 					//print_r($private_event[0]);
 					 
 					
@@ -2342,7 +2342,7 @@ class EVO_generator {
 					$query = $wpdb->get_results($sql);
 					$rowcount = $wpdb->num_rows;  
 					   
-					$email = wp_get_current_user()->user_email; 
+					//$email = wp_get_current_user()->user_email; 
 						//echo $email;
 						
 						//print_r($_SESSION['inviteemail']);
@@ -2361,7 +2361,7 @@ class EVO_generator {
 					else{
 						if($private_event[0] == 1){
 							//echo "hii";
-							if( $flnNewBlueConnect->is_user_invited( $email,  $event_id) ) {
+							if( $flnNewBlueConnect->is_user_invited( $user_email,  $event_id) ) {
 								
 								// prepare output
 								$months_event_array[]=array(
