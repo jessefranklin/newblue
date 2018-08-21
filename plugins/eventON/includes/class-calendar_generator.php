@@ -9,7 +9,6 @@
  * @author 		AJDE
  * Intel Version 1.1
  */
-
 class EVO_generator {
 
 	public $google_maps_load,
@@ -1536,20 +1535,20 @@ class EVO_generator {
 				$cal_lang = evo_get_current_lang();
 
 				// user interavtion for the calendar
-					$calendar_ux_val = !empty($__shortC_arg['ux_val'])? $__shortC_arg['ux_val']: '0';
-					$cal_hide_end_time = (!empty($__shortC_arg['hide_end_time']) && $__shortC_arg['hide_end_time']=='yes' )? true: false;
+				$calendar_ux_val = !empty($__shortC_arg['ux_val'])? $__shortC_arg['ux_val']: '0';
+				$cal_hide_end_time = (!empty($__shortC_arg['hide_end_time']) && $__shortC_arg['hide_end_time']=='yes' )? true: false;
 
 				// schema data
-					$show_schema = (evo_settings_check_yn($this->evopt1,'evo_schema'))? false: true;
+				$show_schema = (evo_settings_check_yn($this->evopt1,'evo_schema'))? false: true;
 					if($this->__calendar_type =='single' && !empty($this->evopt1['evcal_schema_disable_section']) && $this->evopt1['evcal_schema_disable_section']=='single' && !$show_schema)
 						$show_schema = true;
 
 				$__count=0;
 
 				// EVENT CARD open by default variables
-					$_is_eventCardOpen = ( evo_settings_check_yn($__shortC_arg,'evc_open'))? true: ( $this->is_eventcard_open? true:false);
-					$eventcard_script_class = ($_is_eventCardOpen)? "gmaponload":null;
-					$this->is_eventcard_open = false;
+				$_is_eventCardOpen = ( evo_settings_check_yn($__shortC_arg,'evc_open'))? true: ( $this->is_eventcard_open? true:false);
+				$eventcard_script_class = ($_is_eventCardOpen)? "gmaponload":null;
+				$this->is_eventcard_open = false;
 
 				// check featured events are prioritized
 				$__feature_events = evo_settings_check_yn($__shortC_arg,'ft_event_priority');
@@ -1696,7 +1695,6 @@ class EVO_generator {
 					// EVENT DESCRIPTION
 						$event = get_post($event_id);
 						
-						
 						$evcal_event_content =(isset($event->post_content) ? $event->post_content:'');
 
 						if(!empty($evcal_event_content) ){
@@ -1715,7 +1713,7 @@ class EVO_generator {
 								'excerpt'=>$event_excerpt,
 							);
 						}
-				
+
 					// EVENT LOCATION
 						$location_terms = wp_get_post_terms($event_id, 'event_location');
 						$location_address = $location_name = $lonlat = false;
@@ -1759,9 +1757,8 @@ class EVO_generator {
 							if( $hide_location_info){
 								$location_name = $location_address = '';
 							}
-  
-
-						$_eventcard['timelocation'] = array(
+  						
+  						$_eventcard['timelocation'] = array(
 							'event_id' => $event_id,
 							'timetext'=>$_event_date_HTML['html_prettytime'],
 							'timezone'=>(!empty($ev_vals['evo_event_timezone'])? $ev_vals['evo_event_timezone'][0]:null),
@@ -2363,9 +2360,9 @@ class EVO_generator {
 					}
 					else{
 						if($private_event[0] == 1){
-							//
+							//echo "hii";
 							if( $flnNewBlueConnect->is_user_invited( $email,  $event_id) ) {
-								//echo "hii";
+								
 								// prepare output
 								$months_event_array[]=array(
 									'event_id'=>$event_id,
@@ -2376,6 +2373,7 @@ class EVO_generator {
 							}	
 								   
 						}else{
+						//	echo "helloo";
 							$months_event_array[]=array(
 							'event_id'=>$event_id,
 							'srow'=>$event_start_unix,
@@ -2816,14 +2814,29 @@ class EVO_generator {
 
 								// each term
 								foreach($cats as $ct){
+	
+									$cats1 = get_terms($vv, apply_filters('evo_get_frontend_filter_tax',
+										array(
+										'hide_empty'=> false,
+										'parent'=>$ct->term_id
+										)								
+									));
 									// event type 1 tax icon
 										$icon_str = $this->helper->get_tax_icon($vv,$ct->term_id, $this->evopt1 );
 
 									$term_name = $this->lang('evolang_'.$vv.'_'.$ct->term_id,$ct->name );
 									if(!$selectfilterType){
 										$inside .=  "<p class='".$ct->slug.' '. ($icon_str?'has_icon':'')."' data-filter_val='".$ct->term_id."' data-filter_slug='".$ct->slug."'>". $icon_str . $term_name."</p>";
+										foreach($cats1 as $ct1){    
+											$term_name1 = $this->lang('evolang_'.$vv.'_'.$ct1->term_id,$ct1->name );
+											$inside .=  "<p class='".$ct1->slug.' '. ($icon_str?'has_icon':'')."' data-filter_val='".$ct1->term_id."' data-filter_slug='".$ct1->slug."'>&nbsp;&nbsp;&nbsp; ". $icon_str . $term_name1."</p>";
+										}
 									}else{
 										$inside .=  "<p class='".$ct->slug."' ><input type='checkbox' data-filter_val='".$ct->term_id."' checked data-filter_slug='".$ct->slug."'/> ". $term_name."</p>";
+										foreach($cats1 as $ct1){
+											$term_name1 = $this->lang('evolang_'.$vv.'_'.$ct1->term_id,$ct1->name );
+											$inside .=  "<p class='".$ct1->slug.' '. ($icon_str?'has_icon':'')."' data-filter_val='".$ct1->term_id."' data-filter_slug='".$ct1->slug."'>&nbsp;&nbsp;&nbsp;". $icon_str . $term_name1."</p>";
+										}
 									}
 								}
 
@@ -2841,6 +2854,14 @@ class EVO_generator {
 
 								// each taxonomy term
 								foreach($cats as $ct){
+									
+									$cats1 = get_terms($vv, apply_filters('evo_get_frontend_filter_tax',
+										array(
+										'hide_empty'=> false,
+										'parent'=>$ct->term_id
+										)								
+									));
+									
 									// skip shortcode via set filter values from showing in list
 										if(in_array($ct->term_id, $filtering_values) && !$selectfilterType) continue;
 
@@ -2848,11 +2869,21 @@ class EVO_generator {
 										$icon_str = $this->helper->get_tax_icon($vv,$ct->term_id, $this->evopt1 );
 
 									$term_name = $this->lang('evolang_'.$vv.'_'.$ct->term_id,$ct->name );
+								
 									if(!$selectfilterType){
 										$inside .=  "<p class='".$ct->slug.' '. ($icon_str?'has_icon':'')."' data-filter_val='".$ct->term_id."' data-filter_slug='".$ct->slug."'>". $icon_str . $term_name."</p>";
+										foreach($cats1 as $ct1){    									
+											$term_name1 = $this->lang('evolang_'.$vv.'_'.$ct1->term_id,$ct1->name );
+											$inside .=  "<p class='".$ct1->slug.' '. ($icon_str?'has_icon':'')."' data-filter_val='".$ct1->term_id."' data-filter_slug='".$ct1->slug."'>&nbsp;&nbsp;&nbsp; ". $icon_str . $term_name1."</p>";
+										}
 									}else{// checkbox select option
 										$checked = ( in_array($ct->term_id, $filtering_values) ) ? 'checked':'';
-										$inside .=  "<p class='{$ct->term_id} {$ct->slug}' ><input {$checked} type='checkbox' data-filter_val='".$ct->term_id."' data-filter_slug='".$ct->slug."'/> ". $term_name."</p>";
+										$inside .=  "<p class='".$ct->slug."' ><input type='checkbox' data-filter_val='".$ct->term_id."' checked data-filter_slug='".$ct->slug."'/> ". $term_name."</p>";
+										foreach($cats1 as $ct1){
+											$checked = ( in_array($ct1->term_id, $filtering_values) ) ? 'checked':'';
+											$term_name1 = $this->lang('evolang_'.$vv.'_'.$ct1->term_id,$ct1->name );
+											$inside .=  "<p class='".$ct1->slug.' '. ($icon_str?'has_icon':'')."' data-filter_val='".$ct1->term_id."' data-filter_slug='".$ct1->slug."'>&nbsp;&nbsp;&nbsp;". $icon_str . $term_name1."</p>";
+										}
 									}
 								}
 							}
