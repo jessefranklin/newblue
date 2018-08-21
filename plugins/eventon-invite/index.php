@@ -511,7 +511,7 @@ function evoautimezone_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 			<option value="America/Los_Angeles">(GMT-08:00) Pacific Time (US & Canada)</option>
 			<option value="America/Denver">(GMT-07:00) Mountain Time (US & Canada)</option>
 			<option value="America/Chihuahua">(GMT-07:00) Chihuahua, La Paz, Mazatlan</option>
-			<option value="America/Arizona">(GMT-07:00) Arizona</option>
+			<option value="America/Phoenix">(GMT-07:00) Arizona</option>
 			<option value="America/Belize">(GMT-06:00) Saskatchewan, Central America</option>
 			<option value="America/Cancun">(GMT-06:00) Guadalajara, Mexico City, Monterrey</option>
 			<option value="Chile/EasterIsland">(GMT-06:00) Easter Island</option>
