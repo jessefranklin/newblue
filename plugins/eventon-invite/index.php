@@ -3,11 +3,7 @@
    Plugin Name: EventON - Invite
    Plugin URI: http://www.myeventon.com/
    description:Invite group
-<<<<<<< HEAD
-   Intel Version: 1.83
-=======
-   Intel Version: 1.84
->>>>>>> Private-Events
+   Intel Version: 1.85
    Author: Hero Digital
    Author URI: http://herodigital.com  
    License: GPL2
@@ -136,8 +132,7 @@
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.js"></script>
     <div class="wporg-box">
-	
-		<div id="eventon_form" class="evoau_submission_form successForm" >   
+	 
 		<div id="eventon_form" class="evoau_submission_form successForm" >   
 			<div class="evoau_success_msg" style="">
 				<p>
@@ -636,20 +631,17 @@ function evoautest_save_values($field, $fn, $created_event_id){
 	
 	if ( isset( $_POST['evolocationtype'] )){
 		update_post_meta($created_event_id, 'evo_event_locationtype', $_POST['evolocationtype']); 
+		wp_set_post_terms( $created_event_id, array(  intval($_POST['evolocationtype']) ), 'event_type_4' );
 	}
 			
 	
 	if ( isset( $_POST['virtual_link'] )){
 		update_post_meta($created_event_id, 'virtual_link', $_POST['virtual_link']); 
-<<<<<<< HEAD
-	}  
-=======
 	} 
 
 	if ( isset( $_POST['private'] )){
 		update_post_meta($created_event_id, 'private', $_POST['private']); 
 	}	 
->>>>>>> Private-Events
 	
 	$tag = intval($_POST['evolocation']);
 	if ( isset( $_POST['evolocation'] )){
@@ -684,9 +676,23 @@ function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 			<p><label for="site">Select Location Type : </label>		
 			<select class="form-control" id="locationtype" name="evolocationtype">				   
 				<option value="" selected="selected">Select Location Type</option>
-				<option value="site">Site</option>
+				<?php 
+				$taxonomy = 'event_type_4';
+				$args = array(
+					'parent' => 0,
+					'hide_empty' => false,
+					'orderby' => 'id',
+					'order' => 'ASC',	   				
+				);
+				$terms = get_terms( $taxonomy, $args );
+				
+					foreach ( $terms as $term) {
+						echo '<option value="'.$term->term_id .'">'.$term->name .'</option>';
+					}
+					?>
+				<!--<option value="site">Site</option>
 				<option value="off-site">Off-Site</option>
-				<option value="virtual">Virtual</option>
+				<option value="virtual">Virtual</option>  -->
 			</select>			
 			</p> 
 			
@@ -694,16 +700,28 @@ function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 			<select class="form-control" id="region" name="evoregion">				   
 				<option value="" selected="selected">Select Region</option>
 				<?php 
+				$taxonomy = 'event_type_3';
+				$args = array(
+					'parent' => 0,
+					'hide_empty' => false				// to get only parent terms
+				);
+				$terms = get_terms( $taxonomy, $args );
 				
-
-						
-					// foreach($options as $v){
-						// if (array_key_exists("title",$v)){
-							// echo '<option value="'.$v['value'].'">'.$v['title'].'</option>';
-						// }		
-					// }
+					foreach ( $terms as $term) {
+						$args1 = array(
+							'parent' => $term->term_id,
+							'hide_empty' => false	
+						);
+						$terms1 = get_terms( 'event_type_3', $args1);
+						echo '<optgroup label="'.$term->name .'">';   
+						foreach ( $terms1 as $term1) {
+							echo '<option value="'.$term1->term_id .'">'.$term1->name .'</option>';
+						}
+					
+					}
+					
 				?>
-					<optgroup label="AMR">
+				<!--	<optgroup label="AMR">
 					<option value="Argentina, Cordoba">Argentina, Cordoba</option>
 					<option value="Arizona, Chandler">Arizona, Chandler</option>
 					<option value="Arizona, Ocotillo">Arizona, Ocotillo</option>
@@ -772,7 +790,7 @@ function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 				<optgroup label="Other">	
 					<option value="Virtual">Virtual</option>
 					<option value="Off-Site">Off-Site</option>
-				</optgroup>				
+				</optgroup>		 -->		
 			</select>			
 			</p>
 
@@ -798,14 +816,11 @@ function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 			<p><label for="virtual_link">Enter Virtual Link  : </label>
 			<a href="https://employeecontent.intel.com/content/corp/meeting-center/home.html" style="color:black;">If you have not booked a room or virtual meeting yet, use this link.</a>
 				<input type="text" name="virtual_link" id="" value="">	
-<<<<<<< HEAD
-=======
 			</p>
 
 			<p class="checkbox">
 			  <label>Is This A Private Event Only Open To Invited Guests?</label>
 			  <label><input type="checkbox" value="1" name="private">Yes, Make Private</label>
->>>>>>> Private-Events
 			</p>
 
 		</div>
@@ -829,17 +844,17 @@ function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 		jQuery( "#locationtype" ).on( "change", function () {
 		var location_type = jQuery( this ).val();
 	//	alert(location_type);
-		if( location_type === "site" ) {
+		if( location_type === "site"  ||  location_type == 128) {
 			jQuery("#pregion").show();
 			jQuery("#ploc").show();
 			jQuery("#padd").show();
 			jQuery( "#addtxt" ).html( 'Room' ); 
-		} else if( location_type === "off-site" ) {
+		} else if( location_type === "off-site" ||  location_type == 132) {
 			jQuery("#pregion").hide();
 			jQuery("#ploc").hide();
 			jQuery("#padd").show();
 			jQuery( "#addtxt" ).html('Address');
-		}else if( location_type === "virtual" ) {
+		}else if( location_type === "virtual" ||  location_type == 133) {
 			jQuery("#pregion").hide();
 			jQuery("#ploc").hide();
 			jQuery("#padd").hide();
@@ -852,14 +867,5 @@ function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 	
 		</script>
 		
-<<<<<<< HEAD
-		<style>
-label span {
-    color: #404040;
-}
-		</style>
-		
-=======
->>>>>>> Private-Events
 	<?php		 
 }
