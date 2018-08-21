@@ -278,7 +278,7 @@ class evo_ajax{
 			echo "DTEND;TZID=".	$this->esc_ical_text($timezone).':'.date_i18n('Ymd',$end).'T'.date_i18n('His',$end)."\n";	
 			echo "LOCATION:{$location}\n";
 			echo "SUMMARY:".html_entity_decode( $this->esc_ical_text($name))."\n";
-			// echo "DESCRIPTION: ".$this->esc_ical_text($summary)."\n";
+			echo "DESCRIPTION: ".$this->esc_ical_text($summary)."\n";
 			echo "BEGIN:VALARM\n";
 			echo "TRIGGER:-PT15M\n";
 			echo "ACTION:DISPLAY\n";
