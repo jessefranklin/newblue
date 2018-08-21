@@ -1,5 +1,5 @@
 <?php
-   /*
+/*
    Plugin Name: EventON - Invite
    Plugin URI: http://www.myeventon.com/
    description:Invite group
@@ -7,10 +7,9 @@
    Author: Hero Digital
    Author URI: http://herodigital.com  
    License: GPL2
-   */
+*/
        
 	// Get the Timzezone in UFC Offset  format
-
 	function get_UTC_offset(){
 
 		$offset = (get_option('gmt_offset', 0) * 3600);
@@ -21,11 +20,10 @@
 		return $offset + $customoffset;
 
 	}
-
-// return start and end time in array after adjusting time to UTC offset based on site timezone
+	// return start and end time in array after adjusting time to UTC offset based on site timezone
 
 		function get_utc_adjusted_times($start = '', $end='', $timezone, $separate = true ){
-
+			
 			if(empty($start) && empty($end)){
 
 				//$times = $this->get_start_end_times();
@@ -33,8 +31,6 @@
 				$times = array('start'=>$start, 'end'=>$end);
 			}
 			if(empty($times)) return false;
-
-
 
 		//	$datetime = new evo_datetime();
 			$utc_offset = get_UTC_offset();
@@ -45,7 +41,6 @@
 					$new_times[$key] = $unix - $utc_offset;
 					continue;
 				}
-
 
 				$new_unix = $unix - $utc_offset;
 
@@ -58,15 +53,12 @@
 
 			}
 
-
-
 			return $new_times;
 
 		}
 		
         
-  function invite_shortcode($atts = [], $content = null, $tag = '')   
-{
+  function invite_shortcode($atts = [], $content = null, $tag = ''){
 	ob_start();
 	global $wpdb;
 
@@ -153,7 +145,6 @@
 				  <span aria-hidden="true" class="close">×</span>
 				  <h4 class="modal-title" id="myModalLabel">Invite</h4>
 			</div>
-			
 			<div class="modal-body">
 				<form action="<?php echo esc_html__($wporg_atts['post-url'], 'wporg'); ?> " method="post">
 				
@@ -650,21 +641,18 @@ function evoautest_save_values($field, $fn, $created_event_id){
 	}
 
 	if( $field =='evotimezone'){
-		
 		// for each above fields
 		foreach(array(
 			'evoau_test_value',
 		) as $field){
 			if(!empty($_POST[$field]))
 				add_post_meta($created_event_id, $field, $_POST[$field]);
-			
 		}
 	}
 }
 
 // Frontend showing fields and saving values  
 function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $lang){
-	
 	//$fields = get_option('wpcf-termmeta');
 	//$options = $fields['region']['data']['options'];
 	//print_r($options);	
@@ -717,9 +705,7 @@ function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 						foreach ( $terms1 as $term1) {
 							echo '<option value="'.$term1->term_id .'">'.$term1->name .'</option>';
 						}
-					
 					}
-					
 				?>
 				<!--	<optgroup label="AMR">
 					<option value="Argentina, Cordoba">Argentina, Cordoba</option>
@@ -793,7 +779,6 @@ function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 				</optgroup>		 -->		
 			</select>			
 			</p>
-
 			<p id="ploc" style="display:none;"><label for="evolocation">Select Event's Location : </label>	  	
 			<select class="form-control" id="evolocation" name="evolocation">				   
 				<option value="" selected="selected">Select Location</option>        
@@ -812,17 +797,14 @@ function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 			<p id="padd" style="display:none;"><label for="address">Enter The <span id="addtxt">Address</span>  : </label>
 				<input type="text" name="address" id="address" value="">	
 			</p>
-			
 			<p><label for="virtual_link">Enter Virtual Link  : </label>
 			<a href="https://employeecontent.intel.com/content/corp/meeting-center/home.html" style="color:black;">If you have not booked a room or virtual meeting yet, use this link.</a>
 				<input type="text" name="virtual_link" id="" value="">	
 			</p>
-
 			<p class="checkbox">
 			  <label>Is This A Private Event Only Open To Invited Guests?</label>
 			  <label><input type="checkbox" value="1" name="private">Yes, Make Private</label>
 			</p>
-
 		</div>
 		
 		<script>
@@ -864,8 +846,6 @@ function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 			jQuery("#padd").hide();   
 		}
 	} );
-	
-		</script>
-		
+	</script>
 	<?php		 
 }

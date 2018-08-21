@@ -9,7 +9,6 @@
  * @author 		AJDE
  * Intel Version 1.1
  */
-
 class EVO_generator {
 
 	public $google_maps_load,
@@ -1536,20 +1535,20 @@ class EVO_generator {
 				$cal_lang = evo_get_current_lang();
 
 				// user interavtion for the calendar
-					$calendar_ux_val = !empty($__shortC_arg['ux_val'])? $__shortC_arg['ux_val']: '0';
-					$cal_hide_end_time = (!empty($__shortC_arg['hide_end_time']) && $__shortC_arg['hide_end_time']=='yes' )? true: false;
+				$calendar_ux_val = !empty($__shortC_arg['ux_val'])? $__shortC_arg['ux_val']: '0';
+				$cal_hide_end_time = (!empty($__shortC_arg['hide_end_time']) && $__shortC_arg['hide_end_time']=='yes' )? true: false;
 
 				// schema data
-					$show_schema = (evo_settings_check_yn($this->evopt1,'evo_schema'))? false: true;
+				$show_schema = (evo_settings_check_yn($this->evopt1,'evo_schema'))? false: true;
 					if($this->__calendar_type =='single' && !empty($this->evopt1['evcal_schema_disable_section']) && $this->evopt1['evcal_schema_disable_section']=='single' && !$show_schema)
 						$show_schema = true;
 
 				$__count=0;
 
 				// EVENT CARD open by default variables
-					$_is_eventCardOpen = ( evo_settings_check_yn($__shortC_arg,'evc_open'))? true: ( $this->is_eventcard_open? true:false);
-					$eventcard_script_class = ($_is_eventCardOpen)? "gmaponload":null;
-					$this->is_eventcard_open = false;
+				$_is_eventCardOpen = ( evo_settings_check_yn($__shortC_arg,'evc_open'))? true: ( $this->is_eventcard_open? true:false);
+				$eventcard_script_class = ($_is_eventCardOpen)? "gmaponload":null;
+				$this->is_eventcard_open = false;
 
 				// check featured events are prioritized
 				$__feature_events = evo_settings_check_yn($__shortC_arg,'ft_event_priority');
@@ -1696,7 +1695,6 @@ class EVO_generator {
 					// EVENT DESCRIPTION
 						$event = get_post($event_id);
 						
-						
 						$evcal_event_content =(isset($event->post_content) ? $event->post_content:'');
 
 						if(!empty($evcal_event_content) ){
@@ -1715,7 +1713,7 @@ class EVO_generator {
 								'excerpt'=>$event_excerpt,
 							);
 						}
-				
+
 					// EVENT LOCATION
 						$location_terms = wp_get_post_terms($event_id, 'event_location');
 						$location_address = $location_name = $lonlat = false;
@@ -1759,9 +1757,8 @@ class EVO_generator {
 							if( $hide_location_info){
 								$location_name = $location_address = '';
 							}
-  
-
-						$_eventcard['timelocation'] = array(
+  						
+  						$_eventcard['timelocation'] = array(
 							'event_id' => $event_id,
 							'timetext'=>$_event_date_HTML['html_prettytime'],
 							'timezone'=>(!empty($ev_vals['evo_event_timezone'])? $ev_vals['evo_event_timezone'][0]:null),
