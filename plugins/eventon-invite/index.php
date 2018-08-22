@@ -676,7 +676,6 @@ function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 				
 					foreach ( $terms as $term) {
 						echo '<option value="'.$term->slug .'">'.$term->name .'</option>';
-						echo '<!--' . print_r( $term, true ) . ' -->';
 					}
 					?>
 				<!--<option value="site">Site</option>
