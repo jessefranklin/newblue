@@ -2359,10 +2359,11 @@ class EVO_generator {
 						
 					}
 					else{
-						if($private_event[0] == 1){
+						if($private_event[0][0] == 1){
 							//echo "hii";
+							
 							if( $flnNewBlueConnect->is_user_invited( $user_email,  $event_id) ) {
-								
+								//$flnNewBlueConnect->log( 'User is invited' );
 								// prepare output
 								$months_event_array[]=array(
 									'event_id'=>$event_id,
