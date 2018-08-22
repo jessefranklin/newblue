@@ -3,7 +3,7 @@
    Plugin Name: EventON - Invite
    Plugin URI: http://www.myeventon.com/
    description:Invite group
-   Intel Version: 1.85
+   Intel Version: 1.86
    Author: Hero Digital
    Author URI: http://herodigital.com  
    License: GPL2
@@ -675,7 +675,8 @@ function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 				$terms = get_terms( $taxonomy, $args );
 				
 					foreach ( $terms as $term) {
-						echo '<option value="'.$term->term_id .'">'.$term->name .'</option>';
+						echo '<option value="'.$term->slug .'">'.$term->name .'</option>';
+						echo '<!--' . print_r( $term, true ) . ' -->';
 					}
 					?>
 				<!--<option value="site">Site</option>
