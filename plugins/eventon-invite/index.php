@@ -827,17 +827,17 @@ function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 		jQuery( "#locationtype" ).on( "change", function () {
 		var location_type = jQuery( this ).val();
 	//	alert(location_type);
-		if( location_type === "site"  ||  location_type == 128) {
+		if( location_type === "site"  ||  location_type == 802) {
 			jQuery("#pregion").show();
 			jQuery("#ploc").show();
 			jQuery("#padd").show();
 			jQuery( "#addtxt" ).html( 'Room' ); 
-		} else if( location_type === "off-site" ||  location_type == 132) {
+		} else if( location_type === "off-site" ||  location_type == 799) {
 			jQuery("#pregion").hide();
 			jQuery("#ploc").hide();
 			jQuery("#padd").show();
 			jQuery( "#addtxt" ).html('Address');
-		}else if( location_type === "virtual" ||  location_type == 133) {
+		}else if( location_type === "virtual" ||  location_type == 805) {
 			jQuery("#pregion").hide();
 			jQuery("#ploc").hide();
 			jQuery("#padd").hide();
