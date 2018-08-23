@@ -666,6 +666,7 @@ class evoau_frontend{
 					if(!empty($current_user)){
 						// get the user email if the user is logged in and has email
 						$cu_email = $current_user->user_email;
+					    $this->create_custom_fields($created_event_id,'evors_add_emails', $cu_email);
 					}
 
 				// assign author if set to do so

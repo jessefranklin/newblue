@@ -64,7 +64,7 @@
 </div>
 <div>
 <p class="notice" style="background:#009fdf;padding:20px;margin-left:20px;margin-right:20px;">
-Hello and thank you for visiting The New Blue Connect portal. The New Blue is, well, new…Currently, we are loading events by executive and region, and will keep updating this portal with global and local forums, trainings, volunteer events and more. Please bookmark this page and come back often to search, register and connect.
+Hello and thank you for visiting The New Blue Connect portal. The New Blue is, well, new…Currently, we are loading events by executive and region, and will keep updating this portal with global and local forums, trainings, volunteer events and more. Please bookmark this page and come back often to search, register and connect. If you need assistance, contact <strong><u><a href="mailto:dion.keeton@intel.com?subject=New Blue Connect Portal Help and Feedback">Dion Keeton</a></u></strong>.
 </p>
 </div>
 <!-- .site-branding -->

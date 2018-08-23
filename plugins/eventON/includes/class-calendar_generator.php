@@ -2342,7 +2342,7 @@ class EVO_generator {
 					$query = $wpdb->get_results($sql);
 					$rowcount = $wpdb->num_rows;  
 					   
-					$email = $_SESSION['inviteemail']; 
+					$email = wp_get_current_user()->user_email; 
 						//echo $email;
 						
 						//print_r($_SESSION['inviteemail']);
