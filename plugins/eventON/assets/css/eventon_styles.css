@@ -1073,7 +1073,7 @@ div.edit_special {display:none;}
 		#evcal_widget .eventon_events_list .eventon_list_event .evcal_cblock .evo_time span.end{font-size: 11px;}
 
 	.eventon_events_list .eventon_list_event .evcal_desc, .evo_pop_body .evcal_desc, #page-content p.evcal_desc{
-		margin-left:5px;
+		margin-left:8px;
 		padding:3px 15px 0 90px; margin-bottom:0px; top: 0;
 		display: block;
 	}
