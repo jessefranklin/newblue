@@ -529,7 +529,7 @@ class evoau_form{
 
                     echo "<span class='evoau_cat_select_field {$field[1]}' data-enhance='false'>";
                     foreach($terms as $term){
-                      echo "<span class='{$field[1]}_{$term->term_id}'><input type='radio' name='".$__field_id."[]' value='".$term->term_id."' ".( (count($slectedterms) && in_array($term->term_id, $slectedterms))? 'checked="checked"':null )." data-role='none'/> ".$term->name."</span>";
+                      echo "<span class='{$field[1]}_{$term->term_id}'><input type='checkbox' name='".$__field_id."[]' value='".$term->term_id."' ".( (count($slectedterms) && in_array($term->term_id, $slectedterms))? 'checked="checked"':null )." data-role='none'/> ".$term->name."</span>";
                     }
                     echo "</span>";
 
@@ -720,7 +720,7 @@ class evoau_form{
                   echo "<div class='row organizerSelect'>
                   <p class='label'><label for='".$__field_id."'>".$__field_name.$__req."</label></p>";
 
-                  if($terms_exists):
+                  if($terms_exists):      
                   echo '<p data-role="none"><select class="evoau_organizer_select" data-role="none">';
                   echo "<option value='-'>".eventon_get_custom_language($opt_2, 'evoAUL_sso', 'Select Saved Hosts', $lang)."</option>";
 
@@ -772,11 +772,12 @@ class evoau_form{
                   echo "<div class='enterownrow' style='display:none'>";
                   foreach($data as $v){
                     $dataField = $fields[$v];
+					//print_r($dataField);
                     $savedValue = (!empty($termMeta) && !empty($termMeta[$dataField[1]]) )?$termMeta[$dataField[1]]: '';
 
                     // Organizer name
                     if($v == 'event_organizer' && !empty($organizer_terms)){
-                      $savedValue = $organizer_terms[0]->name;
+                      $savedValue = $organizer_terms[0]->name ;
                     }
 
                     echo "<p class='subrows {$v}'><label>".eventon_get_custom_language($opt_2, $dataField[4], $dataField[0], $lang)."</label><input class='fullwidth' type='text' name='{$dataField[1]}' value='{$savedValue}' data-role='none'/></p>";
