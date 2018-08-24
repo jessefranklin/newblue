@@ -4,10 +4,10 @@
  * Plugin URI: http://www.myeventon.com/
  * Description: Powerful eventON user control and event submission manager (last version: 2.1.7)
  * Author: Ashan Jay
- * Version: 2018.07.31
+ * Version: 2018.08.24
  * Author URI: http://www.ashanjay.com/
  * Requires at least: 4.0
- * Tested up to: 4.9.4
+ * Tested up to: 4.9.5
  */
 
 class eventon_au{
