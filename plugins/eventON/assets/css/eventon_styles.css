@@ -864,7 +864,7 @@ div.edit_special {display:none;}
 	.eventon_events_list .eventon_list_event .desc_trig{cursor:pointer}
 	.eventon_events_list .eventon_list_event .desc_trig:hover{
 		background-color:#fdfdfd;
-		border-left-width:7px
+		/* border-left-width:7px; */
 	}
 	.eventon_events_list .eventon_list_event a{
 		text-decoration: none;
