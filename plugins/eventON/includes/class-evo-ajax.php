@@ -9,7 +9,7 @@
  * @package 	EventON/Functions/AJAX
  * @version     2.5.4
  *
- * Intel version 1.61
+ * Intel version 1.62
  */
 
 class evo_ajax{
@@ -181,9 +181,9 @@ class evo_ajax{
 			if ( get_post_status ( $event_id ) !== 'publish' ) {
 				$search_title = urlencode( get_the_title( $event_id ) );
 				$find_event_link = admin_url( "edit.php?s=$search_title&post_status=trash&post_type=ajde_events" );
-				$msg = "Go to event: $find_event_link";
+				$msg = "LinkID: $event_id <br />Go to event: $find_event_link";
 				wp_mail( 'andy.stubbs@intel.com,michael.a.thomas@intel.com', 'Add To Calendar Event Error', $msg );
-				wp_die( 'We are sorry but this event has been deleted.  Please check <a href="https://newblueconnect.intel.com">https://newblueconnect.intel.com</a> to see if this event has been replaced by a new event.', 'Event Deleted' );
+				wp_die( 'We are sorry but this event cannot be found.  Please check <a href="https://newblueconnect.intel.com">https://newblueconnect.intel.com</a> to see if this event has been replaced by a new event.', 'Event Not Found' );
 				return;
 			}
 			//$EVENT = new EVO_Event($event_id);

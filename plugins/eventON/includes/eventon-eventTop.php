@@ -4,6 +4,7 @@
  * process content as html output
  * @since  eventon 2.6.10
  * @version  0.1
+ * Intel Version 1.1
  */
 function eventon_get_eventtop_print($array, $EVENT, $evOPT, $evOPT2){
 
@@ -159,9 +160,16 @@ function eventon_get_eventtop_print($array, $EVENT, $evOPT, $evOPT2){
 						$location = '';
 						
 						$location_type_terms = wp_get_post_terms( $object->event_id , 'event_type_4' );
-					//	print_r($location_type_terms);
+
+						$locationtype = null;
+  						if( ! empty( $object->evvals[ 'evo_event_locationtype' ] ) ) {
+							$locationtype = $object->evvals[ 'evo_event_locationtype' ][ 0 ];
+							if( $locationtype && is_numeric( $locationtype ) ) {
+								$locationtype = get_term( ( int )$locationtype )->slug;
+							}
+						}
 						
-						if($object->evvals['evo_event_locationtype'][0] == 'site' || $location_type_terms[0]->slug == 'site'){
+						if( $locationtype == 'site' ){
 							$location .= (!empty($region_name) ? 'Region : '.$region_name :null);
 							$location .= (!empty($LOCname)? ', Location : '. $LOCname .
 							 ( ($LOCname && $LOCadd)?' - ':''). $LOCadd :null);  
@@ -169,15 +177,15 @@ function eventon_get_eventtop_print($array, $EVENT, $evOPT, $evOPT2){
 							//$location .= (!empty($object->evvals['virtual_link'][0])? ', Virtual Link : '. $object->evvals['virtual_link'][0]:null);
 						}
 						   
-						if($object->evvals['evo_event_locationtype'][0] == 'off-site' || $location_type_terms[0]->slug == 'off-site'){
+						if( $locationtype == 'off-site' ){
 							$location .= (!empty($object->evvals['off_site_address'][0])? 'Address : '. $object->evvals['off_site_address'][0]:null);
 							//$location .= (!empty($object->evvals['virtual_link'][0])? ', Virtual Link : '. $object->evvals['virtual_link'][0]:null);
 						}
 						
-						//if($object->evvals['evo_event_locationtype'][0] == 'virtual' || $location_type_terms[0]->slug == 'virtual'){
+						if( $locationtype == 'virtual' ){
 							//$location .= (!empty($object->evvals['off_site_address'])? 'Address : '. $object->evvals['off_site_address'][0]:null);
 							$location .= (!empty($object->evvals['virtual_link'][0])? ', Virtual Link : '. $object->evvals['virtual_link'][0]:null);
-						//}
+						}
 						
 						if(empty($object->evvals['evo_event_locationtype'][0]) && empty( $location_type_terms)){
 							$location .= (!empty($LOCname)? ', Location : '. $LOCname .

@@ -3,7 +3,7 @@
    Plugin Name: EventON - Invite
    Plugin URI: http://www.myeventon.com/
    description:Invite group
-   Intel Version: 1.86
+   Intel Version: 1.87
    Author: Hero Digital
    Author URI: http://herodigital.com  
    License: GPL2
@@ -675,7 +675,8 @@ function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 				$terms = get_terms( $taxonomy, $args );
 				
 					foreach ( $terms as $term) {
-						echo '<option value="'.$term->slug .'">'.$term->name .'</option>';
+						echo '<option data-slug="' . $term->slug . '"' . ' value="' .$term->term_id . '" >' . $term->name . '</option>';
+						//echo '<!-- ' . print_r( $term, true ) . ' -->';
 					}
 					?>
 				<!--<option value="site">Site</option>
@@ -808,45 +809,44 @@ function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 		</div>
 		
 		<script>
-		 jQuery("#region").change(function () {
-			var ajax_url = '<?php echo admin_url( 'admin-ajax.php' ); ?>';
-			var region = this.value;
-			var data = {
-				'action': 'get_event_location',
-				'region': region
-			};
+			 jQuery("#region").change(function () {
+				var ajax_url = '<?php echo admin_url( 'admin-ajax.php' ); ?>';
+				var region = this.value;
+				var data = {
+					'action': 'get_event_location',
+					'region': region
+				};
 
-			jQuery.post( ajax_url, data, function( response ) {
-				jQuery( "#evolocation" ).html( response );
+				jQuery.post( ajax_url, data, function( response ) {
+					jQuery( "#evolocation" ).html( response );
+					
+				} );  
 				
-			} );  
+			});
 			
-		});
-		
-		jQuery( "#locationtype" ).on( "change", function () {
-		var location_type = jQuery( this ).val();
-	//	alert(location_type);
-		if( location_type === "site"  ||  location_type == 802) {
-			jQuery("#pregion").show();
-			jQuery("#ploc").show();
-			jQuery("#padd").show();
-			jQuery( "#addtxt" ).html( 'Room' ); 
-		} else if( location_type === "off-site" ||  location_type == 799) {
-			jQuery("#pregion").hide();
-			jQuery("#ploc").hide();
-			jQuery("#padd").show();
-			jQuery( "#addtxt" ).html('Address');
-		}else if( location_type === "virtual" ||  location_type == 805) {
-			jQuery("#pregion").hide();
-			jQuery("#ploc").hide();
-			jQuery("#padd").hide();
-		}else {
-			jQuery("#pregion").hide();
-			jQuery("#ploc").hide();
-			jQuery("#padd").hide();   
-		}
-	} );
-	
+			jQuery( "#locationtype" ).on( "change", function () {
+				var location_type = jQuery( this ).val();
+				var location_type_slug = jQuery( this ).find( "option:selected" ).data( "slug" );
+				if( location_type_slug === "site" ) {
+					jQuery("#pregion").show();
+					jQuery("#ploc").show();
+					jQuery("#padd").show();
+					jQuery( "#addtxt" ).html( 'Room' ); 
+				} else if( location_type_slug === "off-site" ) {
+					jQuery("#pregion").hide();
+					jQuery("#ploc").hide();
+					jQuery("#padd").show();
+					jQuery( "#addtxt" ).html('Address');
+				} else if( location_type_slug === "virtual" ) {
+					jQuery("#pregion").hide();
+					jQuery("#ploc").hide();
+					jQuery("#padd").hide();
+				} else {
+					jQuery("#pregion").hide();
+					jQuery("#ploc").hide();
+					jQuery("#padd").hide();   
+				}
+			} );
 		</script>
 		
 	<?php		 
