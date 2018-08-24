@@ -209,14 +209,39 @@ class evoau_frontend{
 			function get_user_events($userid){
 				global $eventon_au;
 
+				$parent_id = get_user_meta($userid,'parent_user_delegate',true );
+				if(!empty($parent_id)){
+					$userid = $parent_id;
+					
+				}
+				$args = array(
+				'role'         => 'delegate',
+				'count_total'  => false,
+				
+					'meta_key'     => 'parent_user_delegate',
+					'meta_value'   => $userid,
+					'meta_compare' => '=',
+				
+			 );
+			 
+			 //parent_user_delegate
+			 
+			$delegates = get_users( $args ); 
+			  $userids = array();
+
+			foreach($delegates as $delegate){
+				$userids[] =  $delegate->ID;
+			}
+			$userids[] = $userid;
 				// events created by the user
 				$events = new WP_Query(array(
 					'post_type'=>'ajde_events',
 					'posts_per_page'=>-1,
 					'post_status'=>'any',
-					'author__in'=>array($userid)
+					'author__in'=> $userids
 				));
 
+				
 				$eventIDs = array();
 
 				if($events->have_posts()){
@@ -666,7 +691,6 @@ class evoau_frontend{
 					if(!empty($current_user)){
 						// get the user email if the user is logged in and has email
 						$cu_email = $current_user->user_email;
-					    $this->create_custom_fields($created_event_id,'evors_add_emails', $cu_email);
 					}
 
 				// assign author if set to do so
@@ -721,7 +745,42 @@ class evoau_frontend{
 
 				// save organizer as taxonomy
 					if(!empty($_POST['evcal_organizer'])){
-						$this->set_new_term($_POST['evcal_organizer'], 'event_organizer', $created_event_id);
+						$taxonomy = 'event_organizer';
+						$terms = explode(",",$_POST['evcal_organizer']);
+						$data = $termID = '';
+						foreach($terms as $term){
+							$TERMEXIST = term_exists($term, $taxonomy);
+							// Setting the tax term to event
+								if($TERMEXIST !== 0 && $TERMEXIST !== null){
+									$termID[] = (int)$TERMEXIST['term_id'];
+								}else{
+									$slug = str_replace(' ', '-', $term);
+									$newTerm = wp_insert_term(
+										$term, // the term
+										$taxonomy, // the taxonomy
+										array(	'slug'=>$slug 	)
+									);
+									if(!is_wp_error($newTerm)){
+										$termID[] = (int)$newTerm['term_id'];
+										
+									}
+								}							
+						}
+						wp_set_object_terms($created_event_id, $termID, $taxonomy, false);
+						//echo $termID;
+						// update/ save term meta
+						if(!empty($termID)){
+							if($taxonomy =='event_organizer'){
+								$term_meta = array();
+
+								if(isset($_POST['evcal_org_contact'])) $term_meta['evcal_org_contact'] = $_POST['evcal_org_contact'];
+								if(isset($_POST['evcal_org_address'])) $term_meta['evcal_org_address'] = $_POST['evcal_org_address'];
+								if(isset($_POST['evcal_org_exlink'])) $term_meta['evcal_org_exlink'] = $_POST['evcal_org_exlink'];
+
+								evo_save_term_metas($taxonomy, $termID, $term_meta);
+							}
+						}
+						//$this->set_new_term($_POST['evcal_organizer'], 'event_organizer', $created_event_id);
 					}
 
 				// OTHER eventon addon intergration

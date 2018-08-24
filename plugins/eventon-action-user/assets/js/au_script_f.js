@@ -398,8 +398,15 @@ jQuery(document).ready(function($){
 		$('body').on('change','.evoau_organizer_select',function(){
 			option = $(this).find(':selected');
 			FORM = $(this).closest('form');
+			
+			var organizer = [];
+			$.each($(".evoau_organizer_select option:selected"), function(){            
+				organizer.push( $(this).text());
+			});
+		
 
-			FORM.find('input[name=evcal_organizer]').attr('value',option.text());
+			FORM.find('input[name=evcal_organizer]').attr('value', organizer);
+		//	FORM.find('input[name=evcal_organizer]').attr('value', option.text());
 			FORM.find('input[name=evcal_org_address]').attr('value',option.attr('data-address'));
 			FORM.find('input[name=evcal_org_contact]').attr('value',option.attr('data-contact'));
 			FORM.find('input[name=evcal_org_exlink]').attr('value',option.attr('data-exlink'));
