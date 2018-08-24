@@ -824,3 +824,191 @@ if(function_exists("register_field_group"))
 		'menu_order' => 0,
 	));
 }
+
+/* Creation of the Add Delegate Shortcode */
+
+function add_delegate() {
+	ob_start();
+	global $wpdb;
+	
+	if(is_user_logged_in() && current_user_can('administrator') || current_user_can('exec')) : 
+	
+	?>
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.css">
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.js"></script>
+		<h3 class="my-delegates">My Delegates</h3>
+		
+		<div class="delegation">
+			<p>Delegates are individuals who can <a href="/create-an-event">Create An Event</a> on your behalf</p>
+			
+			<h4>ADD A NEW DELEGATE</h4>
+			
+			<form action="">
+			Username: <input type="text" id="delegate-id" name="delname"><input type="submit" value="Save Delegate" id="savedelegate">
+			</form>
+
+			<div class="ui red message" style="display:none;">Red</div>
+			<div class="ui olive message" style="display:none;">Successfully added...</div>
+
+			<h4>CURRENT DELEGATES</h4>
+
+			<ul class="delegate-list">
+			<?php
+		//	echo get_current_user_id();
+			$args = array(
+				'role'         => 'delegate',
+				'count_total'  => false,
+				
+					'meta_key'     => 'parent_user_delegate',
+					'meta_value'   => get_current_user_id(),
+					'meta_compare' => '=',
+				
+			 );
+			 
+			 //parent_user_delegate
+			 
+			$delegates = get_users( $args ); 
+			  
+			foreach($delegates as $delegate){
+				echo '<li data-id="'.$delegate->ID.'" class="delegate_'.$delegate->ID.'"><subtitle>'.$delegate->user_login.'</subtitle><a class="fa fa-trash"></a></li>';
+			}
+			?>
+			</ul>
+			
+		</div>
+		
+		<script>
+		jQuery('#savedelegate').click(function (e) {
+			e.preventDefault();
+			jQuery('.olive').hide();
+			jQuery('.red').hide();
+			var ajax_url = '<?php echo admin_url( 'admin-ajax.php' ); ?>';			
+			var name = jQuery('#delegate-id').val();
+			var data = {
+				'action': 'check_delegate',
+				'delegate': name,    
+			};
+		
+			jQuery.ajax({
+				url:ajax_url,
+				type:'POST',
+				data: data,
+				dataType: "json",
+				success:function(response) {
+					console.log(response);
+					//alert(response.msg);  
+					if(response.msg == 'success'){
+						jQuery('.olive').show();
+						jQuery('#delegate-id').val('');  
+						var strToAdd = '<li data-id="'+response.Id+'" class="delegate_'+response.Id+'"><subtitle>'+name+'</subtitle><a class="fa fa-trash"></a></li>';     
+						jQuery(strToAdd).prependTo('.delegate-list');
+						   
+						remove_delegates();   
+		
+					}else{
+						jQuery('.red').html(response.msg);
+						jQuery('.red').show();
+					}
+					
+				}
+        });
+		
+		
+		});   
+
+function remove_delegates(){
+	jQuery('.fa-trash').click(function (e) {
+		e.preventDefault();
+		jQuery('.olive').hide();    
+		jQuery('.red').hide();
+		var ajax_url = '<?php echo admin_url( 'admin-ajax.php' ); ?>';			
+		var id = jQuery(this).closest('li').data('id'); 
+		var data = {
+			'action': 'delete_delegate',
+			'delegate': id,    
+		};   
+		var li = jQuery(this).closest('li'); 
+		
+		if(confirm("Are you sure that you would like to remove the Delegate?")) { 
+
+			
+			jQuery.ajax({
+			url:ajax_url,
+			type:'POST',
+			data: data,
+			dataType: "json",
+			success:function(response) {
+				console.log(response);
+				//alert(response.msg);   
+				if(response.msg == 'success'){  
+					li.remove(); 
+				}
+			}
+			});
+			
+		}
+	});
+}		
+		
+remove_delegates();   
+</script>
+
+	<?php endif; 
+	
+	$output = ob_get_clean();
+	return $output;
+}
+add_shortcode( 'add_delegate', 'add_delegate' );   
+
+add_action('wp_ajax_check_delegate', 'check_delegate');
+
+function check_delegate(){
+	//print_r($_POST);   
+	$username = $_POST['delegate'];
+	$username = trim($username," ");
+	if ( username_exists( $username ) ){
+		
+		$user = username_exists( $username );
+		$user_data = get_userdata( $user );
+		$user_roles = $user_data->roles;
+		
+		if ( in_array( 'delegate', $user_roles, true ) ) {
+		   $data['msg'] = 'Delegate User already exists.'; 
+		}else{
+			$user_id = wp_update_user( array( 'ID' => $user, 'role' => 'delegate' ) );
+			update_user_meta($user_id, 'parent_user_delegate',get_current_user_id() );
+			if ( is_wp_error( $user_id ) ) {
+				$data['msg'] = 'Failed'; 
+			} else {
+				$data['msg'] = 'success';  
+				$data['Id'] = $user;  
+			}
+		}
+	}else{
+		$data['msg'] = 'The User does not exist.';                     
+	}
+          
+		  
+	echo json_encode($data);
+	die();
+}
+
+add_action('wp_ajax_delete_delegate', 'delete_delegate');
+
+function delete_delegate(){
+	//print_r($_POST);   
+	$user= $_POST['delegate'];
+	$user_id = wp_update_user( array( 'ID' => $user, 'role' => 'subscriber' ) );
+	update_user_meta($user_id, 'parent_user_delegate',0 );
+	if ( is_wp_error( $user_id ) ) {
+		$data['msg'] = 'Failed'; 
+	} else {
+		$data['msg'] = 'success';  
+		$data['Id'] = $user;  
+	}
+			
+	  
+	echo json_encode($data);
+	die();
+}

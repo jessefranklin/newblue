@@ -440,3 +440,22 @@
   		top: 20px;
   		color: #9BD28C; background-color: #fff
   	}
+
+/* Custom Intel Overrides */
+
+/* My Events Customization */
+
+.evoau_manager_event_section {
+    background-color: #fff;
+}
+.eventon_actionuser_eventslist p subtitle a {
+    color: #000;
+}
+.eventon_actionuser_eventslist .evoau_manager_row {
+    padding: 40px 20px;
+}
+.evoau_manager h3, h3.my-delegates {
+    padding-top: .5em;
+    background: #0071c5;
+    padding: 15px 20px;
+}

@@ -35,7 +35,7 @@
 		</div><!-- .site-branding-text -->
 		<span class="header-links">
 			<a href="<?php echo esc_url( home_url( '/' ) ); ?>">Home</a>
-			<?php if(is_user_logged_in() && current_user_can('administrator') || current_user_can('editor') || current_user_can('author') || current_user_can('contributor')) : ?>
+			<?php if(is_user_logged_in() && current_user_can('administrator') || current_user_can('editor') || current_user_can('author') || current_user_can('contributor') || current_user_can('exec') || current_user_can('delegate')) : ?>
 				<a href="<?php echo esc_url( home_url( '/' ) ); ?>create-an-event/">Create an Event</a>
 				<a href="<?php echo esc_url( home_url( '/' ) ); ?>my-events/">My Events</a>
 				<a href="<?php echo esc_url( home_url( '/' ) ); ?>resources/">Resources</a>

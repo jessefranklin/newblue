@@ -4,7 +4,7 @@
  * process content as html output
  * @since  eventon 2.6.10
  * @version  0.1
- * Intel Version 1.0
+ * Intel Version 1.1
  */
 function eventon_get_eventtop_print($array, $EVENT, $evOPT, $evOPT2){
 
@@ -160,7 +160,7 @@ function eventon_get_eventtop_print($array, $EVENT, $evOPT, $evOPT2){
 						$location = '';
 						
 						$location_type_terms = wp_get_post_terms( $object->event_id , 'event_type_4' );
-//print_r($location_type_terms);
+
 						$locationtype = null;
   						if( ! empty( $object->evvals[ 'evo_event_locationtype' ] ) ) {
 							$locationtype = $object->evvals[ 'evo_event_locationtype' ][ 0 ];
@@ -174,12 +174,12 @@ function eventon_get_eventtop_print($array, $EVENT, $evOPT, $evOPT2){
 							$location .= (!empty($LOCname)? ', Location : '. $LOCname .
 							 ( ($LOCname && $LOCadd)?' - ':''). $LOCadd :null);  
 							$location .= (!empty($object->evvals['off_site_address'][0])? ', Room : '. $object->evvals['off_site_address'][0]:null);
-							$location .= (!empty($object->evvals['virtual_link'][0])? ', Virtual Link : '. $object->evvals['virtual_link'][0]:null);
+							//$location .= (!empty($object->evvals['virtual_link'][0])? ', Virtual Link : '. $object->evvals['virtual_link'][0]:null);
 						}
 						   
 						if( $locationtype == 'off-site' ){
 							$location .= (!empty($object->evvals['off_site_address'][0])? 'Address : '. $object->evvals['off_site_address'][0]:null);
-							$location .= (!empty($object->evvals['virtual_link'][0])? ', Virtual Link : '. $object->evvals['virtual_link'][0]:null);
+							//$location .= (!empty($object->evvals['virtual_link'][0])? ', Virtual Link : '. $object->evvals['virtual_link'][0]:null);
 						}
 						
 						if( $locationtype == 'virtual' ){

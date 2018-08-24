@@ -217,6 +217,19 @@
     End of Eventon code
   ------------------------------------*/
 
+  // hide sidebar until loaded
+  if ($('body').find('#sidebar-past').length){
+    $('body').find('#sidebar-past').find('.ajde_evcal_calendar').hide();
+    var sidebarCheck = setInterval(showSidebar, 10);
+
+    function showSidebar(){
+      if($('body').find('#sidebar-past').find('.eventon_list_event').length){
+        $('body').find('#sidebar-past').find('.ajde_evcal_calendar').show();
+        clearInterval(sidebarCheck);
+      }
+    }
+  }
+
   /*---------------------------------------------
   Code to hide reviews until after event is done
   Hide share button after event
