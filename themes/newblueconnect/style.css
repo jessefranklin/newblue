@@ -4769,10 +4769,15 @@ body .sidebar-past .evo_sort_btn p{
 	padding-left: 20px !important;
 }
 
-.eventon_single_event .evo_end{
+.eventon_single_event .evo_end,
+.evo_search_results .evo_end{
 	transform: translate(-25px,33px);
 	font-size: 14px !important;
 	font-weight: 300;
+}
+
+.evo_search_results .evo_end{
+	transform: translate(-50px,48px);
 }
 
 .eventon_single_event .evo_end:before{
