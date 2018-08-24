@@ -1230,6 +1230,10 @@ a:active {
 	outline: 0;
 }
 
+.desc_trig_outter a:hover{
+	opacity: 1;
+}
+
 /* Hover effects */
 
 .entry-content a,
