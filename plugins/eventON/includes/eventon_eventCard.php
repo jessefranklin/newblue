@@ -109,13 +109,13 @@ function eventon_eventcard_print($array, $EVENT, $evOPT, $evoOPT2){
 						
 					
 						
-						if($object->location_type == 'site' || $location_type_terms[0]->term_id == 128){
+						if($object->location_type == 'site' || $location_type_terms[0]->slug == 'site'){
 							$location .= (!empty($region_name)? ' <p class="evo_location_region">Region : '. $region_name.'</p>':null);
 							$location .= (!empty($object->location_name)? ' <p class="evo_location_name">Site : '. $object->location_name . ( !empty($object->address)? ' - '. stripslashes($object->address): null).'</p>':null);
 							$location .= (!empty($object->location_offsite_address)? ' <p class="evo_location_offsite_Address">Room : '. $object->location_offsite_address.'</p>':null);
 						}
 						
-						if($object->location_type == 'off-site' || $location_type_terms[0]->term_id == 132){
+						if($object->location_type == 'off-site' || $location_type_terms[0]->slug == 'off-site'){
 							$location .= (!empty($object->location_offsite_address)? ' <p class="evo_location_offsite_Address">Address : '. $object->location_offsite_address.'</p>':null);
 						}
 						
