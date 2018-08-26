@@ -172,13 +172,70 @@ class EVO_admin_ajax{
   // get event singular tax term form or list
   function get_event_tax_term_section(){
 
-    echo json_encode(array(
-    'status'=>'good',
-    'content'=> EVO()->evo_admin->metaboxes->get_tax_form()
-    )); exit;
+	echo json_encode(array(
+	    'status'=>'good',
+	    'content'=> EVO()->evo_admin->metaboxes->get_tax_form()
+	)); exit;
   }
+    // Frontend showing fields and saving values  
+    private function evo_add_location_fields(){
+      echo '    <div class=\'row evotest\'>   ';
+      echo '	<p><label for="">Event Location: Site</label></p>	';
 
-  // tax term list
+		echo '	';
+		echo '	<p id="pregion"><label for="region">Select Event\'s Region : </label>		';
+		echo '	    <select class="field form-control" id="region" name="evoregion">				   ';
+		echo '		<option value="" selected="selected">Select Region</option>';
+		$taxonomy = 'event_type_3';
+		$args = array(
+		    'parent' => 0,
+		    'hide_empty' => false				// to get only parent terms
+		);
+		$terms = get_terms( $taxonomy, $args );
+		
+		foreach ( $terms as $term) {
+		    $args1 = array(
+			'parent' => $term->term_id,
+			'hide_empty' => false	
+		    );
+		    $terms1 = get_terms( 'event_type_3', $args1);
+		    echo '<optgroup label="'.$term->name .'">';   
+		    foreach ( $terms1 as $term1) {
+			echo '<option value="'.$term1->term_id .'">'.$term1->name .'</option>';
+		    }
+		}
+		echo '	    </select>			';
+		echo '	</p>';
+		echo '	<p id="ploc"><label for="evolocation">Select Event\'s Location : </label>	  	';
+		echo '	    <select class="field form-control" id="evolocation" name="event_tax_termid">				   ';
+		echo '		<option value="" selected="selected">Select Location</option>        ';
+		echo '	    </select>			';
+		echo '	</p>';
+		echo '	';
+		echo '	<p id="padd"><label for="address">Enter The <span id="addtxt">Address</span>  : </label>';
+		echo '	    <input type="text" name="address" id="address" value="">	';
+		echo '	</p>';
+		echo '    </div>';
+		echo '    ';
+		echo '    <script>';
+		echo '     jQuery("#region").change(function () {';
+		echo '	 var ajax_url = \'' . admin_url('admin-ajax.php' ) . '\';';
+		echo '	 var region = this.value;';
+		echo '	 var data = {';
+		echo '	     \'action\': \'get_event_location\',';
+		echo '	     \'region\': region';
+		echo '	 };';
+		echo '	 ';
+		echo '	 jQuery.post( ajax_url, data, function( response ) {';
+		echo '	     jQuery( "#evolocation" ).html( response );';
+		echo '	     ';
+		echo '	 } );  ';
+		echo '	 ';
+		echo '     });';
+		echo '     ';
+		echo '    </script>';
+    }
+// tax term list
   function event_tax_list(){
     $tax = sanitize_text_field($_POST['tax']);
     $eventid = sanitize_text_field($_POST['eventid']);
@@ -196,23 +253,8 @@ class EVO_admin_ajax{
     ob_start();
     echo "<div class='evo_tax_entry' data-eventid='{$eventid}' data-tax='{$tax}' data-type='list'>";
     if(count($terms)>0){
-
+      $this->evo_add_location_fields(); 
       ?>
-      <select class='field' name='event_tax_termid'>
-        <?php
-
-        if(empty($termid)){
-          ?><option value=""><?php _e('Select from the list','eventon');?></option><?php
-        }
-
-        foreach ( $terms as $term ) {
-          $selected = (!empty($termid) && $term->term_id == $termid)? 'selected="selected"':'';
-          ?>
-          <option <?php echo $selected;?> value="<?php echo $term->term_id;?>"><?php echo $term->name;?></option>
-          <?php
-        }
-        ?>
-      </select>
       <p style='text-align:center; padding-top:10px;'><span class='evo_btn evo_term_submit'><?php _e('Save Changes','eventon');?></span></p>
       <?php
     }else{
@@ -220,11 +262,7 @@ class EVO_admin_ajax{
     }
 
     echo "</div>";
-
-    echo json_encode(array(
-    'status'=>'good',
-    'content'=>ob_get_clean()
-    ));
+    echo json_encode(array('status'=>'good', 'content'=>ob_get_clean()));
     exit;
   }
 
@@ -237,7 +275,7 @@ class EVO_admin_ajax{
     $event_tax_termid = intval($_POST['event_tax_termid']);
     $eventid = sanitize_text_field($_POST['eventid']);
     $term_name = sanitize_text_field($_POST['term_name']);
-
+    error_log(print_r($_POST, true), 0);
     switch($type){
       case 'list':
       if(!empty($event_tax_termid)){
