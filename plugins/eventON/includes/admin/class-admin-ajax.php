@@ -213,7 +213,7 @@ class EVO_admin_ajax{
 		echo '	</p>';
 		echo '	';
 		echo '	<p id="padd"><label for="address">Enter The <span id="addtxt">Address</span>  : </label>';
-		echo '	    <input type="text" name="address" id="address" value="">	';
+		echo '	    <input type="text" name="evoaddress" class="field" id="address" value="">	';
 		echo '	</p>';
 		echo '    </div>';
 		echo '    ';
@@ -240,6 +240,7 @@ class EVO_admin_ajax{
     $tax = sanitize_text_field($_POST['tax']);
     $eventid = sanitize_text_field($_POST['eventid']);
     $termid = sanitize_text_field($_POST['$termid']);
+				  
 
     $terms = get_terms(
     $tax,
@@ -275,10 +276,30 @@ class EVO_admin_ajax{
     $event_tax_termid = intval($_POST['event_tax_termid']);
     $eventid = sanitize_text_field($_POST['eventid']);
     $term_name = sanitize_text_field($_POST['term_name']);
-    error_log(print_r($_POST, true), 0);
+    $region_id = intval($_POST['evoregion']);
+    $region_tax = 'event_type_3';
+    $region_term_name = 'evo_event_region';
+    $address = sanitize_text_field($_POST['evoaddress']);
+    $address_term_name = 'off_site_address';
+    
     switch($type){
       case 'list':
       if(!empty($event_tax_termid)){
+
+      // BEGIN Intel: Update additional location fields
+	update_post_meta($eventid, 'evo_event_location', $event_tax_termid); 
+	
+	if (isset($region_id) && term_exists($region_id, $region_tax)){
+	  wp_set_post_terms($eventid, $region_id, $region_tax, false );
+	  update_post_meta($eventid, $region_term_name, $region_id); 
+	}
+	
+	if (isset($address)){
+	  update_post_meta($eventid, $address_term_name, $address); 
+	}
+	// END Intel: Update additional location fields
+
+	
         wp_set_object_terms( $eventid, $event_tax_termid, $tax , false);
         $status = 'good';
         $content = __('Changes successfully saved!','eventon');
@@ -308,8 +329,6 @@ class EVO_admin_ajax{
       }
 
       $fields = EVO()->taxonomies->get_event_tax_fields_array($tax,'');
-
-
       // if a term ID is present
       if($taxtermID){
         $term_meta = array();
@@ -318,6 +337,7 @@ class EVO_admin_ajax{
         $term_description = isset($_POST['description'])? sanitize_text_field($_POST['description']):'';
         $tt = wp_update_term($taxtermID, $tax, array( 'description'=>$term_description ));
 
+	
         // lat and lon values saved in the form
         if(isset($_POST['location_lon'])) $term_meta['location_lon'] = str_replace('"', "'", sanitize_text_field($_POST['location_lon']) );
         if(isset($_POST['location_lat'])) $term_meta['location_lat'] = str_replace('"', "'", sanitize_text_field($_POST['location_lat']) );
