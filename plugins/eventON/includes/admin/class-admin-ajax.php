@@ -2,6 +2,7 @@
 /**
 * Function ajax for backend
 * @version   2.5.1
+* Intel Version 1.0
 */
 class EVO_admin_ajax{
   public function __construct(){
