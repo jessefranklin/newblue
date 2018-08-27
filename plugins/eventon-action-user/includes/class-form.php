@@ -684,7 +684,11 @@ class evoau_form{
 				<option value="" selected="selected">Select Location</option>        
 			</select>			
 			</p>
-			<?php if( !$shouldHide ) { ?>
+			<?php
+                        if( !$shouldHide ) {
+                                $metakey = 'evo_event_location';
+				$location_value = get_post_meta($event_id, $metakey, true);
+		  ?>
 			  <script>
 jQuery(document).ready(function(){
     var ajax_url = '<?php echo admin_url( 'admin-ajax.php' ); ?>';
@@ -697,7 +701,7 @@ jQuery(document).ready(function(){
     $.post( ajax_url, data, function( response ) {
 	var $loc = $( "#evolocation" );
 	$loc.html( response );
-	var $selectedOption = $loc.find('option[value=<?php echo intval(4); ?>]');
+	var $selectedOption = $loc.find('option[value=<?php echo intval($location_value); ?>]');
 	if($selectedOption && $selectedOption.length){
 	    $selectedOption.attr('selected', 'selected');
 	} else {
