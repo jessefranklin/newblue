@@ -2,6 +2,7 @@
 /*
  *	ActionUser front-end
  *	@version 	2.0.11
+ *  Intel Version 1.0
  */
 
 class evoau_frontend{
@@ -208,31 +209,84 @@ class evoau_frontend{
 		// user created events
 			function get_user_events($userid){
 				global $eventon_au;
-
-				$parent_id = get_user_meta($userid,'parent_user_delegate',true );
-				if(!empty($parent_id)){
-					$userid = $parent_id;
+				$userids = array();
+				$eventIDs = array();
+				
+				$exe = get_userdata( $userid );
+			//	print_r($exe);            
+				$user_roles = $exe->roles[0];      
+				if($user_roles == 'delegate'){   
+				
+					$parent_ids = get_user_meta($userid,'parent_user_delegate',true );
 					
-				}
-				$args = array(
-				'role'         => 'delegate',
-				'count_total'  => false,
-				
-					'meta_key'     => 'parent_user_delegate',
-					'meta_value'   => $userid,
-					'meta_compare' => '=',
-				
-			 );
-			 
-			 //parent_user_delegate
-			 
-			$delegates = get_users( $args ); 
-			  $userids = array();
+					if(!empty($parent_ids)){
+						$aparent_id = explode(",",$parent_ids);
+						foreach($aparent_id as $parent_id){
+							$userids[]= $parent_id;
+						}
+						
+						
+						// events created by the user
+						$events = new WP_Query(array(
+							'post_type'=>'ajde_events',
+							'posts_per_page'=>-1,
+							'post_status'=>'any',
+							'meta_key '=> 'evoexec',
+							'meta_value' => $aparent_id,
+							'meta_compare' => 'IN'
+						));
 
-			foreach($delegates as $delegate){
-				$userids[] =  $delegate->ID;
-			}
-			$userids[] = $userid;
+						
+						
+
+						if($events->have_posts()){
+							while($events->have_posts()): $events->the_post();
+								$eventIDs[$events->post->ID] = array(
+									$events->post->post_title,
+									$events->post->post_status,
+									$events->post->ID
+								);
+							endwhile;
+							wp_reset_postdata();
+						}
+
+						//$userid = $parent_id;
+						
+					}
+				
+				}else if($user_roles == 'exec'){ 
+				
+					// events created by the user
+						$events = new WP_Query(array(
+							'post_type'=>'ajde_events',
+							'posts_per_page'=>-1,
+							'post_status'=>'any',
+							'meta_key '=> 'evoexec',
+							'meta_value' => $userid,
+							'meta_compare' => '='
+						));
+
+						
+						
+
+						if($events->have_posts()){
+							while($events->have_posts()): $events->the_post();
+								$eventIDs[$events->post->ID] = array(
+									$events->post->post_title,
+									$events->post->post_status,
+									$events->post->ID
+								);
+							endwhile;
+							wp_reset_postdata();
+						}
+						//print_r($eventIDs);
+				
+				}
+				
+				
+				
+				$userids[] = $userid;
+				
 				// events created by the user
 				$events = new WP_Query(array(
 					'post_type'=>'ajde_events',
@@ -240,9 +294,6 @@ class evoau_frontend{
 					'post_status'=>'any',
 					'author__in'=> $userids
 				));
-
-				
-				$eventIDs = array();
 
 				if($events->have_posts()){
 					while($events->have_posts()): $events->the_post();
@@ -358,6 +409,7 @@ class evoau_frontend{
 				'evo_exclude_ev'=>array(evo_lang('Exclude this event from calendar'), 'evo_exclude_ev', 'yesno'),
 				'_featured'=>array(evo_lang('Feature this event'), '_featured', 'yesno'),
 				'_cancel'=>array(evo_lang('Cancel this event'), '_cancel', 'yesno'),
+				'evoexec'
 			);
 
 			$event_fields = array_merge($event_fields, $event_fields_1, $event_fields_editonly);
