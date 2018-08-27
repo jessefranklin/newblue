@@ -752,7 +752,7 @@ class evoau_frontend{
 							$TERMEXIST = term_exists($term, $taxonomy);
 							// Setting the tax term to event
 								if($TERMEXIST !== 0 && $TERMEXIST !== null){
-									$termID[] = (int)$TERMEXIST['term_id'];
+									$termID = (int)$TERMEXIST['term_id'];
 								}else{
 									$slug = str_replace(' ', '-', $term);
 									$newTerm = wp_insert_term(
