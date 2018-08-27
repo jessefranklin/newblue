@@ -2,6 +2,7 @@
 /**
 * Evoau front end submission form
 * @version 2.1.6
+* @ Intel version 1.0
 */
 class evoau_form{
 
@@ -205,7 +206,6 @@ class evoau_form{
                 if(empty($FORM_FIELDS[$INDEX])) continue;
 
                 $field = $FORM_FIELDS[$INDEX];
-
                 $__field_name = (!empty($field[4]))?
                 eventon_get_custom_language($opt_2, $field[4], $field[0], $lang) :$field[0];
                 $__field_type = $field[2];
@@ -608,6 +608,183 @@ class evoau_form{
                   <label>".eventon_get_custom_language($opt_2, 'evoAUL_lm1', 'Open in new window', $lang)."</label></p>
                   </div>";
                   break;
+		  // BEGIN Intel: Edit location on frontend
+		  case 'evolocation':
+		    $shouldHide = true;
+		    ?>
+		<div class='row evotest'>   
+		    
+			<p><label for="">Event Location</label></p>	
+
+			<p><label for="site">Select Location Type : </label>		
+			<select class="form-control" id="locationtype" name="evolocationtype">				   
+				<?php 
+                                $taxonomy = 'event_type_4';
+                                $location_type_terms = wp_get_post_terms($event_id, $taxonomy);
+                                $selected = "";
+                                if(empty($location_type_terms) || count($location_type_terms) > 1 ){
+                                    $selected = ' selected="selected" ';
+                                } else {
+				  $location_type_term_id = $location_type_terms[0]->term_id;
+				  $shouldHide = false;
+				}
+                                echo '<option value="" ' . $selected . '>Select Location Type</option>';
+                                $args = array(
+                                        'parent' => 0,
+                                        'hide_empty' => false,
+                                        'orderby' => 'id',
+                                        'order' => 'ASC',                                       
+                                );
+                                $terms = get_terms( $taxonomy, $args );
+                                
+				foreach ( $terms as $term) {
+				  $selected = ($location_type_term_id == $term->term_id) ? ' selected="selected" ' : '';
+				  echo '<option data-slug="' . $term->slug . '"' . ' value="' .$term->term_id . '"' . $selected . '>' . $term->name . '</option>';
+				}
+				?>
+			</select>			
+			</p> 
+			
+			    <p id="pregion" <?php echo ($shouldHide ? ' style="display:none;" ' : '') ?>><label for="region">Select Event's Region : </label>		
+			<select class="form-control" id="region" name="evoregion">				   
+				<?php 
+                                $taxonomy = 'event_type_3';
+                                $shouldHide = true;
+                                $region_terms = wp_get_post_terms($event_id, $taxonomy);
+                                $selected = "";
+                                if(empty($region_terms) || count($region_terms) > 1 ){
+                                    $selected = ' selected="selected" ';
+                                } else {
+				  $region_term_id = $region_terms[0]->term_id;
+				  $shouldHide = false;
+				}
+                                echo '<option value="" ' . $selected . '>Select Region</option>';
+				$args = array(
+					'parent' => 0,
+					'hide_empty' => false				// to get only parent terms
+				);
+                                $terms = get_terms( $taxonomy, $args );
+					foreach ( $terms as $term) {
+						$args1 = array(
+							'parent' => $term->term_id,
+							'hide_empty' => false	
+						);
+						$terms1 = get_terms( 'event_type_3', $args1);
+						echo '<optgroup label="'.$term->name .'">';   
+						foreach ( $terms1 as $term1) {
+                    				        $selected = ($region_term_id == $term1->term_id) ? ' selected="selected" ' : '';
+							echo '<option value="'.$term1->term_id .'" ' . $selected . '>'.$term1->name .'</option>';
+						}
+					}				
+				?>
+			</select>			
+			</p>
+			<p id="ploc" <?php echo ($shouldHide ? ' style="display:none;" ' : '') ?>><label for="evolocation">Select Event's Location : </label>	  	
+			<select class="form-control" id="evolocation" name="evolocation">				   
+				<option value="" selected="selected">Select Location</option>        
+			</select>			
+			</p>
+			<?php
+                        if( !$shouldHide ) {
+                                $metakey = 'evo_event_location';
+				$location_value = get_post_meta($event_id, $metakey, true);
+		  ?>
+			  <script>
+jQuery(document).ready(function(){
+    var ajax_url = '<?php echo admin_url( 'admin-ajax.php' ); ?>';
+    var region = $('#region').val();
+    var data = {
+	'action': 'get_event_location',
+	'region': region
+    };
+
+    $.post( ajax_url, data, function( response ) {
+	var $loc = $( "#evolocation" );
+	$loc.html( response );
+	var $selectedOption = $loc.find('option[value=<?php echo intval($location_value); ?>]');
+	if($selectedOption && $selectedOption.length){
+	    $selectedOption.attr('selected', 'selected');
+	} else {
+	    $loc.find('option:first').attr('selected', 'selected');
+	}
+	$('#addtxt').html('Room');
+    } );  
+});		    </script>
+			<?php }
+				$shouldHide = true;
+                                $metakey = 'off_site_address';
+				$address_value = get_post_meta($event_id, $metakey, true);
+                                if(!empty($address_value)){
+						   $shouldHide = false;
+                                }
+				?>						   
+			<p id="padd" <?php echo ($shouldHide ? ' style="display:none;" ' : '') ?>><label for="address">Enter The <span id="addtxt">Address</span>  : </label>
+				<input type="text" name="address" id="address" value="<?php echo sanitize_text_field($address_value); ?>">	
+			</p>
+			<?php 
+				$shouldHide = true;
+                                $metakey = 'virtual_link';
+				$virtual_link_value = get_post_meta($event_id, $metakey, true);
+                                if(!empty($virtual_link_value)){
+						   $shouldHide = false;
+                                }
+				?>						   
+
+			<p><label for="virtual_link">Enter Virtual Link  : </label>
+			<a href="https://employeecontent.intel.com/content/corp/meeting-center/home.html" style="color:black;">If you have not booked a room or virtual meeting yet, use this link.</a>
+				<input type="text" name="virtual_link" id="" value="<?php echo sanitize_text_field($virtual_link_value); ?>">	
+			</p><!--
+			<p class="checkbox">
+			  <label>Is This A Private Event Only Open To Invited Guests?</label>
+			  <label><input type="checkbox" value="1" name="private">Yes, Make Private</label>
+			</p>-->
+		</div>
+		
+		<script>
+			 jQuery("#region").change(function () {
+				var ajax_url = '<?php echo admin_url( 'admin-ajax.php' ); ?>';
+				var region = this.value;
+				var data = {
+					'action': 'get_event_location',
+					'region': region
+				};
+
+				jQuery.post( ajax_url, data, function( response ) {
+					jQuery( "#evolocation" ).html( response );
+					
+				} );  
+				
+			});
+			
+			jQuery( "#locationtype" ).on( "change", function () {
+				var location_type = jQuery( this ).val();
+				var location_type_slug = jQuery( this ).find( "option:selected" ).data( "slug" );
+				if( location_type_slug === "site" ) {
+					jQuery("#pregion").show();
+					jQuery("#ploc").show();
+					jQuery("#padd").show();
+					jQuery( "#addtxt" ).html( 'Room' ); 
+				} else if( location_type_slug === "off-site" ) {
+					jQuery("#pregion").hide();
+					jQuery("#ploc").hide();
+					jQuery("#padd").show();
+					jQuery( "#addtxt" ).html('Address');
+				} else if( location_type_slug === "virtual" ) {
+					jQuery("#pregion").hide();
+					jQuery("#ploc").hide();
+					jQuery("#padd").hide();
+				} else {
+					jQuery("#pregion").hide();
+					jQuery("#ploc").hide();
+					jQuery("#padd").hide();   
+				}
+			} );
+		</script>
+		
+	<?php		 
+
+		    break;
+		  // END Intel: Edit location on frontend
                   case 'locationselect':
                   $allow_add_new = $EVOAU_Props->is_yes('evoau_allow_new');
 

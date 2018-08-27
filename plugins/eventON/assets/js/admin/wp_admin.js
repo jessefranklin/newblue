@@ -157,7 +157,8 @@ jQuery(document).ready(function($){
 					}
 				},complete:function(){
 					setTimeout(function () {
-					   $('.ajde_close_pop_btn').trigger('click');
+					    $('.ajde_close_pop_btn').trigger('click');
+						window.location.reload(false);					    
 					}, 2000);					
 					$('.evo_term_lightbox').find('.ajde_popup_text').removeClass( 'loading');
 				}

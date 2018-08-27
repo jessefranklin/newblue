@@ -2,6 +2,7 @@
 /**
 * Function ajax for backend
 * @version   2.5.1
+* Intel Version 1.0
 */
 class EVO_admin_ajax{
   public function __construct(){
@@ -172,17 +173,17 @@ class EVO_admin_ajax{
   // get event singular tax term form or list
   function get_event_tax_term_section(){
 
-    echo json_encode(array(
-    'status'=>'good',
-    'content'=> EVO()->evo_admin->metaboxes->get_tax_form()
-    )); exit;
+	echo json_encode(array(
+	    'status'=>'good',
+	    'content'=> EVO()->evo_admin->metaboxes->get_tax_form()
+	)); exit;
   }
-
-  // tax term list
+	  // tax term list
   function event_tax_list(){
     $tax = sanitize_text_field($_POST['tax']);
     $eventid = sanitize_text_field($_POST['eventid']);
     $termid = sanitize_text_field($_POST['$termid']);
+				  
 
     $terms = get_terms(
     $tax,
@@ -196,23 +197,68 @@ class EVO_admin_ajax{
     ob_start();
     echo "<div class='evo_tax_entry' data-eventid='{$eventid}' data-tax='{$tax}' data-type='list'>";
     if(count($terms)>0){
+      // BEGIN Intel: Add region and address selection
+?>
+        <div class='row evotest'>   
+          <p><label for="">Event Location: Site</label></p>	
+          
+          
+          <p id="pregion"><label for="region">Select Event&apos;s Region : </label>		
+          <select class="field form-control" id="region" name="evoregion">				   
+            <option value="" selected="selected">Select Region</option>
+<?php
+                $taxonomy = 'event_type_3';
+                $args = array(
+                	      'parent' => 0,
+                	      'hide_empty' => false  // to get only parent terms
+                	      );
+                $terms = get_terms( $taxonomy, $args );
+                
+                foreach ( $terms as $term) {
+                  $args1 = array(
+                		 'parent' => $term->term_id,
+                		 'hide_empty' => false	
+                		 );
+                  $terms1 = get_terms( 'event_type_3', $args1);
+                  echo '<optgroup label="'.$term->name .'">';   
+                  foreach ( $terms1 as $term1) {
+                    echo '<option value="'.$term1->term_id .'">'.$term1->name .'</option>';
+		  }
+		}
+?>
+            </select>			
+            </p>
+            <p id="ploc"><label for="evolocation">Select Event&apos;s Location : </label>	  	
+            <select class="field form-control" id="evolocation" name="event_tax_termid">				   
+              <option value="" selected="selected">Select Location</option>        
+            </select>			
+            </p>
+            
+            <p id="padd"><label for="address">Enter The <span id="addtxt">Address</span>  : </label>
+            <input type="text" name="evoaddress" class="field" id="address" value="">	
+            </p>
+          </div>
+          
+          <script>
+                jQuery("#region").change(function () {
+                    var ajax_url = '<?php echo admin_url( 'admin-ajax.php' ); ?>';
+                    var region = this.value;
+                    var data = {
+                	'action': 'get_event_location',
+                	'region': region
+                    };
+                    
+                    jQuery.post( ajax_url, data, function( response ) {
+                	jQuery( "#evolocation" ).html( response );
+                	
+                    } );  
+                    
+                });
+          </script>
+<?php
+	            // END Intel: Add region and address selection
+?>
 
-      ?>
-      <select class='field' name='event_tax_termid'>
-        <?php
-
-        if(empty($termid)){
-          ?><option value=""><?php _e('Select from the list','eventon');?></option><?php
-        }
-
-        foreach ( $terms as $term ) {
-          $selected = (!empty($termid) && $term->term_id == $termid)? 'selected="selected"':'';
-          ?>
-          <option <?php echo $selected;?> value="<?php echo $term->term_id;?>"><?php echo $term->name;?></option>
-          <?php
-        }
-        ?>
-      </select>
       <p style='text-align:center; padding-top:10px;'><span class='evo_btn evo_term_submit'><?php _e('Save Changes','eventon');?></span></p>
       <?php
     }else{
@@ -220,11 +266,7 @@ class EVO_admin_ajax{
     }
 
     echo "</div>";
-
-    echo json_encode(array(
-    'status'=>'good',
-    'content'=>ob_get_clean()
-    ));
+    echo json_encode(array('status'=>'good', 'content'=>ob_get_clean()));
     exit;
   }
 
@@ -237,10 +279,30 @@ class EVO_admin_ajax{
     $event_tax_termid = intval($_POST['event_tax_termid']);
     $eventid = sanitize_text_field($_POST['eventid']);
     $term_name = sanitize_text_field($_POST['term_name']);
-
+    $region_id = intval($_POST['evoregion']);
+    $region_tax = 'event_type_3';
+    $region_term_name = 'evo_event_region';
+    $address = sanitize_text_field($_POST['evoaddress']);
+    $address_term_name = 'off_site_address';
+    
     switch($type){
       case 'list':
       if(!empty($event_tax_termid)){
+
+      // BEGIN Intel: Update additional location fields
+	update_post_meta($eventid, 'evo_event_location', $event_tax_termid); 
+	
+	if (isset($region_id) && term_exists($region_id, $region_tax)){
+	  wp_set_post_terms($eventid, $region_id, $region_tax, false );
+	  update_post_meta($eventid, $region_term_name, $region_id); 
+	}
+	
+	if (isset($address)){
+	  update_post_meta($eventid, $address_term_name, $address); 
+	}
+	// END Intel: Update additional location fields
+
+	
         wp_set_object_terms( $eventid, $event_tax_termid, $tax , false);
         $status = 'good';
         $content = __('Changes successfully saved!','eventon');
@@ -270,8 +332,6 @@ class EVO_admin_ajax{
       }
 
       $fields = EVO()->taxonomies->get_event_tax_fields_array($tax,'');
-
-
       // if a term ID is present
       if($taxtermID){
         $term_meta = array();
@@ -280,6 +340,7 @@ class EVO_admin_ajax{
         $term_description = isset($_POST['description'])? sanitize_text_field($_POST['description']):'';
         $tt = wp_update_term($taxtermID, $tax, array( 'description'=>$term_description ));
 
+	
         // lat and lon values saved in the form
         if(isset($_POST['location_lon'])) $term_meta['location_lon'] = str_replace('"', "'", sanitize_text_field($_POST['location_lon']) );
         if(isset($_POST['location_lat'])) $term_meta['location_lat'] = str_replace('"', "'", sanitize_text_field($_POST['location_lat']) );
