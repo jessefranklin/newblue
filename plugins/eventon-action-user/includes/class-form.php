@@ -2,6 +2,7 @@
 /**
 * Evoau front end submission form
 * @version 2.1.6
+* @ Intel version 1.0
 */
 class evoau_form{
 
