@@ -822,7 +822,10 @@ class evors_front{
 					$eventon_rs->email->send_email($args);
 				}
 				
-				$eventon_rs->email->send_email($args,'notification');
+				// $eventon_rs->email->send_email($args,'notification');
+                if(get_post_meta($args['e_id'], 'evors_notify_event_author', true) == 'yes'){
+                        $eventon_rs->email->send_email($args,'notification');
+                }
 
 				$status = $created_rsvp_id;
 
