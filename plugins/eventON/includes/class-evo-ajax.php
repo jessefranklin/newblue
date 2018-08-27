@@ -222,7 +222,10 @@ class evo_ajax{
 				$summary = wp_trim_words($content, 50, '[..]');
 				//$summary = substr($content, 0, 500).' [..]';
 			}			
-							
+			$e_virt_link = get_post_meta($event_id, 'virtual_link', true);
+			$e_lm_link = get_post_meta($event_id, 'evcal_lmlink', true);
+			$e_address = get_post_meta($event_id, 'off_site_address', true);
+            $e_location = ($location? $location . ' ':'') . ($e_address? $e_address . ' ':'') . ($e_virt_link?$e_virt_link:'');
 			
 			$uid = uniqid();
 			//$description = $the_event->post_content;
@@ -240,8 +243,8 @@ class evo_ajax{
 			header("Content-Type: text/Calendar; charset=utf-8");
 			header("Content-Disposition: inline; filename={$slug}.ics");     
 			
-			echo "BEGIN:VCALENDAR\r\n";
-			echo "VERSION:2.0\r\n";
+			echo "BEGIN:VCALENDAR\n";
+			echo "VERSION:2.0\n";
 			echo "PRODID:www.eventon.com\n";
 			echo "METHOD:PUBLISH\n";
 			//echo "X-WR-CALNAME:".html_entity_decode( $this->esc_ical_text($name))."\n";			
@@ -276,13 +279,13 @@ class evo_ajax{
 			//echo "DTEND:".		( strpos($start, 'T')===false? date_i18n('Ymd\THis',$end): $end)."\n";
 			echo "DTSTART;TZID=". $this->esc_ical_text($timezone).':'.date_i18n('Ymd',$start).'T'.date_i18n('His',$start)."\n";
 			echo "DTEND;TZID=".	$this->esc_ical_text($timezone).':'.date_i18n('Ymd',$end).'T'.date_i18n('His',$end)."\n";	
-			echo "LOCATION:{$location}\n";
+			echo "LOCATION:{$e_location}\n";
 			echo "SUMMARY:".html_entity_decode( $this->esc_ical_text($name))."\n";
-			echo "DESCRIPTION: ".$this->esc_ical_text($summary)."\n";
+			// echo "DESCRIPTION: ".$this->esc_ical_text($summary) . ($e_lm_link? "\n\nLearn More: " . $this->esc_ical_text($e_lm_link) : '');
+			echo "DESCRIPTION: ".$this->esc_ical_text($content) . ($e_lm_link? "\\n\\nLearn More: " . $this->esc_ical_text($e_lm_link) : '') . ($e_virt_link? "\\n\\nClick Here to Join: " . $this->esc_ical_text($e_virt_link) : '') . "\n";
 			echo "BEGIN:VALARM\n";
 			echo "TRIGGER:-PT15M\n";
 			echo "ACTION:DISPLAY\n";
-			echo "DESCRIPTION:Reminder\n";
 			echo "END:VALARM\n";
 			echo "END:VEVENT\n";		
 			echo "END:VCALENDAR";
@@ -292,8 +295,9 @@ class evo_ajax{
 			$fnc = new evo_fnc();
 			
 		    $text = str_replace("\\", "", $text);
-		    $text = str_replace("\r", "\r\n ", $text);
-		    $text = str_replace("\n", "\r\n ", $text);
+		    $text = str_replace("\r\n", "\\n ", $text);
+		    $text = str_replace("\r", "\\n ", $text);
+		    $text = str_replace("\n", "\\n ", $text);
 		    $text = str_replace(",", "\, ", $text);
 		    $text = $fnc->htmlspecialchars_decode($text);
 		    return $text;
