@@ -3,7 +3,7 @@
    Plugin Name: EventON - Invite
    Plugin URI: http://www.myeventon.com/
    description:Invite group
-   Intel Version: 1.88
+   Intel Version: 1.89
    Author: Hero Digital
    Author URI: http://herodigital.com  
    License: GPL2
@@ -89,9 +89,19 @@
 	$timezone = get_post_meta( $post_id[0]->ID , 'evotimezone', true );
 	
 	$evcal_location_name = get_post_meta( $post_id[0]->ID , 'evcal_location_name', true );
+	if( ! $evcal_location_name ) {
+		$evo_event_location_term_id = ( int )get_post_meta( $post_id[0]->ID , 'evo_event_location', true );
+		$event_location_term = get_term( $evo_event_location_term_id, 'event_location' );
+		if( $event_location_term ) {
+			$evcal_location_name = $event_location_term->name;
+		}
+	}
 	
 	$location_address = get_post_meta( $post_id[0]->ID , 'location_address', true );
-	
+	if( ! $location_address ) {
+		$location_address = get_post_meta( $post_id[0]->ID , 'off_site_address', true );
+	}
+
 	$evcal_organizer = get_post_meta( $post_id[0]->ID , 'evcal_organizer', true );
 	
 	$adjusted_times = get_utc_adjusted_times( $estart, $eend, $timezone );
@@ -413,6 +423,7 @@ $(document).ready(function(){
 					'ics_url': $('#ics_url').val(),
 					'group': $('#group').val(),
 					'event_location': $('#event_location').val(),
+					'event_location_address': $( '#event_location_address' ).val(),
 					'event_time': $('#event_time').val(),
 					'evcal_organizer': $('#evcal_organizer').val(),
 					'evcal_type': $('#event_type').val(),
