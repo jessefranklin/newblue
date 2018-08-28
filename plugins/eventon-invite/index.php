@@ -591,7 +591,7 @@ function evoautimezone_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 		<div class='row evotest'><p>
 		   <label for="timezone">Select the event&apos;s timezone:</label>
         
-        <select class="form-control" id="timezone" name="evotimezone">   
+        <select class="form-control req" id="timezone" name="evotimezone">   
         	
         	<option value="" <?php if(empty($timezone)){ echo 'selected="selected"'; } ?> >select timezone</option>
 <?php
