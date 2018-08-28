@@ -61,6 +61,10 @@ class FlnNewBlueConnectTest {
 		add_action( 'wp_ajax_fln_invite_guests', array( $this, 'fln_ajax_invite_guests' ) );
 	}
 
+	public function send_event_update_notifications( $event_id, $html ) {
+		return true;
+	}
+
 	public function is_user_invited( $email, $event_id ) {
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'fln_nbc_invites';
