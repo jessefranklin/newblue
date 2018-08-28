@@ -487,7 +487,9 @@ function evoaulocation_fields_to_form($array){
 
 // actionUser intergration
 add_action('evoau_frontform_evotimezone',  'evoautimezone_fields', 10, 6);
-add_action('evoau_frontform_evolocation',  'evoaulocation_fields', 10, 6);  		   
+if(!is_admin()){
+    add_action('evoau_frontform_evolocation',  'evoaulocation_fields', 10, 6);  		   
+}
 
 // Frontend showing fields and saving values  
 function evoautimezone_fields($field, $event_id, $default_val, $EPMV, $opt2, $lang){
