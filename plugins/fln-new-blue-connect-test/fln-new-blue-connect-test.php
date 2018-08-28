@@ -317,17 +317,3 @@ class FlnNewBlueConnectTest {
 
 $flnNewBlueConnect = new FlnNewBlueConnectTest();
 
-
-/* Email for Testing 
-* The inviteemail is acting as the user's S.S.O email address
-* When the inviteemail is invited to a private event, that event will be viewble when testing.
-*/
-
-add_action('init', 'start_session', 1);
-
-function start_session() {
-if(!session_id()) {
-session_start();
-$_SESSION['inviteemail'] = 'test@intel.com';
-}
-}
