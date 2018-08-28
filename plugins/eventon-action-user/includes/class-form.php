@@ -733,11 +733,15 @@ jQuery(document).ready(function(){
 			<p><label for="virtual_link">Enter Virtual Link  : </label>
 			<a href="https://employeecontent.intel.com/content/corp/meeting-center/home.html" style="color:black;">If you have not booked a room or virtual meeting yet, use this link.</a>
 				<input type="text" name="virtual_link" id="" value="<?php echo sanitize_text_field($virtual_link_value); ?>">	
-			</p><!--
-			<p class="checkbox">
+			</p>
+<?php 
+				$custom_fields = get_post_custom($event_id);
+				$is_private = get_post_meta($event_id, 'private', true) == 1;
+				?>	
+						       <p class="checkbox">
 			  <label>Is This A Private Event Only Open To Invited Guests?</label>
-			  <label><input type="checkbox" value="1" name="private">Yes, Make Private</label>
-			</p>-->
+			     <label><input type="checkbox" value="1" name="private"<?php echo ($is_private ? ' checked="checked" ' : '' ) ?>>Yes, Make Private</label>
+			</p>
 		</div>
 		
 		<script>
