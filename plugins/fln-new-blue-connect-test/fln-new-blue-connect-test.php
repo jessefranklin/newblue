@@ -61,7 +61,7 @@ class FlnNewBlueConnectTest {
 		add_action( 'wp_ajax_fln_invite_guests', array( $this, 'fln_ajax_invite_guests' ) );
 	}
 
-	public function send_event_update_notifications( $event_id, $html ) {
+	public function send_event_update_notifications( $event_id, $subject, $html ) {
 		return true;
 	}
 
