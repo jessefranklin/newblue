@@ -877,6 +877,7 @@ add_action('evoau_manager_row',  'event_manager_row_invite', 10, 3);
 function event_manager_row_invite($event_id, $EPMV){
 			if( evo_check_yn($EPMV,'evors_rsvp') ){
 				echo "<a class='invite_event_single evoauem_additional_buttons ' data-eid='{$event_id}'>".evo_lang('Invite')."</a>";
+				echo "<a class='check_invites evoauem_additional_buttons ' data-eid='{$event_id}'>".evo_lang('Check Invites')."</a>";
 			}
 		}
 
@@ -887,6 +888,19 @@ function after_events_invite($atts){
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.css">
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.13/b-1.2.4/b-html5-1.2.4/datatables.min.css"/> 
+	<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.13/b-1.2.4/b-html5-1.2.4/datatables.min.js"></script>
+	<div id="myModal2" class="modal">
+		<div class="modal-content">
+			<div class="modal-header">
+				  <span aria-hidden="true" class="close">×</span>
+				  <h4 class="modal-title" id="myModalLabel" style="color: black">Event Invites List</h4>
+			</div>
+			<div class="modal-body" style="color: black">
+				<table id="my_invites"><thead><tr><th>Email</th></tr><tbody></tbody></table>
+			</div>
+		</div>
+	</div>
 <div id="myModal" class="modal">
 	  <!-- Modal content -->
 		<div class="modal-content">
@@ -1071,13 +1085,58 @@ select {
 .evoau_submission_form.successForm h2{
 	color: #ffffff !important;
 }
+#myModal2 select {
+	height: 26px !important;
+}
+#myModal2 label {
+	display: inline-block;
+	color: black;
+	height: 26px !important;
+}
+#myModal2 input[type='search'] {
+	display: inline-block;
+    width: 150px;
+}
 </style>
 <script>
 var g_event_id;
 
 var ajax_url = '<?php echo admin_url( 'admin-ajax.php' ); ?>';
 $('.ui.dropdown').dropdown({placeholder:'Select Group'});
+
 $(document).ready(function(){
+	$( ".check_invites" ).on( "click", function () {
+		$( "#myModal2" ).show();
+
+		//Load the Invitees
+		var data = {
+			'action': 'fln_get_invitees',
+			'event_id': $( this ).data( "eid" )
+		};
+		$( "#my_invites tbody" ).html( "" );
+		$.post( ajax_url, data, function( response ) {
+			if ( $.fn.dataTable.isDataTable( '#my_invites' ) ) {
+				$( "#my_invites" ).DataTable().destroy();
+			}
+
+			var tbl_body = '';
+			for( var i = 0; i < response.length; i++ ) {
+				tbl_body += "<tr><td>" + response[ i ] + "</td></tr>";
+			}
+			$( "#my_invites tbody" ).html( tbl_body );
+
+			$( "#my_invites" ).DataTable( {
+				dom: 'Bfrtip',
+				buttons: [ 'csv' ],
+				"bPaginate": true,
+				scrollX: false,
+				scrollY: 300
+			});
+
+			$( "#myModal2" ).show();
+		} );
+	} );
+
 	$( "#get_invite_type" ).on( "change", function () {
 		var invite_type = $( this ).val();
 		if( invite_type === "custom_list" ) {
@@ -1120,11 +1179,16 @@ $(document).ready(function(){
 	// When the user clicks on <span> (x), close the modal
 	$(".close").click(function(){
 			$("#myModal").hide();
+			$("#myModal2").hide();
 	});		
 	/* close on click outside of modal */
 	$("#myModal").on('click', function(e) {
 	  if (e.target !== this) return;
 	  $("#myModal").hide();
+	});
+	$("#myModal2").on('click', function(e) {
+	  if (e.target !== this) return;
+	  $("#myModal2").hide();
 	});
 });
 </script>
