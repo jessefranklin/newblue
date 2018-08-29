@@ -3,12 +3,11 @@
    Plugin Name: EventON - Invite
    Plugin URI: http://www.myeventon.com/
    description:Invite group
-   Intel Version: 1.89
+   Intel Version: 1.90
    Author: Hero Digital
    Author URI: http://herodigital.com  
    License: GPL2
 */
-       
 	// Get the Timzezone in UFC Offset  format
 	function get_UTC_offset(){
 
@@ -871,4 +870,21 @@ function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 		</script>
 		
 	<?php		 
+}
+
+add_action( 'wp_ajax_fln_update_notifications', 'fln_update_notifications', 10, 3);
+function fln_update_notifications(){
+  global $flnNewBlueConnect;  
+  if( ! current_user_can( 'edit_posts' ) ) {
+    wp_send_json_error( 'You do not have access to this feature.' );
+    return;
+  }
+  
+  $event_id = intval($_POST[ 'eventId' ]);
+  if(isset($event_id) && $event_id > 0){
+    $flnNewBlueConnect->send_event_update_notifications( $event_id, '<div>This event has changed.<br />Please update your registration</div>');
+    return true;
+  }
+  wp_send_json_error( 'Invalid Event!' );
+  return;
 }

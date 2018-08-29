@@ -2,7 +2,7 @@
 /**
 * Evoau front end submission form
 * @version 2.1.6
-* @ Intel version 1.0
+* @ Intel version 1.1
 */
 class evoau_form{
 
@@ -995,7 +995,28 @@ jQuery(document).ready(function(){
 
               <?php endif; // close if $_USER_LOGIN_REQ?>
             </form>
-
+		<?php
+		// BEGIN Intel update notification
+		?>
+		<script>
+		 $('#evoau_submit').click(function(){
+		    var ajax_url = '<?php echo admin_url( 'admin-ajax.php' ); ?>';		     
+		     if(confirm('Would you like to notify your registered attendees?')){
+			 $.post(
+			     ajax_url, {
+				 'action': 'fln_update_notifications',
+				 'eventId': <?php echo intval($event_id) ?>
+			     },
+			     function( response ) {
+			     }
+			 );			 
+		     };
+			return true;
+		    });
+		</script>
+		<?php
+		// END Intel update notification
+		?>
           </div>
         </div><!--.eventon_au_form_section-->
         <?php
