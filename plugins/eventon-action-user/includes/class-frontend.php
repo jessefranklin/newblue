@@ -409,6 +409,7 @@ class evoau_frontend{
 				'evo_exclude_ev'=>array(evo_lang('Exclude this event from calendar'), 'evo_exclude_ev', 'yesno'),
 				'_featured'=>array(evo_lang('Feature this event'), '_featured', 'yesno'),
 				'_cancel'=>array(evo_lang('Cancel this event'), '_cancel', 'yesno'),
+				'evoexec'
 			);
 
 			$event_fields = array_merge($event_fields, $event_fields_1, $event_fields_editonly);
