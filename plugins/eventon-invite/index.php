@@ -3,7 +3,7 @@
    Plugin Name: EventON - Invite
    Plugin URI: http://www.myeventon.com/
    description:Invite group
-   Intel Version: 1.91
+   Intel Version: 1.92
    Author: Hero Digital
    Author URI: http://herodigital.com  
    License: GPL2
@@ -1073,6 +1073,8 @@ select {
 }
 </style>
 <script>
+var g_event_id;
+
 var ajax_url = '<?php echo admin_url( 'admin-ajax.php' ); ?>';
 $('.ui.dropdown').dropdown({placeholder:'Select Group'});
 $(document).ready(function(){
@@ -1087,7 +1089,10 @@ $(document).ready(function(){
 		}
 	} );
   
-    $(".invite_event_single").click(function(){
+    $(".invite_event_single").click(function() {
+		//Store the event id in a global variable
+		g_event_id = $( this ).data( "eid" );
+
         $("#myModal").show();		
 			var dropdown = $('#group');
 			dropdown.empty();
@@ -1155,17 +1160,8 @@ $(document).ready(function(){
 			var data = {
 				'action': 'fln_invite_guests',
 				'event_data': {
-					'event_id': $('#event_id').val(),
-					'event_title': $('#event_title').val(),
-					'evcal_subtitle': $('#event_subtitle').val(),
-					'event_details': $('#event_details').val(),
-					'ics_url': $('#ics_url').val(),
-					'group': $('#group').val(),
-					'event_location': $('#event_location').val(),
-					'event_time': $('#event_time').val(),
-					'evcal_organizer': $('#evcal_organizer').val(),
-					'evcal_type': $('#event_type').val(),
-					'event_link': $('#event_link').val()
+					'event_id': g_event_id,
+					'additional_invites': true
 				}
 			};
 			if( $( "#get_invite_type" ).val() === "custom_list" ) {
@@ -1190,16 +1186,7 @@ $(document).ready(function(){
 			}
 
 			jQuery.post( ajax_url, data, function( response ) {
-				console.log('event_id : ' + $('#event_id').val() );
-				console.log('event_title : ' + $('#event_title').val() );
-				console.log('evcal_subtitle : ' + $('#event_subtitle').val() );
-				console.log('event_details : ' + $('#event_details').val() );
-				console.log('ics_url : ' + $('#ics_url').val() );
-				console.log('group : ' + $('#group').val() );
-				console.log('event_location : ' + $('#event_location').val() );
-				console.log('event_time : ' + $('#event_time').val() );
-				console.log('evcal_organizer : ' + $('#evcal_organizer').val() );
-				console.log('evcal_type : ' + $('#event_type').val() );
+				console.log('event_id : ' + g_event_id );
 				$("#myModal .modal-body").removeClass( "evoloadbar" );
 				$("#myModal .modal-body").removeClass( "bottom" );
 				$("#myModal").hide();
@@ -1217,18 +1204,20 @@ $(document).ready(function(){
 }
 
 add_action( 'wp_ajax_fln_update_notifications', 'fln_update_notifications', 10, 3);
-function fln_update_notifications(){
-  global $flnNewBlueConnect;  
-  if( ! current_user_can( 'edit_posts' ) ) {
-    wp_send_json_error( 'You do not have access to this feature.' );
-    return;
-  }
-  
-  $event_id = intval($_POST[ 'eventId' ]);
-  if(isset($event_id) && $event_id > 0){
-    $flnNewBlueConnect->send_event_update_notifications( $event_id, '<div>This event has changed.<br />Please update your registration</div>');
-    return true;
-  }
-  wp_send_json_error( 'Invalid Event!' );
-  return;
+function fln_update_notifications() {
+	global $flnNewBlueConnect;
+	//$flnNewBlueConnect->log( 'Update Notifications' );
+	if( ! current_user_can( 'edit_eventon' ) && ! current_user_can( 'edit_posts' ) ) {
+		wp_send_json_error( 'You do not have access to this feature.' );
+		$flnNewBlueConnect->log( 'You do not have access to this feature.' );
+		return;
+	}
+
+	$event_id = intval( $_POST[ 'eventId' ] );
+	if( isset( $event_id ) && $event_id > 0 ) {
+		$flnNewBlueConnect->send_event_update_notifications( $event_id );
+		return true;
+	}
+	wp_send_json_error( 'Invalid Event!' );
+	return;
 }
