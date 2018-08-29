@@ -3,7 +3,7 @@
    Plugin Name: EventON - Invite
    Plugin URI: http://www.myeventon.com/
    description:Invite group
-   Intel Version: 1.85
+   Intel Version: 1.86
    Author: Hero Digital
    Author URI: http://herodigital.com  
    License: GPL2
@@ -64,7 +64,10 @@
 
 	$user_id = get_current_user_id();
 
+ 
 	//echo "SELECT * from $wpdb->posts WHERE post_author =".$user_id;
+	
+//	echo "SELECT * from $wpdb->posts WHERE post_type='ajde_events' and post_status='publish' and post_author =".$user_id." ORDER BY post_date DESC LIMIT 1";
 
 	$post_id = $wpdb->get_results("SELECT * from $wpdb->posts WHERE post_type='ajde_events' and post_status='publish' and post_author =".$user_id." ORDER BY post_date DESC LIMIT 1");
 	if( ! isset( $post_id[ 0 ] ) ) {
@@ -485,11 +488,13 @@ function evoaulocation_fields_to_form($array){
 	return $array;
 }
 
+
+
 // only for frontend
 if(!is_admin()){
 	// actionUser intergration
 	add_action('evoau_frontform_evotimezone',  'evoautimezone_fields', 10, 6);
-    add_action('evoau_frontform_evolocation',  'evoaulocation_fields', 10, 6);  		   
+    add_action('evoau_frontform_evolocation',  'evoaulocation_fields', 10, 6);  	   
 }
 // Frontend showing fields and saving values  
 function evoautimezone_fields($field, $event_id, $default_val, $EPMV, $opt2, $lang){
@@ -511,7 +516,7 @@ function evoautimezone_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 			<option value="America/Los_Angeles">(GMT-08:00) Pacific Time (US & Canada)</option>
 			<option value="America/Denver">(GMT-07:00) Mountain Time (US & Canada)</option>
 			<option value="America/Chihuahua">(GMT-07:00) Chihuahua, La Paz, Mazatlan</option>
-			<option value="America/Arizona">(GMT-07:00) Arizona</option>
+			<option value="America/Phoenix">(GMT-07:00) Arizona</option>
 			<option value="America/Belize">(GMT-06:00) Saskatchewan, Central America</option>
 			<option value="America/Cancun">(GMT-06:00) Guadalajara, Mexico City, Monterrey</option>
 			<option value="Chile/EasterIsland">(GMT-06:00) Easter Island</option>
@@ -603,6 +608,10 @@ function evoautest_save_values($field, $fn, $created_event_id){
 // print_r($_POST);
 // die();
 
+	// if ( isset( $_POST['evoexec'] )){  
+		// update_post_meta($created_event_id, 'exec', $_POST['evoexec']); 
+	// }
+	
 	if ( isset( $_POST['evotimezone'] )){
 		update_post_meta($created_event_id, 'evo_event_timezone', $_POST['evotimezone']); 
 	}
@@ -826,17 +835,17 @@ function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 		jQuery( "#locationtype" ).on( "change", function () {
 		var location_type = jQuery( this ).val();
 	//	alert(location_type);
-		if( location_type === "site"  ||  location_type == 128) {
+		if( location_type === "site"  ||  location_type == 802) {
 			jQuery("#pregion").show();
 			jQuery("#ploc").show();
 			jQuery("#padd").show();
 			jQuery( "#addtxt" ).html( 'Room' ); 
-		} else if( location_type === "off-site" ||  location_type == 132) {
+		} else if( location_type === "off-site" ||  location_type == 799) {
 			jQuery("#pregion").hide();
 			jQuery("#ploc").hide();
 			jQuery("#padd").show();
 			jQuery( "#addtxt" ).html('Address');
-		}else if( location_type === "virtual" ||  location_type == 133) {
+		}else if( location_type === "virtual" ||  location_type == 805) {
 			jQuery("#pregion").hide();
 			jQuery("#ploc").hide();
 			jQuery("#padd").hide();
@@ -846,6 +855,351 @@ function evoaulocation_fields($field, $event_id, $default_val, $EPMV, $opt2, $la
 			jQuery("#padd").hide();   
 		}
 	} );
-	</script>
+	
+		</script>
+		
 	<?php		 
+}
+add_action('evoau_manager_row',  'event_manager_row_invite', 10, 3);
+
+function event_manager_row_invite($event_id, $EPMV){
+			if( evo_check_yn($EPMV,'evors_rsvp') ){
+				echo "<a class='invite_event_single evoauem_additional_buttons ' data-eid='{$event_id}'>".evo_lang('Invite')."</a>";
+			}
+		}
+
+		
+add_action('evoau_manager_after_events', 'after_events_invite',10,1);
+function after_events_invite($atts){
+?>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.css">
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.js"></script>
+<div id="myModal" class="modal">
+	  <!-- Modal content -->
+		<div class="modal-content">
+			<div class="modal-header">
+				  <span aria-hidden="true" class="close">×</span>
+				  <h4 class="modal-title" id="myModalLabel">Invite</h4>
+			</div>
+			<div class="modal-body">
+				<form action="<?php echo esc_html__($wporg_atts['post-url'], 'wporg'); ?> " method="post">
+				
+					<!--<input type="hidden" name="event_id" id="event_id" value="<?php echo esc_html__($post_id[0]->ID); ?>">							
+					<input type="hidden" name="event_title" id="event_title" value="<?php echo esc_html__($post_id[0]->post_title); ?>">
+					<input type="hidden" name="event_subtitle" id="event_subtitle" value="<?php echo esc_html__($evcal_subtitle); ?>">
+					<input type="hidden" name="event_details" id="event_details" value="<?php echo esc_html__($post_id[0]->post_content); ?>">
+					<input type="hidden" name="event_location" id="event_location" value="<?php echo esc_html__($evcal_location_name); ?>">
+					<input type="hidden" name="event_location_address" id="event_location_address" value="<?php echo esc_html__($location_address); ?>">
+					<input type="hidden" name="evcal_organizer" id="evcal_organizer" value="<?php echo esc_html__($evcal_organizer); ?>">
+					<input type="hidden" name="event_time" id="event_time" value="<?php echo esc_html__($new_estart).' - '.esc_html__($new_eend); ?>">
+					<input type="hidden" name="ics_url" id="ics_url" value="<?php echo esc_html__($ics_url); ?>">
+					<input type="hidden" name="event_type" id="event_type" value="<?php echo esc_html__($terms[0]->name); ?>">
+					<input type="hidden" name="event_link" id="event_link" value="<?php echo esc_html__($event_link); ?>"> -->
+					<div>
+						<span style="font-weight: bold; margin-top: 10px; color: black; display: block;" >Select Invite List Selection Method</span>
+						<select id="get_invite_type" class="ui fluid dropdown">
+							<option value='custom_list' selected>Upload Custom Invite List</option>
+							<option value='super_group'>Invite Super Group(s)</option>
+						</select>
+
+						<div id="group_container" style="display: none;">
+							<select name="group[]" multiple="" class="ui fluid dropdown" id="group">
+							</select>
+						</div>
+						<div id="custom_list">
+							<span style="font-weight: bold; margin-top: 10px; color: black; display: block;" >Enter/Paste Emails (Email addresses can be separated by commas, semi-colons, or new-lines.):</span>
+							<textarea id="txt_custom_list" style="height: 150px"></textarea>
+						</div>
+
+					</div>
+					<div style="margin-top:20px;">
+						<input type="submit" name="submit" value="Submit" id="submit">
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+<style>
+body {
+	font-size: 16px;
+    line-height: 1.5;
+    background-color: #005395;
+	font-family: "intel_clear_wlatlight", "Libre Franklin", "Helvetica Neue", helvetica, arial, sans-serif;
+	font-weight: 400;
+}
+.header-links a {
+	color: white;
+}
+label span {
+    color: #404040;
+}
+select {
+    width: 30%;
+    height: 4em !important;
+}
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 10; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    border: 1px solid #888;
+    width: 80%;
+}
+.modal-header {
+    padding: 15px;
+    border-bottom: 1px solid #e5e5e5;
+}
+.modal-title {
+    margin: 0;
+    line-height: 1.42857143;
+	clear: none;
+    padding: 0px;
+}
+/* The Close Button */
+.close {
+    float: right;
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    filter: alpha(opacity=20);
+    opacity: .2;
+}
+.modal-body {
+    position: relative;
+    padding: 15px;
+}
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* success message */
+		.evoau_success_msg{text-align: center;}
+		.limitSubmission .evoau_success_msg p{color: #ffffff;}
+		.limitSubmission .evoau_success_msg p b:before{
+			content:"!";
+			-webkit-transform: rotate(0deg);
+  			-moz-transform: rotate(0deg);
+  			-ms-transform: rotate(0deg);
+  			-o-transform: rotate(0deg);
+  			transform: rotate(0deg);
+  			border:none;
+  			margin:0;
+  			top:auto; left: auto;
+  			height: auto;
+  			width: 40px;
+  			line-height: 120%;
+  			font-size: 32px;
+		}
+		body .evoau_success_msg h3 {color:#ffffff;} 
+		body .evoau_success_msg p{color: #ffffff;
+			line-height: 1.5;
+	  		margin: 0;
+	  		font-size: 18px;
+	  		text-align: center;
+	  		padding-top: 20px;
+		}
+		.evoau_success_msg p b{
+			position: relative;
+	  		display: block;
+	  		width: 45px;
+	  		height: 45px;
+	  		border: 3px solid #ffffff;
+	  		border-radius: 50%;
+	  		margin: 0 auto;
+				margin-bottom: 10px;
+	  		box-sizing: border-box;
+		}
+		.evoau_success_msg p b:before{
+			content: '';
+	  		display: block;
+	  		position: absolute;
+	  		top: 50%;
+	  		left: 50%;
+	  		margin: -9px 0 0 -9px;
+	  		height: 10px;
+	 		width: 16px;
+	  		border: solid #ffffff;
+	  		border-width: 0 0 4px 4px;
+	  		-webkit-transform: rotate(-45deg);
+	  		-moz-transform: rotate(-45deg);
+	  		-ms-transform: rotate(-45deg);
+	  		-o-transform: rotate(-45deg);
+	  		transform: rotate(-45deg);
+		}
+.evoau_submission_form.successForm {
+    background-color: #9BD28C;
+	padding: 13px 20px;
+    border: 1px solid #d9d7d7;
+    border-bottom-width: 3px;
+    position: relative;
+    border-radius: 5px;
+    overflow: hidden;
+}
+   
+.evoau_submission_form.successForm h2{
+	color: #ffffff !important;
+}
+</style>
+<script>
+var ajax_url = '<?php echo admin_url( 'admin-ajax.php' ); ?>';
+$('.ui.dropdown').dropdown({placeholder:'Select Group'});
+$(document).ready(function(){
+	$( "#get_invite_type" ).on( "change", function () {
+		var invite_type = $( this ).val();
+		if( invite_type === "custom_list" ) {
+			$("#custom_list").show();
+			$("#group_container").hide();
+		} else if( invite_type === "super_group" ) {
+			$("#custom_list").hide();
+			$("#group_container").show();
+		}
+	} );
+  
+    $(".invite_event_single").click(function(){
+        $("#myModal").show();		
+			var dropdown = $('#group');
+			dropdown.empty();
+			dropdown.append('<option selected="true" disabled>Select Group</option>');
+			dropdown.prop('selectedIndex', 0);
+			/*const url = '<?php echo esc_html__($wporg_atts['file'], 'wporg'); ?>';
+			// Populate dropdown with list of provinces
+			$.getJSON(url, function (data) {
+			  $.each(data, function (key, entry) {
+				dropdown.append($('<option></option>').attr('value', entry.bu).text(entry.bu));
+			  })
+			});*/
+
+			//Load the Super groups
+			var data = {
+				'action': 'fln_get_super_groups'
+			};
+
+			$.post( ajax_url, data, function( response ) {
+				for( var i = 0; i < response.length; i++ ) {
+					dropdown.append($('<option></option>').attr('value', response[ i ].bu).text(response[ i ].bu));
+				}
+			} );
+    });	
+	// When the user clicks on <span> (x), close the modal
+	$(".close").click(function(){
+			$("#myModal").hide();
+	});		
+	/* close on click outside of modal */
+	$("#myModal").on('click', function(e) {
+	  if (e.target !== this) return;
+	  $("#myModal").hide();
+	});
+});
+</script>
+
+<script>
+      $(function () {
+
+        $('form').on('submit', function (e) {
+
+          e.preventDefault();
+
+          /*$.ajax({
+            type: 'post',
+            url: '<?php echo esc_html__($wporg_atts['post-url'], 'wporg'); ?>',
+            data: $('form').serialize(),
+            success: function () {
+			  console.log('event_id : ' + $('#event_id').val() );
+			  console.log('event_title : ' + $('#event_title').val() );
+			  console.log('evcal_subtitle : ' + $('#event_subtitle').val() );
+			  console.log('event_details : ' + $('#event_details').val() );	
+			  console.log('ics_url : ' + $('#ics_url').val() );
+			  console.log('group : ' + $('#group').val() );
+			  console.log('event_location : ' + $('#event_location').val() );  		  
+			  console.log('event_time : ' + $('#event_time').val() );
+			  console.log('evcal_organizer : ' + $('#evcal_organizer').val() );
+			  console.log('evcal_type : ' + $('#event_type').val() );
+			  $("#myModal").hide();
+             // window.location.href = 'http://newblueconnect.com.s224062.gridserver.com/';
+            }
+          });*/
+
+			//Sub
+			var data = {
+				'action': 'fln_invite_guests',
+				'event_data': {
+					'event_id': $('#event_id').val(),
+					'event_title': $('#event_title').val(),
+					'evcal_subtitle': $('#event_subtitle').val(),
+					'event_details': $('#event_details').val(),
+					'ics_url': $('#ics_url').val(),
+					'group': $('#group').val(),
+					'event_location': $('#event_location').val(),
+					'event_time': $('#event_time').val(),
+					'evcal_organizer': $('#evcal_organizer').val(),
+					'evcal_type': $('#event_type').val(),
+					'event_link': $('#event_link').val()
+				}
+			};
+			if( $( "#get_invite_type" ).val() === "custom_list" ) {
+				var custom_list = $( '#txt_custom_list' ).val();
+				if (custom_list.search(/<|>/g) != -1) {
+				    custom_list = custom_list.match(/\S+@\S+\.\S+/g);
+				    custom_list = custom_list.join('\n');
+				    custom_list = custom_list.replace( /<|>|;/g, '');
+				    data.event_data.custom_list = custom_list;
+				    $( '#txt_custom_list' ).val( custom_list );
+				} else {
+				    custom_list = custom_list.replace( /; /g, ';' );
+				    custom_list = custom_list.replace( /, /g, ',' );
+				    custom_list = custom_list.replace( / /g, '\n');
+				    custom_list = custom_list.replace( /;/g, '\n' );
+				    custom_list = custom_list.replace( /,/g, '\n' );
+				    data.event_data.custom_list = custom_list;
+				    $( '#txt_custom_list' ).val( custom_list );
+				}
+			} else if( $( "#get_invite_type" ).val() === "super_group" ) {
+				data.event_data.group = $( '#group' ).val();
+			}
+
+			jQuery.post( ajax_url, data, function( response ) {
+				console.log('event_id : ' + $('#event_id').val() );
+				console.log('event_title : ' + $('#event_title').val() );
+				console.log('evcal_subtitle : ' + $('#event_subtitle').val() );
+				console.log('event_details : ' + $('#event_details').val() );
+				console.log('ics_url : ' + $('#ics_url').val() );
+				console.log('group : ' + $('#group').val() );
+				console.log('event_location : ' + $('#event_location').val() );
+				console.log('event_time : ' + $('#event_time').val() );
+				console.log('evcal_organizer : ' + $('#evcal_organizer').val() );
+				console.log('evcal_type : ' + $('#event_type').val() );
+				$("#myModal .modal-body").removeClass( "evoloadbar" );
+				$("#myModal .modal-body").removeClass( "bottom" );
+				$("#myModal").hide();
+				$("#myBtn").after("<p>Invitations Sent</p>");
+				$("#myBtn").hide();
+			} );
+			$("#myModal .modal-body").addClass( "evoloadbar" );
+			$("#myModal .modal-body").addClass( "bottom" );
+        });
+
+      });
+    </script>
+
+<?php 
 }
