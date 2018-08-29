@@ -61,7 +61,7 @@ class FlnNewBlueConnectTest {
 		add_action( 'wp_ajax_fln_invite_guests', array( $this, 'fln_ajax_invite_guests' ) );
 	}
 
-	public function send_event_update_notifications( $event_id, $subject, $html ) {
+	public function send_event_update_notifications( $event_id ) {
 		return true;
 	}
 
@@ -104,7 +104,7 @@ class FlnNewBlueConnectTest {
 	}
 
 	public function fln_ajax_invite_guests() {
-		if( ! current_user_can( 'edit_posts' ) ) {
+		if( ! current_user_can( 'edit_eventon' ) ) {
 			wp_send_json_error( 'You do not have access to this feature.' );
 			return;
 		}
@@ -148,7 +148,7 @@ class FlnNewBlueConnectTest {
 	}
 
 	public function fln_ajax_get_super_groups() {
-		if( ! current_user_can( 'edit_posts' ) ) {
+		if( ! current_user_can( 'edit_eventon' ) ) {
 			wp_send_json_error( 'You do not have access to this feature.' );
 			return;
 		}
@@ -177,7 +177,7 @@ class FlnNewBlueConnectTest {
 	}
 
 	public function fln_ajax_get_sites() {
-		if( ! current_user_can( 'edit_posts' ) ) {
+		if( ! current_user_can( 'edit_eventon' ) ) {
 			wp_send_json_error( 'You do not have access to this feature.' );
 			return;
 		}
@@ -240,7 +240,7 @@ class FlnNewBlueConnectTest {
 	}
 
 	public function fln_ajax_get_employees_by_bu() {
-		if( ! current_user_can( 'edit_posts' ) ) {
+		if( ! current_user_can( 'edit_eventon' ) ) {
 			wp_send_json_error( 'You do not have access to this feature.' );
 			return;
 		}
@@ -252,7 +252,7 @@ class FlnNewBlueConnectTest {
 	}
 
 	public function fln_ajax_get_employees_by_site() {
-		if( ! current_user_can( 'edit_posts' ) ) {
+		if( ! current_user_can( 'edit_eventon' ) ) {
 			wp_send_json_error( 'You do not have access to this feature.' );
 			return;
 		}
