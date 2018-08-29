@@ -3,7 +3,7 @@
    Plugin Name: EventON - Invite
    Plugin URI: http://www.myeventon.com/
    description:Invite group
-   Intel Version: 1.92
+   Intel Version: 1.93
    Author: Hero Digital
    Author URI: http://herodigital.com  
    License: GPL2
@@ -69,7 +69,9 @@
 	if( ! isset( $post_id[ 0 ] ) ) {
 		return 'You have not created any events.';
 	}
-	$event_link = 'https://newblueconnect.intel.com/events/' . $post_id[0]->post_name;
+	//$event_link = 'https://newblueconnect.intel.com/events/' . $post_id[0]->post_name;
+	$event_link = 'https://sifederation.intel.com/affwebservices/public/saml2sso?SAMLRequest=fZJbj9owEIX%2fSuT33AMkFrBil16QKKCF7sO%2brJxkDJYc2%2fU4pf33NaHVsg%2flzRqfM3O%2bsafIOmnooncn9Qw%2fekAX%2fOqkQjpczEhvFdUMBVLFOkDqGrpffFvTLEqosdrpRktyY7nvYIhgndCKBKvljGw3n9bbL6vNW8EhaZIxVOUkTyd1U%2bTZqMp4WlRFzss0Z0U1Hk3aigQvYNH7Z8S3800Qe1gpdEw5X0rSMkzKMKsO6YjmY5qVryRYeiahmBtcJ%2bcM0jhGwaEFO1QjoRzIqNFdzDg%2fQ%2b0z%2fhQNYGz6WoomvnBliJoEu7%2fEj0K1Qh3vw9ZXEdKvh8Mu3G33BxIs%2fi3gSSvsO7D766zvz%2bv3cGdrQiOZ49p2kTjK%2bibh2YRSH4WKzMk8XIK9sQbJfHo50mEddn7HP41vhdPr62989NVypz3r7%2bCzNzH3f7I0SoeKaEM%2bSGmv0EAjuIDWA0qpz08WmIMZcbYHEsTz69SP32z%2bBw%3d%3d&RelayState=%2fwp-login.php%3fredirect_to%3dhttps%253A%252F%252Fnewblueconnect.intel.com%252F/events/' . $post_id[0]->post_name;
+
 	//$event_link = get_permalink( $post_id[0] );
 	//print_r($_POST);   
 	
