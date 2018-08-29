@@ -855,23 +855,33 @@ function add_delegate() {
 
 			<ul class="delegate-list">
 			<?php
-		//	echo get_current_user_id();
+			//echo get_current_user_id();
+			//$all_meta_for_user = get_user_meta( get_current_user_id() ,'parent_user_delegate');
+			//$exec = $all_meta_for_user[0];
+		//	print_r($exec);   
 			$args = array(
 				'role'         => 'delegate',
-				'count_total'  => false,
-				
-					'meta_key'     => 'parent_user_delegate',
-					'meta_value'   => get_current_user_id(),
-					'meta_compare' => '=',
+				'count_total'  => false,      
+				'meta_key'     => 'parent_user_delegate', 
+				'meta_value'   => get_current_user_id(),
+				'meta_compare' => 'IN'
 				
 			 );
+			 global $wpdb;
+			// echo "SELECT * FROM ".$wpdb->prefix ."usermeta WHERE meta_key = 'parent_user_delegate' AND  meta_value IN('".get_current_user_id()."' ";
+			 $sql = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix ."usermeta WHERE meta_key = 'parent_user_delegate' AND  FIND_IN_SET(".get_current_user_id().", meta_value)  ");
 			 
 			 //parent_user_delegate
 			 
-			$delegates = get_users( $args ); 
-			  
-			foreach($delegates as $delegate){
-				echo '<li data-id="'.$delegate->ID.'" class="delegate_'.$delegate->ID.'"><subtitle>'.$delegate->user_login.'</subtitle><a class="fa fa-trash"></a></li>';
+			//$delegates = get_users( $args ); 
+			//  print_r($delegates);     
+			foreach($sql as $delegates){
+				
+				//echo $delegates->user_id;
+				$delegate = get_userdata( $delegates->user_id );
+				//print_r($delegate);   
+				//$user_roles = $user_data->roles;
+				echo '<li data-id="'.$delegate->ID.'" class="delegate_'.$delegate->ID.'"><subtitle>'.$delegate->display_name.'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'. $delegate->user_email.'</subtitle><a class="fa fa-trash"></a></li>';
 			}
 			?>
 			</ul>
@@ -901,7 +911,7 @@ function add_delegate() {
 					if(response.msg == 'success'){
 						jQuery('.olive').show();
 						jQuery('#delegate-id').val('');  
-						var strToAdd = '<li data-id="'+response.Id+'" class="delegate_'+response.Id+'"><subtitle>'+name+'</subtitle><a class="fa fa-trash"></a></li>';     
+						var strToAdd = '<li data-id="'+response.Id+'" class="delegate_'+response.Id+'"><subtitle>'+response.name+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+response.email+'</subtitle><a class="fa fa-trash"></a></li>';     
 						jQuery(strToAdd).prependTo('.delegate-list');
 						   
 						remove_delegates();   
@@ -965,28 +975,64 @@ add_action('wp_ajax_check_delegate', 'check_delegate');
 
 function check_delegate(){
 	//print_r($_POST);   
-	$username = $_POST['delegate'];
-	$username = trim($username," ");
-	if ( username_exists( $username ) ){
+	$email = $_POST['delegate'];
+	$email = trim($email," ");
+	if ( email_exists( $email ) ){
 		
-		$user = username_exists( $username );
+		$user = email_exists( $email );
 		$user_data = get_userdata( $user );
 		$user_roles = $user_data->roles;
+		//print_r($user_data);    
+			
+		$all_meta_for_user = get_user_meta( $user ,'parent_user_delegate');
+		$exec = $all_meta_for_user[0];
+		//$arr = array_push($exec, get_current_user_id());
+		//echo get_current_user_id();    
+		//print_r($exec);
+		//die();
 		
-		if ( in_array( 'delegate', $user_roles, true ) ) {
-		   $data['msg'] = 'Delegate User already exists.'; 
-		}else{
+		$exec1 = explode(",",$exec);
+		
+		//print_r($exec1);
+		//die();
+		
+		if(in_array( get_current_user_id(), $exec1) ){
+			 $data['msg'] = 'Delegate User already exists.'; 
+		}else{   
+			
 			$user_id = wp_update_user( array( 'ID' => $user, 'role' => 'delegate' ) );
-			update_user_meta($user_id, 'parent_user_delegate',get_current_user_id() );
+			//$exec[] = get_current_user_id(); 
+			//print_r($exec);
+			//die();
+			
+			$exec .= ','.get_current_user_id();  
+			$exec =	ltrim($exec,",");			
+			update_user_meta($user_id, 'parent_user_delegate',$exec );
 			if ( is_wp_error( $user_id ) ) {
 				$data['msg'] = 'Failed'; 
 			} else {
 				$data['msg'] = 'success';  
-				$data['Id'] = $user;  
+				$data['Id'] = $user;
+				$data['email'] = $user_data->user_email;
+				$data['name'] = $user_data->display_name;			
 			}
 		}
+		// if ( in_array( 'delegate', $user_roles, true ) ) {
+		   // $data['msg'] = 'Delegate User already exists.'; 
+		// }else{
+			// $user_id = wp_update_user( array( 'ID' => $user, 'role' => 'delegate' ) );
+			// update_user_meta($user_id, 'parent_user_delegate',get_current_user_id() );
+			// if ( is_wp_error( $user_id ) ) {
+				// $data['msg'] = 'Failed'; 
+			// } else {
+				// $data['msg'] = 'success';  
+				// $data['Id'] = $user;
+				// $data['email'] = $user_data->user_email;
+				// $data['name'] = $user_data->display_name;			
+			// }
+		// }
 	}else{
-		$data['msg'] = 'The User does not exist.';                     
+		$data['msg'] = 'The User does not exists...';                     
 	}
           
 		  
@@ -999,9 +1045,31 @@ add_action('wp_ajax_delete_delegate', 'delete_delegate');
 function delete_delegate(){
 	//print_r($_POST);   
 	$user= $_POST['delegate'];
-	$user_id = wp_update_user( array( 'ID' => $user, 'role' => 'subscriber' ) );
-	update_user_meta($user_id, 'parent_user_delegate',0 );
-	if ( is_wp_error( $user_id ) ) {
+	//$user_id = wp_update_user( array( 'ID' => $user, 'role' => 'subscriber' ) );
+	
+	$all_meta_for_user = get_user_meta( $user ,'parent_user_delegate');
+	$exec = $all_meta_for_user[0];
+	
+	$exec1 = explode(",",$exec);
+	
+	//print_r($exec1);
+	//die();
+	
+	//echo get_current_user_id();
+	$key = array_search(get_current_user_id(), $exec1);
+	if (false !== $key) {
+		//echo "hii";
+		unset($exec1[$key]);
+		//$exes = $exec1;
+	}
+	
+	//print_r($exec1);
+	 $exec2 = implode(",",$exec1);
+	//die();
+	
+	update_user_meta($user, 'parent_user_delegate',$exec2 );
+	
+	if ( is_wp_error( $user ) ) {
 		$data['msg'] = 'Failed'; 
 	} else {
 		$data['msg'] = 'success';  
@@ -1011,4 +1079,60 @@ function delete_delegate(){
 	  
 	echo json_encode($data);
 	die();
+}
+
+
+add_filter('evoau_form_fields', 'evoauexec_fields_to_form', 10, 1);
+function evoauexec_fields_to_form($array){
+	$array['evoexec']=array('Exec', 'evoexec', 'evoexec','custom','');
+	return $array;
+}
+
+
+// only for frontend
+if(!is_admin()){
+	// actionUser intergration
+	add_action('evoau_frontform_evoexec',  'evoauexec_fields', 10, 6);  	   
+}
+
+/* Select Exec Drop Down for Delegates on Frontend */
+
+function evoauexec_fields($field, $event_id, $default_val, $EPMV, $opt2, $lang){ 
+
+$exe = get_userdata( get_current_user_id() );
+			//	print_r($exe);            
+ $user_roles = $exe->roles[0];      
+if($user_roles == 'delegate'){   
+?>       
+	<div class='row evotest'><p>
+		<label for="exec">Select Exec:</label>     
+        
+        <select class="form-control" id="exec" name="evoexec">   
+        	
+        	<option value="" selected="selected">select exec</option>
+			<?php        
+			global $wpdb;
+			//echo "SELECT * FROM ".$wpdb->prefix ."usermeta WHERE meta_key = 'parent_user_delegate' AND  FIND_IN_SET(".get_current_user_id().", meta_value) ";  
+			// $sql = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix ."usermeta WHERE meta_key = 'parent_user_delegate' AND  FIND_IN_SET(".get_current_user_id().", meta_value) ");
+			
+			$all_meta_for_user = get_user_meta( get_current_user_id() ,'parent_user_delegate');
+			$exec = $all_meta_for_user[0];  
+			    
+			$exec1 = explode(",",$exec);
+			
+			foreach($exec1 as $data){     
+				//print_r($delegates);     
+				//echo $delegates;
+				$exec = get_userdata( $data );
+				//print_r($delegate);   
+				//$user_roles = $user_data->roles;
+				echo '<option value="'.$exec->ID.'">'.$exec->display_name .'</option>';
+			}
+			?>
+		</select>
+		</p>
+	</div>
+	
+<?php
+}
 }
