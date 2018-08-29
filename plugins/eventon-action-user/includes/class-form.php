@@ -2,7 +2,7 @@
 /**
 * Evoau front end submission form
 * @version 2.1.6
-* @ Intel version 1.2
+* @ Intel version 1.1
 */
 class evoau_form{
 
@@ -529,7 +529,7 @@ class evoau_form{
 
                     echo "<span class='evoau_cat_select_field {$field[1]}' data-enhance='false'>";
                     foreach($terms as $term){
-                      echo "<span class='{$field[1]}_{$term->term_id}'><input type='radio' name='".$__field_id."[]' value='".$term->term_id."' ".( (count($slectedterms) && in_array($term->term_id, $slectedterms))? 'checked="checked"':null )." data-role='none'/> ".$term->name."</span>";
+                      echo "<span class='{$field[1]}_{$term->term_id}'><input type='checkbox' name='".$__field_id."[]' value='".$term->term_id."' ".( (count($slectedterms) && in_array($term->term_id, $slectedterms))? 'checked="checked"':null )." data-role='none'/> ".$term->name."</span>";
                     }
                     echo "</span>";
 
@@ -902,7 +902,7 @@ jQuery(document).ready(function(){
                   <p class='label'><label for='".$__field_id."'>".$__field_name.$__req."</label></p>";
 
                   if($terms_exists):      
-                  echo '<p data-role="none"><select class="evoau_organizer_select" data-role="none">';
+                  echo '<p data-role="none"><select class="evoau_organizer_select" multiple data-role="none">';
                   echo "<option value='-'>".eventon_get_custom_language($opt_2, 'evoAUL_sso', 'Select Saved Hosts', $lang)."</option>";
 
                   // each organizer meta data

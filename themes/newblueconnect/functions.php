@@ -1081,6 +1081,75 @@ function delete_delegate(){
 	die();
 }
 
+add_action('wp_ajax_invite_adddata', 'invite_adddata');
+
+function invite_adddata(){
+	//print_r($_POST);
+	
+	global $wpdb;
+
+	$user_id = get_current_user_id();
+	
+//	echo "SELECT * from $wpdb->posts WHERE post_type='ajde_events' and post_status='publish' and post_author =".$user_id." and ID=".$_POST['id'];  
+
+	$post_id = $wpdb->get_results("SELECT * from $wpdb->posts WHERE post_type='ajde_events' and post_status='publish' and post_author =".$user_id." and ID=".$_POST['id']);
+	
+	$data['event_link'] = 'https://newblueconnect.intel.com/events/' . $post_id[0]->post_name;
+	//$event_link = get_permalink( $post_id[0] );
+	//print_r($_POST);   
+	
+	// $post_id[0]->ID;
+	
+	$data['evcal_title']= $post_id[0]->post_name;
+	
+	$data['evcal_subtitle']= get_post_meta($post_id[0]->ID , 'evcal_subtitle',true);
+	
+	$data['evcal_desc']= $post_id[0]->post_content;
+	
+	$data['estart']= get_post_meta($post_id[0]->ID , 'evcal_srow',true);
+	
+	$new_estart = date('jS F(l) - h:i A', $estart);
+	
+	$data['eend']= get_post_meta($post_id[0]->ID , 'evcal_erow',true);
+	
+	$new_eend = date('jS F(l) - h:i A', $eend);
+	
+	$data['time'] = $new_estart.' - '.$new_eend;   
+	
+	$data['timezone'] = get_post_meta( $post_id[0]->ID , 'evotimezone', true );
+	
+	$evcal_location_name = get_post_meta( $post_id[0]->ID , 'evcal_location_name', true );
+	
+	$location_address = get_post_meta( $post_id[0]->ID , 'location_address', true );	
+	
+	$data['evcal_location_name'] = $evcal_location_name;
+	
+	$data['location_address'] = $location_address;    
+	
+	$data['evcal_organizer'] = get_post_meta( $post_id[0]->ID , 'evcal_organizer', true );
+	
+	$adjusted_times = get_utc_adjusted_times( $estart, $eend, $timezone );
+
+	$data['$adjusted_unix_start'] = $adjusted_times['start'];       
+
+	$data['$adjusted_unix_end'] = $adjusted_times['end'];
+	 
+	$terms = wp_get_post_terms( $post_id[0]->ID, 'event_type' );
+	
+	$data['terms'] = $terms[0]->name;
+	
+	//print_r();
+	
+	$data['ics_url'] =admin_url('admin-ajax.php').'?action=eventon_ics_download&amp;event_id='.esc_html__($post_id[0]->ID).'&amp;sunix='.$adjusted_unix_start.'&amp;eunix='.$adjusted_unix_end . 
+
+							(isset($location_address) ? '&amp;loca='. $location_address : '' ).
+
+							(isset($evcal_location_name) ? '&amp;locn='.$evcal_location_name : '' );
+							
+	echo json_encode($data);
+die();
+}
+
 
 add_filter('evoau_form_fields', 'evoauexec_fields_to_form', 10, 1);
 function evoauexec_fields_to_form($array){

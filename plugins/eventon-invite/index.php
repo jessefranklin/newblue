@@ -1101,44 +1101,9 @@ select {
 }
 </style>
 <script>
-var g_event_id;
-
 var ajax_url = '<?php echo admin_url( 'admin-ajax.php' ); ?>';
 $('.ui.dropdown').dropdown({placeholder:'Select Group'});
-
 $(document).ready(function(){
-	$( ".check_invites" ).on( "click", function () {
-		$( "#myModal2" ).show();
-
-		//Load the Invitees
-		var data = {
-			'action': 'fln_get_invitees',
-			'event_id': $( this ).data( "eid" )
-		};
-		$( "#my_invites tbody" ).html( "" );
-		$.post( ajax_url, data, function( response ) {
-			if ( $.fn.dataTable.isDataTable( '#my_invites' ) ) {
-				$( "#my_invites" ).DataTable().destroy();
-			}
-
-			var tbl_body = '';
-			for( var i = 0; i < response.length; i++ ) {
-				tbl_body += "<tr><td>" + response[ i ] + "</td></tr>";
-			}
-			$( "#my_invites tbody" ).html( tbl_body );
-
-			$( "#my_invites" ).DataTable( {
-				dom: 'Bfrtip',
-				buttons: [ 'csv' ],
-				"bPaginate": true,
-				scrollX: false,
-				scrollY: 300
-			});
-
-			$( "#myModal2" ).show();
-		} );
-	} );
-
 	$( "#get_invite_type" ).on( "change", function () {
 		var invite_type = $( this ).val();
 		if( invite_type === "custom_list" ) {
@@ -1150,15 +1115,38 @@ $(document).ready(function(){
 		}
 	} );
   
-    $(".invite_event_single").click(function() {
-		//Store the event id in a global variable
-		g_event_id = $( this ).data( "eid" );
-
+    $(".invite_event_single").click(function(){
         $("#myModal").show();		
 			var dropdown = $('#group');
 			dropdown.empty();
 			dropdown.append('<option selected="true" disabled>Select Group</option>');
 			dropdown.prop('selectedIndex', 0);
+			
+			var id = $(this).attr( "data-eid" );
+			
+			//Load the Super groups
+			var data = {
+				'action': 'invite_adddata',
+				'id':id
+			};
+
+			$.post( ajax_url, data, function( response ) {
+				var obj = jQuery.parseJSON( response );
+				$('#event_id').val(id);
+				$('#event_title').val(obj.evcal_title);
+				$('#event_subtitle').val(obj.evcal_subtitle);
+				$('#event_details').val(obj.evcal_desc);
+				$('#ics_url').val(obj.ics_url);
+					// 'group': $('#group').val(),
+				$('#event_location').val(obj.evcal_location_name);
+				$('#event_location_address').val(obj.location_address);
+				$('#event_time').val(obj.time);
+				$('#evcal_organizer').val(obj.evcal_organizer);
+				$('#event_type').val(obj.terms);
+				$('#event_link').val(obj.event_link);
+
+			} );
+			//alert(title);
 			/*const url = '<?php echo esc_html__($wporg_atts['file'], 'wporg'); ?>';
 			// Populate dropdown with list of provinces
 			$.getJSON(url, function (data) {
@@ -1181,24 +1169,19 @@ $(document).ready(function(){
 	// When the user clicks on <span> (x), close the modal
 	$(".close").click(function(){
 			$("#myModal").hide();
-			$("#myModal2").hide();
 	});		
 	/* close on click outside of modal */
 	$("#myModal").on('click', function(e) {
 	  if (e.target !== this) return;
 	  $("#myModal").hide();
 	});
-	$("#myModal2").on('click', function(e) {
-	  if (e.target !== this) return;
-	  $("#myModal2").hide();
-	});
 });
 </script>
 
 <script>
-      $(function () {
+    $(function () {
 
-        $('form').on('submit', function (e) {
+     $('form').on('submit', function (e) {
 
           e.preventDefault();
 
@@ -1226,8 +1209,17 @@ $(document).ready(function(){
 			var data = {
 				'action': 'fln_invite_guests',
 				'event_data': {
-					'event_id': g_event_id,
-					'additional_invites': true
+					'event_id': $('#event_id').val(),
+					'event_title': $('#event_title').val(),
+					'evcal_subtitle': $('#event_subtitle').val(),
+					'event_details': $('#event_details').val(),
+					'ics_url': $('#ics_url').val(),
+					'group': $('#group').val(),
+					'event_location': $('#event_location').val(),
+					'event_time': $('#event_time').val(),
+					'evcal_organizer': $('#evcal_organizer').val(),
+					'evcal_type': $('#event_type').val(),
+					'event_link': $('#event_link').val()
 				}
 			};
 			if( $( "#get_invite_type" ).val() === "custom_list" ) {
@@ -1252,7 +1244,16 @@ $(document).ready(function(){
 			}
 
 			jQuery.post( ajax_url, data, function( response ) {
-				console.log('event_id : ' + g_event_id );
+				console.log('event_id : ' + $('#event_id').val() );
+				console.log('event_title : ' + $('#event_title').val() );
+				console.log('evcal_subtitle : ' + $('#event_subtitle').val() );
+				console.log('event_details : ' + $('#event_details').val() );
+				console.log('ics_url : ' + $('#ics_url').val() );
+				console.log('group : ' + $('#group').val() );
+				console.log('event_location : ' + $('#event_location').val() );
+				console.log('event_time : ' + $('#event_time').val() );
+				console.log('evcal_organizer : ' + $('#evcal_organizer').val() );
+				console.log('evcal_type : ' + $('#event_type').val() );
 				$("#myModal .modal-body").removeClass( "evoloadbar" );
 				$("#myModal .modal-body").removeClass( "bottom" );
 				$("#myModal").hide();
@@ -1264,7 +1265,7 @@ $(document).ready(function(){
         });
 
       });
-    </script>
+</script>
 
 <?php 
 }
