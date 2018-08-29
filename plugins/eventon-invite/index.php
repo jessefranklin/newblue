@@ -880,7 +880,7 @@ function fln_update_notifications(){
     return;
   }
   
-  $event_id = $_POST[ 'eventId' ];
+  $event_id = intval($_POST[ 'eventId' ]);
   if(isset($event_id) && $event_id > 0){
     $flnNewBlueConnect->send_event_update_notifications( $event_id, '<div>This event has changed.<br />Please update your registration</div>');
     return true;
