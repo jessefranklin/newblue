@@ -869,7 +869,7 @@ function add_delegate() {
 			 );
 			 global $wpdb;
 			// echo "SELECT * FROM ".$wpdb->prefix ."usermeta WHERE meta_key = 'parent_user_delegate' AND  meta_value IN('".get_current_user_id()."' ";
-			 $sql = $wpdb->get_results("SELECT * FROM ".$wpdb->base_prefix ."usermeta WHERE meta_key = 'parent_user_delegate' AND  meta_value IN(".get_current_user_id().") ");
+			 $sql = $wpdb->get_results("SELECT * FROM ".$wpdb->base_prefix ."usermeta WHERE meta_key = 'parent_user_delegate' AND  FIND_IN_SET(".get_current_user_id().", meta_value)  ");
 			 
 			 //parent_user_delegate
 			 
