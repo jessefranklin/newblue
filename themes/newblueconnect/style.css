@@ -5122,7 +5122,11 @@ body .evo_search_results_count span{
   height: 0;
 }
 
-/* Custom Styles */
+/*--------------------------------------------------------------
+23.0 Custom Syles
+--------------------------------------------------------------*/
+
+/* Delegate Management */
 
 .delegation {
 	padding:20px;
@@ -5179,3 +5183,10 @@ color:#000;
 .delegation input[type="submit"]:hover{
 	background-color:#0071c5;
 }
+
+/* Muli Hosts Select - Frontend Form */
+
+#eventon_form p select.evoau_organizer_select {
+    width: 100%;
+}
+
