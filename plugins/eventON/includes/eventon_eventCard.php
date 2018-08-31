@@ -249,19 +249,30 @@ function eventon_eventcard_print($array, $EVENT, $evOPT, $evoOPT2){
 					$evcal_evcard_org = eventon_get_custom_language($evoOPT2, 'evcal_evcard_org','Host');
 
 					$ORGMeta = evo_get_term_meta('event_organizer',$object->organizer_term_id,'',true);
+					
+					$organizer_terms = wp_get_post_terms( $object->event_id , 'event_organizer' );
 
 					$img_src = (!empty($ORGMeta['evo_org_img'])?
 						wp_get_attachment_image_src($ORGMeta['evo_org_img'],'medium'): null);
 
 					$newdinwow = (!empty($ORGMeta['_evocal_org_exlink_target']) && $ORGMeta['_evocal_org_exlink_target']=='yes')? 'target="_blank"':'';
 
+					$orgNAME = '';
 					// organizer name text openinnewwindow
+					foreach($organizer_terms as $org_term){       
 						if(!empty($ORGMeta['evcal_org_exlink'])){
-							$orgNAME = "<span class='evo_card_organizer_name_t'><a ".( $newdinwow )." href='" .
-								evo_format_link($ORGMeta['evcal_org_exlink']) . "'>".$object->organizer_name."</a></span>";
-						}else{
-							$orgNAME = "<span class='evo_card_organizer_name_t'>".$object->organizer_name."</span>";
+							$orgNAME .= "<span class='evo_card_organizer_name_t'><a ".( $newdinwow )." href='" .
+								evo_format_link($ORGMeta['evcal_org_exlink']) . "'>".$org_term->name ."</a></span>";
+						}else{  
+							$orgNAME .= "<span class='evo_card_organizer_name_t'>".$org_term->name ."</span>";
 						}
+					}
+						// if(!empty($ORGMeta['evcal_org_exlink'])){
+							// $orgNAME = "<span class='evo_card_organizer_name_t'><a ".( $newdinwow )." href='" .
+								// evo_format_link($ORGMeta['evcal_org_exlink']) . "'>".$object->organizer_name."</a></span>";
+						// }else{
+							// $orgNAME = "<span class='evo_card_organizer_name_t'>".$object->organizer_name."</span>";
+						// }
 
 					$OT.= "<div class='evo_metarow_organizer evorow evcal_evdata_row bordb evcal_evrow_sm ".$end_row_class."'>
 							<span class='evcal_evdata_icons'><i class='fa ".get_eventON_icon('evcal__fai_004', 'fa-headphones',$evOPT )."'></i></span>

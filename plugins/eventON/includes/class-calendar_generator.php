@@ -7,7 +7,7 @@
  * @package		EventON/Classes
  * @category	Class
  * @author 		AJDE
- * Intel Version 1.2
+ * Intel Version 1.3
  */
 class EVO_generator {
 
@@ -1851,6 +1851,7 @@ class EVO_generator {
 						if($organizer_term_id && !$hideOrganizer_from_eventCard){
 							// organizer meta is run from eventCard.php
 							$_eventcard['organizer'] = array(
+								'event_id' => $event_id,  
 								'organizer_term_id'=>$organizer_term_id,
 								'organizer_name'=>$organizer_name
 							);
