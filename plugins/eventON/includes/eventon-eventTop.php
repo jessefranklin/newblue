@@ -182,10 +182,10 @@ function eventon_get_eventtop_print($array, $EVENT, $evOPT, $evOPT2){
 							//$location .= (!empty($object->evvals['virtual_link'][0])? ', Virtual Link : '. $object->evvals['virtual_link'][0]:null);
 						}
 						
-						if( $locationtype == 'virtual' ){
+					//	if( $locationtype == 'virtual' ){
 							//$location .= (!empty($object->evvals['off_site_address'])? 'Address : '. $object->evvals['off_site_address'][0]:null);
 							$location .= (!empty($object->evvals['virtual_link'][0])? ', Virtual Link : '. $object->evvals['virtual_link'][0]:null);
-						}
+						//}
 						
 						if(empty($object->evvals['evo_event_locationtype'][0]) && empty( $location_type_terms)){
 							$location .= (!empty($LOCname)? ', Location : '. $LOCname .
@@ -230,7 +230,9 @@ function eventon_get_eventtop_print($array, $EVENT, $evOPT, $evOPT2){
 				$OT.="<span class='evcal_desc3'>";
 
 				//organizer
-					$org = ($object->organizer_name)? $object->organizer_name: ((!empty($object->evvals['evcal_organizer']))? $object->evvals['evcal_organizer'][0]:false);
+					//$org = ($object->organizer_name)? $object->organizer_name: ((!empty($object->evvals['evcal_organizer']))? $object->evvals['evcal_organizer'][0]:false);
+					
+					$org = (!empty($object->evvals['evcal_organizer']))? $object->evvals['evcal_organizer'][0]: (($object->organizer_name)? $object->organizer_name :false);
 
 					if($object->fields_ && in_array('organizer',$object->fields) && $org){
 						$OT.="<span class='evcal_oganizer'>

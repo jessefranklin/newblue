@@ -5188,5 +5188,6 @@ color:#000;
 
 #eventon_form p select.evoau_organizer_select {
     width: 100%;
+    min-height:100px;
 }
 

@@ -1,6 +1,7 @@
 /**
  * Javascript: Eventon Active User - Front end script
  * @version  2.0.14
+ * Intel Version 1.1
  */
 jQuery(document).ready(function($){
 
@@ -399,6 +400,8 @@ jQuery(document).ready(function($){
 			option = $(this).find(':selected');
 			FORM = $(this).closest('form');
 			
+		
+			
 			var organizer = [];
 			$.each($(".evoau_organizer_select option:selected"), function(){            
 				organizer.push( $(this).text());
@@ -728,6 +731,15 @@ jQuery(document).ready(function($){
 		var originalScrollTop = $(this).parent().scrollTop();
 		console.log(originalScrollTop);
 		$(this).prop('selected', $(this).prop('selected') ? false : true);
+		option = $(this).find(':selected');
+		FORM = $(this).closest('form');
+			
+		var organizer = [];
+		$.each($(".evoau_organizer_select option:selected"), function(){            
+			organizer.push( $(this).text());
+		});
+		
+		FORM.find('input[name=evcal_organizer]').attr('value', organizer);
 		var self = this;
 		$(this).parent().focus();
 		setTimeout(function() {
