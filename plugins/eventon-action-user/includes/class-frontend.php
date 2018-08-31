@@ -2,7 +2,7 @@
 /*
  *	ActionUser front-end
  *	@version 	2.0.11
- *  Intel Version 1.0
+ *  Intel Version 1.1
  */
 
 class evoau_frontend{
