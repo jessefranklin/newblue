@@ -902,8 +902,9 @@ jQuery(document).ready(function(){
                   <p class='label'><label for='".$__field_id."'>".$__field_name.$__req."</label></p>";
 
                   if($terms_exists):      
+                  //echo '<p data-role="none"><select class="evoau_organizer_select" data-role="none">';
                   echo '<p data-role="none"><select class="evoau_organizer_select" multiple data-role="none">';
-                  echo "<option value='-'>".eventon_get_custom_language($opt_2, 'evoAUL_sso', 'Select Saved Hosts', $lang)."</option>";
+                  //echo "<option value='-'>".eventon_get_custom_language($opt_2, 'evoAUL_sso', 'Select Saved Hosts', $lang)."</option>";
 
                   // each organizer meta data
                   foreach ( $organizers as $org ) {

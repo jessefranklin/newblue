@@ -2,7 +2,7 @@
 /*
  *	ActionUser front-end
  *	@version 	2.0.11
- *  Intel Version 1.1
+ *  Intel Version 1.2
  */
 
 class evoau_frontend{
@@ -486,12 +486,13 @@ class evoau_frontend{
 			return $event_fields;
 		}
 
-	// SAVE form submittions UPON submit
-		function save_form_submissions(){
-			$status= $cu_email='';
-			if( ! array_key_exists( 'private', $_POST ) ) {
-				$_POST[ 'private' ] = 0;
-			}
+			// SAVE form submittions UPON submit
+				function save_form_submissions(){
+					$status= $cu_email='';
+					if( ! array_key_exists( 'private', $_POST ) ) {
+					$_POST[ 'private' ] = 0;
+				}
+
 			//process $_POST array
 				foreach($_POST as $ff=>$post){
 					if(!is_array($post))
@@ -801,12 +802,13 @@ class evoau_frontend{
 					if(!empty($_POST['evcal_organizer'])){
 						$taxonomy = 'event_organizer';
 						$terms = explode(",",$_POST['evcal_organizer']);
-						$data = $termID = '';
+						$data = $termID = array();
+						//$termID = array();
 						foreach($terms as $term){
 							$TERMEXIST = term_exists($term, $taxonomy);
 							// Setting the tax term to event
 								if($TERMEXIST !== 0 && $TERMEXIST !== null){
-									$termID = (int)$TERMEXIST['term_id'];
+									$termID[] = (int)$TERMEXIST['term_id'];
 								}else{
 									$slug = str_replace(' ', '-', $term);
 									$newTerm = wp_insert_term(
@@ -820,7 +822,7 @@ class evoau_frontend{
 									}
 								}							
 						}
-						wp_set_object_terms($created_event_id, $termID, $taxonomy, false);
+						wp_set_object_terms($created_event_id, $termID, $taxonomy, true);
 						//echo $termID;
 						// update/ save term meta
 						if(!empty($termID)){
