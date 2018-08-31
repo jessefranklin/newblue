@@ -59,7 +59,7 @@ class evors_email{
 				case 'confirmation':
 					$email_data['to'] = $args['email'];
 
-					$email_data['subject'] = '[#'.$args['rsvp_id'].'] '.((!empty($this->optRS['evors_notfiesubjest_e']))? 
+					$email_data['subject'] = ((!empty($this->optRS['evors_notfiesubjest_e']))? 
 					htmlspecialchars_decode($this->optRS['evors_notfiesubjest_e']): __('RSVP Confirmation','eventon'));
 					$filename = 'confirmation_email';
 					$headers = 'From: '.$from_email;
@@ -116,7 +116,7 @@ class evors_email{
 						$text = (!empty($this->optRS['evors_notfiesubjest']))? $this->optRS['evors_notfiesubjest']: 'New RSVP Notification';
 					}
 
-					$email_data['subject'] ='[#'.$args['rsvp_id'].'] '.$text;
+					$email_data['subject'] = $text;
 					$filename = 'notification_email';
 					$headers = 'From: '.$from_email. "\r\n";
 					$headers .= 'Reply-To: '.$args['email']. "\r\n";
