@@ -125,7 +125,6 @@
 				$contactLink = (!empty($optRS['evors_contact_link']))? $optRS['evors_contact_link']:site_url();
 			?>
 			<p style='<?php echo $__sty_lh.$__sty_m0;?> padding-bottom:5px;'><?php echo $eventon_rs->lang('evoRSLX_005', 'We look forward to seeing you!', $lang)?></p>
-			<p style='<?php echo $__sty_lh.$__sty_m0;?>'><a style='' href='<?php echo $contactLink;?>'><?php echo $eventon_rs->lang('evoRSLX_006', 'Contact Us for questions and concerns', $lang)?></a></p>
 		</td>
 	</tr>
 </table>
