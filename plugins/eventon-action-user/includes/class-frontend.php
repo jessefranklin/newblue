@@ -489,7 +489,9 @@ class evoau_frontend{
 	// SAVE form submittions UPON submit
 		function save_form_submissions(){
 			$status= $cu_email='';
-
+			if( ! array_key_exists( 'private', $_POST ) ) {
+				$_POST[ 'private' ] = 0;
+			}
 			//process $_POST array
 				foreach($_POST as $ff=>$post){
 					if(!is_array($post))
