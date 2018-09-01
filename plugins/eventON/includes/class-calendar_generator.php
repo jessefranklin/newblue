@@ -7,7 +7,7 @@
  * @package		EventON/Classes
  * @category	Class
  * @author 		AJDE
- * Intel Version 1.3
+ * Intel Version 1.4
  */
 class EVO_generator {
 
@@ -1839,24 +1839,34 @@ class EVO_generator {
 						}
 
 					// Event Host
-						$organizer_terms = wp_get_post_terms($event_id, 'event_organizer');
-						$organizer_term_id = $organizer_name = false;
-						if($organizer_terms && ! is_wp_error( $organizer_terms )){
-							$organizer_term_id = $organizer_terms[0]->term_id;
-							$organizer_name = $organizer_terms[0]->name;
-						}
-
-						$hideOrganizer_from_eventCard = (!empty($ev_vals['evo_evcrd_field_org']) && $ev_vals['evo_evcrd_field_org'][0] == 'yes')? true: false;
-
-						if($organizer_term_id && !$hideOrganizer_from_eventCard){
-							// organizer meta is run from eventCard.php
+						$current_organizers = explode( ',', get_post_meta( $event_id, 'evcal_organizer', true ) );
+						if( count( $current_organizers ) > 0 && is_numeric ( $current_organizers[ 0 ] ) ) {
+							$organizer_name = get_userdata( ( int ) $organizer )->data->display_name;
 							$_eventcard['organizer'] = array(
 								'event_id' => $event_id,  
-								'organizer_term_id'=>$organizer_term_id,
-								'organizer_name'=>$organizer_name
+								'organizer_term_id' => $current_organizers[ 0 ],
+								'organizer_name' => $organizer_name
 							);
-						}
+						} else {
+							$organizer_terms = wp_get_post_terms($event_id, 'event_organizer');
+							$organizer_term_id = $organizer_name = false;
+							if($organizer_terms && ! is_wp_error( $organizer_terms )){
+								$organizer_term_id = $organizer_terms[0]->term_id;
+								$organizer_name = $organizer_terms[0]->name;
+							}
 
+							$hideOrganizer_from_eventCard = (!empty($ev_vals['evo_evcrd_field_org']) && $ev_vals['evo_evcrd_field_org'][0] == 'yes')? true: false;
+
+							if($organizer_term_id && !$hideOrganizer_from_eventCard){
+								// organizer meta is run from eventCard.php
+								$_eventcard['organizer'] = array(
+									'event_id' => $event_id,  
+									'organizer_term_id'=>$organizer_term_id,
+									'organizer_name'=>$organizer_name
+								);
+							}
+						}
+							
 					// Custom fields
 						$_cmf_count = evo_retrieve_cmd_count($this->evopt1);
 						for($x =1; $x<$_cmf_count+1; $x++){

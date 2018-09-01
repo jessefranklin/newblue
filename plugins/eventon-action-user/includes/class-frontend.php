@@ -2,7 +2,7 @@
 /*
  *	ActionUser front-end
  *	@version 	2.0.11
- *  Intel Version 1.2
+ *  Intel Version 1.3
  */
 
 class evoau_frontend{
@@ -209,102 +209,135 @@ class evoau_frontend{
 		// user created events
 			function get_user_events($userid){
 				global $eventon_au;
+				global $wpdb;
+				
 				$userids = array();
 				$eventIDs = array();
 				
+				$parent_ids = get_user_meta( $userid, 'parent_user_delegate', true );
+				
 				$exe = get_userdata( $userid );
-			//	print_r($exe);            
-				$user_roles = $exe->roles[0];      
-				if($user_roles == 'delegate'){   
+				$sql = $wpdb->prepare( "
+				SELECT ID, post_title, post_status, post_author
+				FROM " . $wpdb->prefix . "posts A
+				WHERE 
+					post_type = 'ajde_events' AND
+					post_status = 'publish' AND
+					(
+						post_author = %d OR
+						/*Get events as Host*/
+						%d IN ( 
+							SELECT meta_value 
+							FROM " . $wpdb->prefix . "postmeta B 
+							WHERE meta_key = 'evcal_organizer' AND B.post_id = A.ID ) OR
+						/*Get events as Exec*/
+						%d = ( 
+							SELECT meta_value 
+							FROM " . $wpdb->prefix . "postmeta B 
+							WHERE meta_key = 'evoexec' AND B.post_id = A.ID LIMIT 1 ) OR
+						post_author IN ( %s )
+					)
+				ORDER BY ID DESC
+				", array( $exe->ID, $exe->ID, $exe->ID, $parent_ids ) );
+				//error_log( $sql );
+				$events = $wpdb->get_results( $sql );
+				//error_log( print_r( $events, true ) );
+				foreach( $events as $event ) {
+					$eventIDs[ $event->ID ] = array(
+						$event->post_title,
+						$event->post_status,
+						$event->ID
+					);
+				}
 				
-					$parent_ids = get_user_meta($userid,'parent_user_delegate',true );
+			// //	print_r($exe);            
+				// $user_roles = $exe->roles[0];      
+				// if($user_roles == 'delegate'){   
+				
+					// $parent_ids = get_user_meta($userid,'parent_user_delegate',true );
 					
-					if(!empty($parent_ids)){
-						$aparent_id = explode(",",$parent_ids);
-						foreach($aparent_id as $parent_id){
-							$userids[]= $parent_id;
-						}
+					// if(!empty($parent_ids)){
+						// $aparent_id = explode(",",$parent_ids);
+						// foreach($aparent_id as $parent_id){
+							// $userids[]= $parent_id;
+						// }
 						
 						
-						// events created by the user
-						$events = new WP_Query(array(
-							'post_type'=>'ajde_events',
-							'posts_per_page'=>-1,
-							'post_status'=>'any',
-							'meta_key '=> 'evoexec',
-							'meta_value' => $aparent_id,
-							'meta_compare' => 'IN'
-						));
+						// // events created by the user
+						// $events = new WP_Query(array(
+							// 'post_type'=>'ajde_events',
+							// 'posts_per_page'=>-1,
+							// 'post_status'=>'any',
+							// 'meta_key '=> 'evoexec',
+							// 'meta_value' => $aparent_id,
+							// 'meta_compare' => 'IN'
+						// ));
 
 						
 						
 
-						if($events->have_posts()){
-							while($events->have_posts()): $events->the_post();
-								$eventIDs[$events->post->ID] = array(
-									$events->post->post_title,
-									$events->post->post_status,
-									$events->post->ID
-								);
-							endwhile;
-							wp_reset_postdata();
-						}
+						// if($events->have_posts()){
+							// while($events->have_posts()): $events->the_post();
+								// $eventIDs[$events->post->ID] = array(
+									// $events->post->post_title,
+									// $events->post->post_status,
+									// $events->post->ID
+								// );
+							// endwhile;
+							// wp_reset_postdata();
+						// }
 
-						//$userid = $parent_id;
+						// //$userid = $parent_id;
 						
-					}
+					// }
 				
-				}else if($user_roles == 'exec'){ 
+				// }else if($user_roles == 'exec'){ 
 				
-					// events created by the user
-						$events = new WP_Query(array(
-							'post_type'=>'ajde_events',
-							'posts_per_page'=>-1,
-							'post_status'=>'any',
-							'meta_key '=> 'evoexec',
-							'meta_value' => $userid,
-							'meta_compare' => '='
-						));
+					// // events created by the user
+						// $events = new WP_Query(array(
+							// 'post_type'=>'ajde_events',
+							// 'posts_per_page'=>-1,
+							// 'post_status'=>'any',
+							// 'meta_key '=> 'evoexec',
+							// 'meta_value' => $userid,
+							// 'meta_compare' => '='
+						// ));
 
-						
-						
+						// if($events->have_posts()){
+							// while($events->have_posts()): $events->the_post();
+								// $eventIDs[$events->post->ID] = array(
+									// $events->post->post_title,
+									// $events->post->post_status,
+									// $events->post->ID
+								// );
+							// endwhile;
+							// wp_reset_postdata();
+						// }
+						// //print_r($eventIDs);
+				// }
+				
+				
+				
+				// $userids[] = $userid;
+				
+				// // events created by the user
+				// $events = new WP_Query(array(
+					// 'post_type'=>'ajde_events',
+					// 'posts_per_page'=>-1,
+					// 'post_status'=>'any',
+					// 'author__in'=> $userids
+				// ));
 
-						if($events->have_posts()){
-							while($events->have_posts()): $events->the_post();
-								$eventIDs[$events->post->ID] = array(
-									$events->post->post_title,
-									$events->post->post_status,
-									$events->post->ID
-								);
-							endwhile;
-							wp_reset_postdata();
-						}
-						//print_r($eventIDs);
-				
-				}
-				
-				
-				
-				$userids[] = $userid;
-				
-				// events created by the user
-				$events = new WP_Query(array(
-					'post_type'=>'ajde_events',
-					'posts_per_page'=>-1,
-					'post_status'=>'any',
-					'author__in'=> $userids
-				));
-
-				if($events->have_posts()){
-					while($events->have_posts()): $events->the_post();
-						$eventIDs[$events->post->ID] = array(
-							$events->post->post_title,
-							$events->post->post_status,
-							$events->post->ID
-						);
-					endwhile;
-					wp_reset_postdata();
-				}
+				// if($events->have_posts()){
+					// while($events->have_posts()): $events->the_post();
+						// $eventIDs[$events->post->ID] = array(
+							// $events->post->post_title,
+							// $events->post->post_status,
+							// $events->post->ID
+						// );
+					// endwhile;
+					// wp_reset_postdata();
+				// }
 
 				if(evo_settings_check_yn($this->evoau_opt, 'evoau_assigned_emanager')){
 
@@ -368,7 +401,7 @@ class evoau_frontend{
 					'event_location_cord'=>array('Event Location Coordinates (lat,lon Seperated by comma)', 'event_location_cord', 'text','','evoAUL_lcor'),
 					'event_location_link'=>array('Event Location Link', 'evcal_location_link', 'text','','evoAUL_llink'),
 				'event_color'=>array('Event Color', 'evcal_event_color', 'color','','evoAUL_ec'),
-				'event_organizer_select'=>array('Event Host Fields', 'evcal_organizer_select', 'organizerselect','','evoAU_pseod'),
+				'event_organizer_select'=>array('Additional Event Host(s)', 'evcal_organizer_select', 'organizerselect','','evoAU_pseod'),
 					'event_organizer'=>array('Event Host', 'evcal_organizer', 'text','','evoAUL_eo'),
 					'event_org_contact'=>array('Event Host Contact Information', 'evcal_org_contact', 'text','','evoAUL_eoc'),
 					'event_org_address'=>array('Event Host Address', 'evcal_org_address', 'text','','evoAUL_eoa'),
@@ -487,12 +520,12 @@ class evoau_frontend{
 		}
 
 			// SAVE form submittions UPON submit
-				function save_form_submissions(){
-					$status= $cu_email='';
-					if( ! array_key_exists( 'private', $_POST ) ) {
+			function save_form_submissions(){
+				$status= $cu_email='';
+				if( ! array_key_exists( 'private', $_POST ) ) {
 					$_POST[ 'private' ] = 0;
 				}
-
+				
 			//process $_POST array
 				foreach($_POST as $ff=>$post){
 					if(!is_array($post))
@@ -799,45 +832,45 @@ class evoau_frontend{
 					}
 
 				// save organizer as taxonomy
-					if(!empty($_POST['evcal_organizer'])){
-						$taxonomy = 'event_organizer';
-						$terms = explode(",",$_POST['evcal_organizer']);
-						$data = $termID = array();
-						//$termID = array();
-						foreach($terms as $term){
-							$TERMEXIST = term_exists($term, $taxonomy);
-							// Setting the tax term to event
-								if($TERMEXIST !== 0 && $TERMEXIST !== null){
-									$termID[] = (int)$TERMEXIST['term_id'];
-								}else{
-									$slug = str_replace(' ', '-', $term);
-									$newTerm = wp_insert_term(
-										$term, // the term
-										$taxonomy, // the taxonomy
-										array(	'slug'=>$slug 	)
-									);
-									if(!is_wp_error($newTerm)){
-										$termID[] = (int)$newTerm['term_id'];
+					// if(!empty($_POST['evcal_organizer'])){
+						// $taxonomy = 'event_organizer';
+						// $terms = explode(",",$_POST['evcal_organizer']);
+						// $data = $termID = array();
+						// //$termID = array();
+						// foreach($terms as $term){
+							// $TERMEXIST = term_exists($term, $taxonomy);
+							// // Setting the tax term to event
+								// if($TERMEXIST !== 0 && $TERMEXIST !== null){
+									// $termID[] = (int)$TERMEXIST['term_id'];
+								// }else{
+									// $slug = str_replace(' ', '-', $term);
+									// $newTerm = wp_insert_term(
+										// $term, // the term
+										// $taxonomy, // the taxonomy
+										// array(	'slug'=>$slug 	)
+									// );
+									// if(!is_wp_error($newTerm)){
+										// $termID[] = (int)$newTerm['term_id'];
 										
-									}
-								}							
-						}
-						wp_set_object_terms($created_event_id, $termID, $taxonomy, true);
-						//echo $termID;
-						// update/ save term meta
-						if(!empty($termID)){
-							if($taxonomy =='event_organizer'){
-								$term_meta = array();
+									// }
+								// }							
+						// }
+						// wp_set_object_terms($created_event_id, $termID, $taxonomy, true);
+						// //echo $termID;
+						// // update/ save term meta
+						// if(!empty($termID)){
+							// if($taxonomy =='event_organizer'){
+								// $term_meta = array();
 
-								if(isset($_POST['evcal_org_contact'])) $term_meta['evcal_org_contact'] = $_POST['evcal_org_contact'];
-								if(isset($_POST['evcal_org_address'])) $term_meta['evcal_org_address'] = $_POST['evcal_org_address'];
-								if(isset($_POST['evcal_org_exlink'])) $term_meta['evcal_org_exlink'] = $_POST['evcal_org_exlink'];
+								// if(isset($_POST['evcal_org_contact'])) $term_meta['evcal_org_contact'] = $_POST['evcal_org_contact'];
+								// if(isset($_POST['evcal_org_address'])) $term_meta['evcal_org_address'] = $_POST['evcal_org_address'];
+								// if(isset($_POST['evcal_org_exlink'])) $term_meta['evcal_org_exlink'] = $_POST['evcal_org_exlink'];
 
-								evo_save_term_metas($taxonomy, $termID, $term_meta);
-							}
-						}
-						//$this->set_new_term($_POST['evcal_organizer'], 'event_organizer', $created_event_id);
-					}
+								// evo_save_term_metas($taxonomy, $termID, $term_meta);
+							// }
+						// }
+						// //$this->set_new_term($_POST['evcal_organizer'], 'event_organizer', $created_event_id);
+					// }
 
 				// OTHER eventon addon intergration
 					// Reviewer addon

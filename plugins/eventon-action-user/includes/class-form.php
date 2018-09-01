@@ -2,7 +2,7 @@
 /**
 * Evoau front end submission form
 * @version 2.1.6
-* @ Intel version 1.2
+* @ Intel version 1.3
 */
 class evoau_form{
 
@@ -880,24 +880,32 @@ jQuery(document).ready(function(){
 
                   break;
                   case 'organizerselect':
-                  $allow_add_new = (!empty($evoopt['evoau_allow_new']) && $evoopt['evoau_allow_new']=='yes')?true:false;
+                  //$allow_add_new = (!empty($evoopt['evoau_allow_new']) && $evoopt['evoau_allow_new']=='yes')?true:false;
+					$allow_add_new = false;
+                  //$organizers = get_terms('event_organizer' , array('hide_empty'=>false));
+				  $organizers = get_users( 'role=exec' );
 
-                  $organizers = get_terms('event_organizer' , array('hide_empty'=>false));
                   $terms_exists = ( ! empty( $organizers ) && ! is_wp_error( $organizers ) )? true:false;
 
                   // if no terms and can not add new
                   if(!$terms_exists && !$allow_add_new) break;
 
                   // if organizer tax saved before
-                  $organizer_terms = !empty($event_id)? wp_get_post_terms($event_id, 'event_organizer'):'';
-                  $termMeta = $evo_organizer_tax_id = '';
-                  if ( $organizer_terms && ! is_wp_error( $organizer_terms ) ){
-                    $evo_organizer_tax_id =  $organizer_terms[0]->term_id;
+                  //$organizer_terms = !empty($event_id)? wp_get_post_terms($event_id, 'event_organizer'):'';
+                  //$termMeta = $evo_organizer_tax_id = '';
+                  // if ( $organizer_terms && ! is_wp_error( $organizer_terms ) ){
+                  //   $evo_organizer_tax_id =  $organizer_terms[0]->term_id;
 
-                    //$termMeta = get_option( "taxonomy_$evo_organizer_tax_id");
-                    $termMeta = evo_get_term_meta('event_organizer',$evo_organizer_tax_id, '', true);
-                  }
+                  //    //$termMeta = get_option( "taxonomy_$evo_organizer_tax_id");
+                  //   $termMeta = evo_get_term_meta('event_organizer',$evo_organizer_tax_id, '', true);
+                  // }
 
+				if( ! empty( $event_id ) ) {
+					$current_organizers = explode( ',', get_post_meta( $event_id, 'evcal_organizer', true ) );
+				} else {
+					$current_organizers = array();
+				}
+				  
                   echo "<div class='row organizerSelect'>
                   <p class='label'><label for='".$__field_id."'>".$__field_name.$__req."</label></p>";
 
@@ -905,27 +913,31 @@ jQuery(document).ready(function(){
                   //echo '<p data-role="none"><select class="evoau_organizer_select" data-role="none">';
                   echo '<p data-role="none"><select class="evoau_organizer_select" multiple data-role="none">';
                   //echo "<option value='-'>".eventon_get_custom_language($opt_2, 'evoAUL_sso', 'Select Saved Hosts', $lang)."</option>";
-
+					
                   // each organizer meta data
                   foreach ( $organizers as $org ) {
                     //$taxmeta = get_option("taxonomy_".$org->term_id);
-                    $taxmeta = evo_get_term_meta('event_organizer',$org->term_id, '', true);
+                    //$taxmeta = evo_get_term_meta('event_organizer',$org->term_id, '', true);
 
-                    $__selected = ($evo_organizer_tax_id== $org->term_id)? "selected='selected'":null;
-
+                    //$__selected = ($evo_organizer_tax_id== $org->term_id)? "selected='selected'":null;
+					if( in_array( $org->ID, $current_organizers ) ) {
+						$__selected = "selected='selected'";
+					} else {
+						$__selected = '';
+					}
                     // select option attributes
-                    $data = array(
-                    'contact'=>(!empty($taxmeta['evcal_org_contact'])?$taxmeta['evcal_org_contact']:''),
-                    'img'=>(!empty($taxmeta['evo_org_img'])? $taxmeta['evo_org_img']:''),
-                    'exlink'=>(!empty($taxmeta['evcal_org_exlink'])?$taxmeta['evcal_org_exlink']:''),
-                    'address'=>(!empty($taxmeta['evcal_org_address'])?$taxmeta['evcal_org_address']:''),
-                    );
+                    //$data = array(
+                    //'contact'=>(!empty($taxmeta['evcal_org_contact'])?$taxmeta['evcal_org_contact']:''),
+                    //'img'=>(!empty($taxmeta['evo_org_img'])? $taxmeta['evo_org_img']:''),
+                    //'exlink'=>(!empty($taxmeta['evcal_org_exlink'])?$taxmeta['evcal_org_exlink']:''),
+                    //'address'=>(!empty($taxmeta['evcal_org_address'])?$taxmeta['evcal_org_address']:''),
+                    //);
                     $datastr = '';
-                    foreach($data as $f=>$v){
-                      $datastr.= ' data-'.$f.'="'.$v.'"';
-                    }
+                    //foreach($data as $f=>$v){
+                    //  $datastr.= ' data-'.$f.'="'.$v.'"';
+                    //}
 
-                    echo "<option value='{$org->term_id}' {$datastr} {$__selected}>" . $org->name . '</option>';
+                    echo "<option value='{$org->ID}' {$datastr} {$__selected}>" . $org->data->display_name . '</option>';
                   }
 
                   $fields = EVOAU()->frontend->au_form_fields();

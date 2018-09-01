@@ -2,6 +2,7 @@
 /**
  * event card content processed and output as html
  * @version 2.5.4
+ * Intel Version 1.0
  */
 function eventon_eventcard_print($array, $EVENT, $evOPT, $evoOPT2){
 	global $eventon;
@@ -37,7 +38,7 @@ function eventon_eventcard_print($array, $EVENT, $evOPT, $evoOPT2){
 		//echo($box_f.' ');
 		//print_r($object);
 		//$OT.="".$items.'-'.$count." ".$box_f;
-
+		error_log( $box_f );
 		// each eventcard type
 		switch($box_f){
 
@@ -247,32 +248,53 @@ function eventon_eventcard_print($array, $EVENT, $evOPT, $evoOPT2){
 			// event organizer
 				case 'organizer':
 					$evcal_evcard_org = eventon_get_custom_language($evoOPT2, 'evcal_evcard_org','Host');
+					error_log( '===========organizer=================' );
+					$current_organizers = explode( ',', get_post_meta( $object->event_id, 'evcal_organizer', true ) );
+					if( count( $current_organizers ) > 0 && is_numeric ( $current_organizers[ 0 ] ) ) {
+						$ORGMeta = array( 
+							'evcal_org_contact' => '',
+							'evcal_org_address' => '',
+							'evcal_org_exlink' => '',
+							'_evocal_org_exlink_target' => ''
+						);
 
-					$ORGMeta = evo_get_term_meta('event_organizer',$object->organizer_term_id,'',true);
-					
-					$organizer_terms = wp_get_post_terms( $object->event_id , 'event_organizer' );
-
-					$img_src = (!empty($ORGMeta['evo_org_img'])?
-						wp_get_attachment_image_src($ORGMeta['evo_org_img'],'medium'): null);
-
-					$newdinwow = (!empty($ORGMeta['_evocal_org_exlink_target']) && $ORGMeta['_evocal_org_exlink_target']=='yes')? 'target="_blank"':'';
-
-					$orgNAME = '';
-					// organizer name text openinnewwindow
-					foreach($organizer_terms as $org_term){       
-						if(!empty($ORGMeta['evcal_org_exlink'])){
-							$orgNAME .= "<span class='evo_card_organizer_name_t'><a ".( $newdinwow )." href='" .
-								evo_format_link($ORGMeta['evcal_org_exlink']) . "'>".$org_term->name ."</a></span>";
-						}else{  
-							$orgNAME .= "<span class='evo_card_organizer_name_t'>".$org_term->name ."</span>";
+						$newdinwow = '';
+						if( ! empty( $ORGMeta[ '_evocal_org_exlink_target'] ) && $ORGMeta[ '_evocal_org_exlink_target' ] == 'yes' ) {
+							$newdinwow = 'target="_blank"';
 						}
-					}
-						// if(!empty($ORGMeta['evcal_org_exlink'])){
-							// $orgNAME = "<span class='evo_card_organizer_name_t'><a ".( $newdinwow )." href='" .
-								// evo_format_link($ORGMeta['evcal_org_exlink']) . "'>".$object->organizer_name."</a></span>";
-						// }else{
-							// $orgNAME = "<span class='evo_card_organizer_name_t'>".$object->organizer_name."</span>";
-						// }
+
+						$current_organizers = explode( ',', get_post_meta( $object->event_id, 'evcal_organizer', true ) );
+						$orgNAME = '';
+						foreach( $current_organizers as $organizer ) {
+							$organizer_name = get_userdata( ( int ) $organizer )->data->display_name;
+							 if( ! empty( $ORGMeta[ 'evcal_org_exlink' ] ) ) {
+								 $orgNAME .= "<span class='evo_card_organizer_name_t'><a " . ( $newdinwow ) . " href='" .
+									 evo_format_link( $ORGMeta[ 'evcal_org_exlink' ] ) . "'>" . $organizer_name ."</a></span>";
+							 } else {  
+								 $orgNAME .= "<span class='evo_card_organizer_name_t'>". $organizer_name . "</span>";
+							 }
+						}
+					} else {
+						$ORGMeta = evo_get_term_meta('event_organizer',$object->organizer_term_id,'',true);
+						
+						$organizer_terms = wp_get_post_terms( $object->event_id , 'event_organizer' );
+
+						$img_src = (!empty($ORGMeta['evo_org_img'])?
+							wp_get_attachment_image_src($ORGMeta['evo_org_img'],'medium'): null);
+
+						$newdinwow = (!empty($ORGMeta['_evocal_org_exlink_target']) && $ORGMeta['_evocal_org_exlink_target']=='yes')? 'target="_blank"':'';
+
+						$orgNAME = '';
+						// organizer name text openinnewwindow
+						foreach($organizer_terms as $org_term){       
+							if(!empty($ORGMeta['evcal_org_exlink'])){
+								$orgNAME .= "<span class='evo_card_organizer_name_t'><a ".( $newdinwow )." href='" .
+									evo_format_link($ORGMeta['evcal_org_exlink']) . "'>".$org_term->name ."</a></span>";
+							}else{  
+								$orgNAME .= "<span class='evo_card_organizer_name_t'>".$org_term->name ."</span>";
+							}
+						}
+					}					
 
 					$OT.= "<div class='evo_metarow_organizer evorow evcal_evdata_row bordb evcal_evrow_sm ".$end_row_class."'>
 							<span class='evcal_evdata_icons'><i class='fa ".get_eventON_icon('evcal__fai_004', 'fa-headphones',$evOPT )."'></i></span>
@@ -294,7 +316,7 @@ function eventon_eventcard_print($array, $EVENT, $evOPT, $evoOPT2){
 								$OT .= "</div><div class='clear'></div>
 							</div>
 						".$end."</div>";
-
+						error_log( $OT );
 				break;
 
 			// get directions

@@ -1,7 +1,7 @@
 /**
  * Javascript: Eventon Active User - Front end script
  * @version  2.0.14
- * Intel Version 1.1
+ * Intel Version 1.2
  */
 jQuery(document).ready(function($){
 
@@ -404,7 +404,7 @@ jQuery(document).ready(function($){
 			
 			var organizer = [];
 			$.each($(".evoau_organizer_select option:selected"), function(){            
-				organizer.push( $(this).text());
+				organizer.push( $(this).val());
 			});
 		
 
@@ -736,7 +736,7 @@ jQuery(document).ready(function($){
 			
 		var organizer = [];
 		$.each($(".evoau_organizer_select option:selected"), function(){            
-			organizer.push( $(this).text());
+			organizer.push( $(this).val() );
 		});
 		
 		FORM.find('input[name=evcal_organizer]').attr('value', organizer);
