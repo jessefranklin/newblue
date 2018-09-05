@@ -1136,3 +1136,41 @@ if($user_roles == 'delegate'){
 <?php
 }
 }
+
+// Set Goals
+add_thickbox();
+
+// To add Set Goals Button
+function addBottonEventTitle($title) {
+    if (is_page('my-events') && current_user_can('administrator') && $title == 'My Events') {
+		wp_enqueue_script( 'setgoal', get_template_directory_uri().'/js/setgoal.js', array( 'jquery' ) );
+		wp_localize_script( 'setgoal', 'set_goals', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
+		
+		$html 	= '<div id="customsetgoal" style="display:none;"><p style="color:#000">Please enter a new goal <input id="setGoalInput" type="text" name="setGoal" value="" /><a href="javascript:void(0);" class="evcal_btn evoau" id="saveGoal">Save</a></p></div>';
+		$title = $title . $html .'<a href="#TB_inline?inlineId=customsetgoal" style="float:right; display:none;" class="evcal_btn evoau button-set-goals thickbox">Set Goals</a>';
+    }
+    return $title;
+}
+add_filter( 'the_title', 'addBottonEventTitle', 10, 2 );
+
+// Ajax to set no. of goals
+add_action( 'wp_ajax_nopriv_set-goals', 'set_goals' );
+add_action( 'wp_ajax_set-goals', 'set_goals' );
+
+function set_goals()
+{
+	if(current_user_can('administrator')){
+		$goals = $_POST['goals'];
+		update_option( 'custom_goals', $goals);
+	}
+	exit();
+}
+
+// Shortcode to show goals to user with role Exec 
+function show_goals_func( $atts ) {
+	if(current_user_can('administrator') || current_user_can('exec')){
+		$goals 	= get_option('custom_goals');
+		return "<span style='float:right'>Goal: Create <span class='goalsNo'>$goals</span> Events</span>";
+	}
+}
+add_shortcode( 'show_goals', 'show_goals_func' );
