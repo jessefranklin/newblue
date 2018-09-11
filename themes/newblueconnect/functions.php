@@ -598,68 +598,68 @@ require get_parent_theme_file_path( '/inc/customizer.php' );
 require get_parent_theme_file_path( '/inc/icon-functions.php' );
 
 
-   
-// add_action( 'edit_terms', 'save_event_location', 10, 2 ); 
+
+// add_action( 'edit_terms', 'save_event_location', 10, 2 );
 
 // function save_event_location( $term_id, $taxonomy ){
-  
-   // if($taxonomy == 'event_location'){	   
+
+   // if($taxonomy == 'event_location'){
 	   // if(isset($_POST['fields'])){
 		 // //  print_r($_POST['fields']);
 		   // update_term_meta($term_id, 'event_region', $_POST['fields']['field_5b7137500c2dd']);
 	   // }
-   // }    
+   // }
 
 // }
 
-function event_location_add_custom_field($term) { 
+function event_location_add_custom_field($term) {
 	$t_id = $term->term_id;
-	echo $term_region = get_term_meta( $t_id, 'region', true );    
+	echo $term_region = get_term_meta( $t_id, 'region', true );
             ?>
 			<script>
 			jQuery(document).ready(function(){
 				var region = '<?php echo $term_region; ?>';
 				//alert('<?php echo $term_region; ?>');
 				//$("#evoregion option[value:<?php echo $term_region; ?>]").prop("selected", true);
-				if(region){   
+				if(region){
 					$("#evoregion option").each(function(){
 						if($(this).val().indexOf("<?php echo $term_region; ?>") != -1){
 							$(this).prop("selected", true)
 						}
 					});
 				}
-				
+
 			//	jQuery('evoregion').attr('id', 'yourid');
 			});
 			</script>
-           <tr class="form-field">  
-				<th scope="row" valign="top">  
-					<label for="evoregion">Event Region</label>  
-				</th>  
-				<td>  
-					<select class="form-control" id="evoregion" name="evoregion" style="width: 95%;">				   
+           <tr class="form-field">
+				<th scope="row" valign="top">
+					<label for="evoregion">Event Region</label>
+				</th>
+				<td>
+					<select class="form-control" id="evoregion" name="evoregion" style="width: 95%;">
 						<option value="" selected="selected">Select Region</option>
-						<?php 
+						<?php
 						$taxonomy = 'event_type_3';
 						$args = array(
 							'parent' => 0,
 							'hide_empty' => false				// to get only parent terms
 						);
 						$terms = get_terms( $taxonomy, $args );
-						
+
 							foreach ( $terms as $term) {
 								$args1 = array(
 									'parent' => $term->term_id,
-									'hide_empty' => false	
+									'hide_empty' => false
 								);
 								$terms1 = get_terms( 'event_type_3', $args1);
-								echo '<optgroup label="'.$term->name .'">';   
+								echo '<optgroup label="'.$term->name .'">';
 								foreach ( $terms1 as $term1) {
 									echo '<option value="'.$term1->term_id .'">'.$term1->name .'</option>';
 								}
-							
+
 							}
-							
+
 						?>
 						<!--<optgroup label="AMR">
 							<option value="Argentina, Cordoba">Argentina, Cordoba</option>
@@ -726,38 +726,38 @@ function event_location_add_custom_field($term) {
 							<option value="Sweden, DRT">Sweden, DRT</option>
 							<option value="Sweden, Kista">Sweden, Kista</option>
 							<option value="UK, Swindon">UK, Swindon</option>
-						</optgroup>  
-						<optgroup label="Other">	
+						</optgroup>
+						<optgroup label="Other">
 							<option value="Virtual">Virtual</option>
 							<option value="Off-Site">Off-Site</option>
-						</optgroup>  -->   
-					</select>			
-				</td>  
-			</tr>    
+						</optgroup>  -->
+					</select>
+				</td>
+			</tr>
         <?php
         }
 add_action( 'event_location_add_form_fields', 'event_location_add_custom_field', 10, 2 );
-add_action( 'event_location_edit_form_fields', 'event_location_add_custom_field', 10, 8 ); 
+add_action( 'event_location_edit_form_fields', 'event_location_add_custom_field', 10, 8 );
 
 function save_event_region( $term_id ) {
-	
+
 	if ( isset( $_POST['evoregion'] ) ) {
 		$term_region = $_POST['evoregion'];
 		if( $term_region ) {
 			 update_term_meta( $term_id, 'region', $term_region );
 			// wp_set_post_terms( $term_id, array(  intval($_POST['evoregion']) ), 'event_type_3' );
 		}
-	} 
-		
-}  
-add_action( 'edited_event_location', 'save_event_region' );  
+	}
+
+}
+add_action( 'edited_event_location', 'save_event_region' );
 add_action( 'create_event_location', 'save_event_region' );
 
 
 add_action('wp_ajax_get_event_location', 'get_event_location');
 
 function get_event_location(){
-	  
+
 	global $wpdb;
 	echo '<option value="">Select Location</option>';
 	if(!empty($_POST['region'])){
@@ -765,7 +765,7 @@ function get_event_location(){
 		$sql = $wpdb->get_results("select t.* from $wpdb->terms t left join $wpdb->termmeta t1 on t.term_id= t1.term_id where t1.meta_key LIKE '%region%' and meta_value = '".$_POST['region']."'");
 		$loc= array();
 
-		
+
 		foreach($sql as $val){
 			// $loc['name'] = $val->name;
 			// $loc['slug'] = $val->slug;
@@ -774,12 +774,12 @@ function get_event_location(){
 			if($val->term_id == 57 || $val->term_id == 58 ){
 				$sel = "selected";
 			}
-		
-				
+
+
 			echo '<option value="'.$val->term_id.'" '. $sel .'>'.$val->name .'</option>';
 		}
 	}
-	
+
 	//echo json_encode($array);
 	die();
 }
@@ -830,20 +830,20 @@ if(function_exists("register_field_group"))
 function add_delegate() {
 	ob_start();
 	global $wpdb;
-	
-	if(is_user_logged_in() && current_user_can('administrator') || current_user_can('exec')) : 
-	
+
+	if(is_user_logged_in() && current_user_can('administrator') || current_user_can('exec')) :
+
 	?>
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.css">
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.js"></script>
 		<h3 class="my-delegates">My Delegates</h3>
-		
+
 		<div class="delegation">
 			<p>Delegates are individuals who can <a href="/create-an-event">Create An Event</a> on your behalf</p>
-			
+
 			<h4>ADD A NEW DELEGATE</h4>
-			
+
 			<form action="">
 			Username: <input type="text" id="delegate-id" name="delname"><input type="submit" value="Save Delegate" id="savedelegate">
 			</form>
@@ -858,48 +858,48 @@ function add_delegate() {
 			//echo get_current_user_id();
 			//$all_meta_for_user = get_user_meta( get_current_user_id() ,'parent_user_delegate');
 			//$exec = $all_meta_for_user[0];
-		//	print_r($exec);   
+		//	print_r($exec);
 			$args = array(
 				'role'         => 'delegate',
-				'count_total'  => false,      
-				'meta_key'     => 'parent_user_delegate', 
+				'count_total'  => false,
+				'meta_key'     => 'parent_user_delegate',
 				'meta_value'   => get_current_user_id(),
 				'meta_compare' => 'IN'
-				
+
 			 );
 			 global $wpdb;
 			// echo "SELECT * FROM ".$wpdb->prefix ."usermeta WHERE meta_key = 'parent_user_delegate' AND  meta_value IN('".get_current_user_id()."' ";
 			 $sql = $wpdb->get_results("SELECT * FROM ".$wpdb->base_prefix ."usermeta WHERE meta_key = 'parent_user_delegate' AND  FIND_IN_SET(".get_current_user_id().", meta_value)  ");
-			 
+
 			 //parent_user_delegate
-			 
-			//$delegates = get_users( $args ); 
-			//  print_r($delegates);     
+
+			//$delegates = get_users( $args );
+			//  print_r($delegates);
 			foreach($sql as $delegates){
-				
+
 				//echo $delegates->user_id;
 				$delegate = get_userdata( $delegates->user_id );
-				//print_r($delegate);   
+				//print_r($delegate);
 				//$user_roles = $user_data->roles;
 				echo '<li data-id="'.$delegate->ID.'" class="delegate_'.$delegate->ID.'"><subtitle>'.$delegate->display_name.'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'. $delegate->user_email.'</subtitle><a class="fa fa-trash"></a></li>';
 			}
 			?>
 			</ul>
-			
+
 		</div>
-		
+
 		<script>
 		jQuery('#savedelegate').click(function (e) {
 			e.preventDefault();
 			jQuery('.olive').hide();
 			jQuery('.red').hide();
-			var ajax_url = '<?php echo admin_url( 'admin-ajax.php' ); ?>';			
+			var ajax_url = '<?php echo admin_url( 'admin-ajax.php' ); ?>';
 			var name = jQuery('#delegate-id').val();
 			var data = {
 				'action': 'check_delegate',
-				'delegate': name,    
+				'delegate': name,
 			};
-		
+
 			jQuery.ajax({
 				url:ajax_url,
 				type:'POST',
@@ -907,42 +907,42 @@ function add_delegate() {
 				dataType: "json",
 				success:function(response) {
 					console.log(response);
-					//alert(response.msg);  
+					//alert(response.msg);
 					if(response.msg == 'success'){
 						jQuery('.olive').show();
-						jQuery('#delegate-id').val('');  
-						var strToAdd = '<li data-id="'+response.Id+'" class="delegate_'+response.Id+'"><subtitle>'+response.name+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+response.email+'</subtitle><a class="fa fa-trash"></a></li>';     
+						jQuery('#delegate-id').val('');
+						var strToAdd = '<li data-id="'+response.Id+'" class="delegate_'+response.Id+'"><subtitle>'+response.name+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+response.email+'</subtitle><a class="fa fa-trash"></a></li>';
 						jQuery(strToAdd).prependTo('.delegate-list');
-						   
-						remove_delegates();   
-		
+
+						remove_delegates();
+
 					}else{
 						jQuery('.red').html(response.msg);
 						jQuery('.red').show();
 					}
-					
+
 				}
         });
-		
-		
-		});   
+
+
+		});
 
 function remove_delegates(){
 	jQuery('.fa-trash').click(function (e) {
 		e.preventDefault();
-		jQuery('.olive').hide();    
+		jQuery('.olive').hide();
 		jQuery('.red').hide();
-		var ajax_url = '<?php echo admin_url( 'admin-ajax.php' ); ?>';			
-		var id = jQuery(this).closest('li').data('id'); 
+		var ajax_url = '<?php echo admin_url( 'admin-ajax.php' ); ?>';
+		var id = jQuery(this).closest('li').data('id');
 		var data = {
 			'action': 'delete_delegate',
-			'delegate': id,    
-		};   
-		var li = jQuery(this).closest('li'); 
-		
-		if(confirm("Are you sure that you would like to remove the Delegate?")) { 
+			'delegate': id,
+		};
+		var li = jQuery(this).closest('li');
 
-			
+		if(confirm("Are you sure that you would like to remove the Delegate?")) {
+
+
 			jQuery.ajax({
 			url:ajax_url,
 			type:'POST',
@@ -950,92 +950,92 @@ function remove_delegates(){
 			dataType: "json",
 			success:function(response) {
 				console.log(response);
-				//alert(response.msg);   
-				if(response.msg == 'success'){  
-					li.remove(); 
+				//alert(response.msg);
+				if(response.msg == 'success'){
+					li.remove();
 				}
 			}
 			});
-			
+
 		}
 	});
-}		
-		
-remove_delegates();   
+}
+
+remove_delegates();
 </script>
 
-	<?php endif; 
-	
+	<?php endif;
+
 	$output = ob_get_clean();
 	return $output;
 }
-add_shortcode( 'add_delegate', 'add_delegate' );   
+add_shortcode( 'add_delegate', 'add_delegate' );
 
 add_action('wp_ajax_check_delegate', 'check_delegate');
 
 function check_delegate(){
-	//print_r($_POST);   
+	//print_r($_POST);
 	$email = $_POST['delegate'];
 	$email = trim($email," ");
 	if ( email_exists( $email ) ){
-		
+
 		$user = email_exists( $email );
 		$user_data = get_userdata( $user );
 		$user_roles = $user_data->roles;
-		//print_r($user_data);    
-			
+		//print_r($user_data);
+
 		$all_meta_for_user = get_user_meta( $user ,'parent_user_delegate');
 		$exec = $all_meta_for_user[0];
 		//$arr = array_push($exec, get_current_user_id());
-		//echo get_current_user_id();    
+		//echo get_current_user_id();
 		//print_r($exec);
 		//die();
-		
+
 		$exec1 = explode(",",$exec);
-		
+
 		//print_r($exec1);
 		//die();
-		
+
 		if(in_array( get_current_user_id(), $exec1) ){
-			 $data['msg'] = 'Delegate User already exists.'; 
-		}else{   
-			
+			 $data['msg'] = 'Delegate User already exists.';
+		}else{
+
 			$user_id = wp_update_user( array( 'ID' => $user, 'role' => 'delegate' ) );
-			//$exec[] = get_current_user_id(); 
+			//$exec[] = get_current_user_id();
 			//print_r($exec);
 			//die();
-			
-			$exec .= ','.get_current_user_id();  
-			$exec =	ltrim($exec,",");			
+
+			$exec .= ','.get_current_user_id();
+			$exec =	ltrim($exec,",");
 			update_user_meta($user_id, 'parent_user_delegate',$exec );
 			if ( is_wp_error( $user_id ) ) {
-				$data['msg'] = 'Failed'; 
+				$data['msg'] = 'Failed';
 			} else {
-				$data['msg'] = 'success';  
+				$data['msg'] = 'success';
 				$data['Id'] = $user;
 				$data['email'] = $user_data->user_email;
-				$data['name'] = $user_data->display_name;			
+				$data['name'] = $user_data->display_name;
 			}
 		}
 		// if ( in_array( 'delegate', $user_roles, true ) ) {
-		   // $data['msg'] = 'Delegate User already exists.'; 
+		   // $data['msg'] = 'Delegate User already exists.';
 		// }else{
 			// $user_id = wp_update_user( array( 'ID' => $user, 'role' => 'delegate' ) );
 			// update_user_meta($user_id, 'parent_user_delegate',get_current_user_id() );
 			// if ( is_wp_error( $user_id ) ) {
-				// $data['msg'] = 'Failed'; 
+				// $data['msg'] = 'Failed';
 			// } else {
-				// $data['msg'] = 'success';  
+				// $data['msg'] = 'success';
 				// $data['Id'] = $user;
 				// $data['email'] = $user_data->user_email;
-				// $data['name'] = $user_data->display_name;			
+				// $data['name'] = $user_data->display_name;
 			// }
 		// }
 	}else{
-		$data['msg'] = 'The User does not exists...';                     
+		$data['msg'] = 'The User does not exists...';
 	}
-          
-		  
+
+
 	echo json_encode($data);
 	die();
 }
@@ -1043,18 +1043,18 @@ function check_delegate(){
 add_action('wp_ajax_delete_delegate', 'delete_delegate');
 
 function delete_delegate(){
-	//print_r($_POST);   
+	//print_r($_POST);
 	$user= $_POST['delegate'];
 	//$user_id = wp_update_user( array( 'ID' => $user, 'role' => 'subscriber' ) );
-	
+
 	$all_meta_for_user = get_user_meta( $user ,'parent_user_delegate');
 	$exec = $all_meta_for_user[0];
-	
+
 	$exec1 = explode(",",$exec);
-	
+
 	//print_r($exec1);
 	//die();
-	
+
 	//echo get_current_user_id();
 	$key = array_search(get_current_user_id(), $exec1);
 	if (false !== $key) {
@@ -1062,21 +1062,21 @@ function delete_delegate(){
 		unset($exec1[$key]);
 		//$exes = $exec1;
 	}
-	
+
 	//print_r($exec1);
 	 $exec2 = implode(",",$exec1);
 	//die();
-	
+
 	update_user_meta($user, 'parent_user_delegate',$exec2 );
-	
+
 	if ( is_wp_error( $user ) ) {
-		$data['msg'] = 'Failed'; 
+		$data['msg'] = 'Failed';
 	} else {
-		$data['msg'] = 'success';  
-		$data['Id'] = $user;  
+		$data['msg'] = 'success';
+		$data['Id'] = $user;
 	}
-			
-	  
+
+
 	echo json_encode($data);
 	die();
 }
@@ -1092,39 +1092,39 @@ function evoauexec_fields_to_form($array){
 // only for frontend
 if(!is_admin()){
 	// actionUser intergration
-	add_action('evoau_frontform_evoexec',  'evoauexec_fields', 10, 6);  	   
+	add_action('evoau_frontform_evoexec',  'evoauexec_fields', 10, 6);
 }
 
 /* Select Exec Drop Down for Delegates on Frontend */
 
-function evoauexec_fields($field, $event_id, $default_val, $EPMV, $opt2, $lang){ 
+function evoauexec_fields($field, $event_id, $default_val, $EPMV, $opt2, $lang){
 
 $exe = get_userdata( get_current_user_id() );
-			//	print_r($exe);            
- $user_roles = $exe->roles[0];      
-if($user_roles == 'delegate'){   
-?>       
+			//	print_r($exe);
+ $user_roles = $exe->roles[0];
+if($user_roles == 'delegate'){
+?>
 	<div class='row evotest'><p>
-		<label for="exec">Select Exec:</label>     
-        
-        <select class="form-control" id="exec" name="evoexec">   
-        	
+		<label for="exec">Select Exec:</label>
+
+        <select class="form-control" id="exec" name="evoexec">
+
         	<option value="" selected="selected">select exec</option>
-			<?php        
+			<?php
 			global $wpdb;
-			//echo "SELECT * FROM ".$wpdb->prefix ."usermeta WHERE meta_key = 'parent_user_delegate' AND  FIND_IN_SET(".get_current_user_id().", meta_value) ";  
+			//echo "SELECT * FROM ".$wpdb->prefix ."usermeta WHERE meta_key = 'parent_user_delegate' AND  FIND_IN_SET(".get_current_user_id().", meta_value) ";
 			// $sql = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix ."usermeta WHERE meta_key = 'parent_user_delegate' AND  FIND_IN_SET(".get_current_user_id().", meta_value) ");
-			
+
 			$all_meta_for_user = get_user_meta( get_current_user_id() ,'parent_user_delegate');
-			$exec = $all_meta_for_user[0];  
-			    
+			$exec = $all_meta_for_user[0];
+
 			$exec1 = explode(",",$exec);
-			
-			foreach($exec1 as $data){     
-				//print_r($delegates);     
+
+			foreach($exec1 as $data){
+				//print_r($delegates);
 				//echo $delegates;
 				$exec = get_userdata( $data );
-				//print_r($delegate);   
+				//print_r($delegate);
 				//$user_roles = $user_data->roles;
 				echo '<option value="'.$exec->ID.'">'.$exec->display_name .'</option>';
 			}
@@ -1132,7 +1132,7 @@ if($user_roles == 'delegate'){
 		</select>
 		</p>
 	</div>
-	
+
 <?php
 }
 }
@@ -1145,7 +1145,7 @@ function addBottonEventTitle($title) {
     if (is_page('my-events') && current_user_can('administrator') && $title == 'My Events') {
 		wp_enqueue_script( 'setgoal', get_template_directory_uri().'/js/setgoal.js', array( 'jquery' ) );
 		wp_localize_script( 'setgoal', 'set_goals', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
-		
+
 		$html 	= '<div id="customsetgoal" style="display:none;"><p style="color:#000">Please enter a new goal <input id="setGoalInput" type="text" name="setGoal" value="" /><a href="javascript:void(0);" class="evcal_btn evoau" id="saveGoal">Save</a></p></div>';
 		$title = $title . $html .'<a href="#TB_inline?inlineId=customsetgoal" style="float:right; display:none;" class="evcal_btn evoau button-set-goals thickbox">Set Goals</a>';
     }
@@ -1166,7 +1166,7 @@ function set_goals()
 	exit();
 }
 
-// Shortcode to show goals to user with role Exec 
+// Shortcode to show goals to user with role Exec
 function show_goals_func( $atts ) {
 	if(current_user_can('administrator') || current_user_can('exec')){
 		$goals 	= get_option('custom_goals');
@@ -1174,3 +1174,40 @@ function show_goals_func( $atts ) {
 	}
 }
 add_shortcode( 'show_goals', 'show_goals_func' );
+
+/* Creation of the Add Chart Shortcode */
+
+function add_chart() {
+	if(is_user_logged_in() && current_user_can('administrator') || current_user_can('exec')) : ?>
+			<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
+			<h3 class="my-events-summary">My Events Summary</h3>
+			<div class="chart-container">
+				<canvas id="myChart"></canvas>
+					<script>
+					var ctx = document.getElementById("myChart");
+					var myChart = new Chart(ctx, {
+					    type: 'bar',
+					    data: {
+					        labels: ["Exec 1", "Exec 2", "Exec 3", "Exec 4", "Exec 5", "Exec 6","Exec 7","Exec 8","Exec 9","Exec 10"],
+					        datasets: [{
+					            label: 'Event Leaders',
+					            data: [4,5,5,6,7,7,9,13,14,16],
+					            borderWidth: 1
+					        }]
+					    },
+					    options: {
+					        scales: {
+					            yAxes: [{
+					                ticks: {
+					                    beginAtZero:true
+					                }
+					            }]
+					        }
+					    }
+					});
+					</script>
+			</div>
+	<?php endif;
+}
+add_shortcode( 'add_chart', 'add_chart' );
