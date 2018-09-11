@@ -3966,6 +3966,10 @@ p > object:only-child {
 		width:35%;
 		float:right;
 	}
+	.sidebar-dash{
+		width:35%;
+		float:right;
+	}
 
 	.blog .site-main > article,
 	.archive .site-main > article,
@@ -4703,7 +4707,8 @@ body .sidebar-past .evo_sort_btn p{
 @media screen and (max-width: 1000px){
 	.sidebar-past,
 	.sidebar-alt,
-	.sidebar-other{
+	.sidebar-other,
+	.sidebar-dash{
 		margin-top: 45px;
 	}
 	.sidebar-past .calendar_header{
@@ -5081,6 +5086,10 @@ body .evo_search_results_count span{
 	margin: 70px 0 0 30px;
 }
 
+.sidebar-dash{
+	margin: 0px 0 0 0;
+}
+
 .comment-list li{
 	margin-left: 65px;
 }
@@ -5191,3 +5200,69 @@ color:#000;
     min-height:100px;
 }
 
+/* Executive Dashboard */
+.exec-dash{
+	background-color: #0071c5;
+	padding:20px;
+	overflow:auto;
+}
+
+.user-profile{
+	float:left;
+	position: relative;
+	width:40%;
+}
+
+.user-profile img{
+	border-radius: 100%;
+	height:60px;
+	width:60px;
+}
+
+.user-profile .user-info{
+	display: inline;
+	position: absolute;
+	top:-4px;
+	left:70px;
+}
+
+.user-profile .user-info p{
+	margin: 0 0 4px;
+}
+
+.event-overview{
+	float:right;
+	width:40%;
+	text-align: right;
+}
+
+.event-overview h4{
+	display: inline;
+}
+
+.event-overview .fa{
+	color:#fff;
+}
+
+@media screen and (max-width: 1000px){
+	.user-profile{
+		width:100%;
+	}
+	.event-overview{
+		float:left;
+		width:100%;
+		text-align: left;
+		margin-top: 20px;
+	}
+}
+
+/*Charts*/
+.my-events-summary{
+	background: #0071c5;
+  padding: 15px 20px;
+}
+
+.chart-container{
+	background: #fff;
+	padding: 20px;
+}
